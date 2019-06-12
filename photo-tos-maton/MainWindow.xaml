@@ -4,9 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:photo_tos_maton"
+        xmlns:controls="clr-namespace:Transitionals.Controls;assembly=Transitionals"
+        xmlns:Transitions="clr-namespace:Transitionals.Transitions;assembly=Transitionals"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <controls:TransitionElement x:Name="transitionBox" Margin="0,0,0,0">
+            <controls:TransitionElement.Transition>
+                <Transitions:FadeTransition></Transitions:FadeTransition>
+            </controls:TransitionElement.Transition>
+        </controls:TransitionElement>
     </Grid>
 </Window>
