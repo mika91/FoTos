@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,26 +21,26 @@ namespace photo_tos_maton.user_controls
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class SlideShowControl : UserControl
     {
-        // TODO
+        // TODO: release time ???
         private Timer _timer = new Timer();
 
         private string[] _files;
         private int pos = 0;
 
-        public UserControl1()
+        public SlideShowControl()
         {
             InitializeComponent();
 
-
-
+         
             // init timer
             _timer.Interval = 4000; // TODO
             _timer.Enabled = false;
             _timer.Elapsed += (s, e) => NextPhoto();
 
             // start
+
 
         }
 
@@ -77,8 +78,9 @@ namespace photo_tos_maton.user_controls
                 if (!File.Exists(file))
                 {
                     // TODO
+                    int toto = 0;
                 }
-                img.Source = new BitmapImage(new Uri(file, UriKind.Relative));
+                img.Source = new BitmapImage(new Uri(file, UriKind.Absolute));
                 pos = (pos + 1) % _files.Length;
 
                 this.transitionBox.Content = img;

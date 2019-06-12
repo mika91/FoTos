@@ -26,5 +26,10 @@ namespace photo_tos_maton.pages
         {
             InitializeComponent();
         }
+
+        private void ButtonBack_Click(object sender, RoutedEventArgs e)
+        {
+            GotoBackPageHandler?.Invoke();
+        }
     }
 }

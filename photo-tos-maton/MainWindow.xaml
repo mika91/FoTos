@@ -7,7 +7,9 @@
         xmlns:controls="clr-namespace:Transitionals.Controls;assembly=Transitionals"
         xmlns:Transitions="clr-namespace:Transitionals.Transitions;assembly=Transitionals"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        WindowState="Maximized"
+        WindowStyle="None">
     <Grid>
         <controls:TransitionElement x:Name="transitionBox" Margin="0,0,0,0">
             <controls:TransitionElement.Transition>

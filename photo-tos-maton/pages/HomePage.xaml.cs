@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +27,18 @@ namespace photo_tos_maton.pages
         public HomePage()
         {
             InitializeComponent();
+
+            // run slideshow
+            slideShowControl.Start(ConfigurationManager.AppSettings["SlideShowDirPath"].ToString());
+        }
+
+        
+
+
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            GotoPhotoPageHandler?.Invoke();
         }
     }
 }
