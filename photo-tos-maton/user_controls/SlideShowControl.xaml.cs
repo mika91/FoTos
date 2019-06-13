@@ -1,8 +1,10 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -23,11 +25,12 @@ namespace photo_tos_maton.user_controls
     /// </summary>
     public partial class SlideShowControl : UserControl
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+
         // TODO: release time ???
         private Timer _timer = new Timer();
-
         private string[] _files;
-        private int pos = 0;
 
         public SlideShowControl()
         {
@@ -44,12 +47,19 @@ namespace photo_tos_maton.user_controls
 
         }
 
-
+        public static ILog Log => log;
 
         public void Start(String dirPath)
         {
+            if (!Directory.Exists(dirPath))
+            {
+                log.Error(String.Format("Slideshow directory '{0}' doesn't exit: ", dirPath));
+                return;
+            }
+
+            log.Info(String.Format("Slideshow directory = '{0}'", dirPath));
             _files = Directory.GetFiles(dirPath);
-            pos = 0;
+            
 
             NextPhoto();
             _timer.Enabled = true;
@@ -65,24 +75,25 @@ namespace photo_tos_maton.user_controls
             }
 
             _files = null;
-            pos = 0;
         }
 
         private void NextPhoto()
         {
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
-                // TODO: gérer erreurs
-                var img = new Image();
-                var file = _files[pos];
+                var ind = new Random().Next() % _files.Length;
+                var file = _files[ind];
+
                 if (!File.Exists(file))
                 {
-                    // TODO
-                    int toto = 0;
+                    // TODO: reload dir ???
+                    log.Error(string.Format("file '{0}' doesn't exist anymore", file));
+                    return;
                 }
-                img.Source = new BitmapImage(new Uri(file, UriKind.Absolute));
-                pos = (pos + 1) % _files.Length;
 
+                // TODO: gérer erreurs
+                var img = new Image();
+                img.Source = new BitmapImage(new Uri(file, UriKind.Absolute));
                 this.transitionBox.Content = img;
             });
         }

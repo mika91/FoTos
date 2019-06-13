@@ -1,8 +1,11 @@
-﻿using photo_tos_maton.pages;
+﻿using CameraControl.Devices;
+using log4net;
+using photo_tos_maton.pages;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,11 +25,14 @@ namespace photo_tos_maton
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         private PhotoPage _photoPage;
         private HomePage _homePage;
 
         public MainWindow()
         {
+            log.Info("MainWindow InitializeComponent");
             InitializeComponent();
 
             if (DesignerProperties.GetIsInDesignMode(this))
@@ -38,6 +44,8 @@ namespace photo_tos_maton
 
         private void initPages()
         {
+            // TODO: ajouter un 'OnUnload' sur toutes les pages pour centraliser ici toute la gestion des etas IHM / Camera
+
             // home page
             _homePage = new HomePage();
             _homePage.GotoPhotoPageHandler = LoadPhotoPage;
@@ -52,10 +60,14 @@ namespace photo_tos_maton
         private void LoadPhotoPage()
         {
             transitionBox.Content = _photoPage;
+            _photoPage.StartLiveView();
         }
 
         private void LoadHomePage()
         {
+            // TODO: should be done in photopage unload 
+            _photoPage.StopLiveView();
+
             transitionBox.Content = _homePage;
         }
     }

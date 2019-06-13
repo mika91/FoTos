@@ -24,7 +24,19 @@ namespace photo_tos_maton.pages
 
         public PhotoPage()
         {
+            // TODO: logger
             InitializeComponent();
+        }
+
+        // TODO: should be done on OnLoad() ???
+        public void StartLiveView()
+        {
+            this.liveViewControl.StartLiveView(Camera.Device);
+        }
+
+        public void StopLiveView()
+        {
+            this.liveViewControl.StopLiveView();
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
