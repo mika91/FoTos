@@ -35,9 +35,10 @@ namespace photo_tos_maton.user_controls
         public void StartLiveView(ICameraDevice cameraDevice)
         {
             _cameraDevice = cameraDevice;
+
             // todo: à revoir
-            this.cameraOffIcon.Visibility = _cameraDevice != null ? Visibility.Visible : Visibility.Hidden;
-            this.LiveViewImage.Visibility = _cameraDevice != null ? Visibility.Hidden : Visibility.Visible;
+            this.LiveViewImage.Visibility = _cameraDevice != null ? Visibility.Visible : Visibility.Collapsed;
+            this.cameraOffIcon.Visibility = _cameraDevice != null ? Visibility.Collapsed : Visibility.Visible;
 
             // start liveview
             _liveView = new LiveView(_cameraDevice, () => StopLiveView());
@@ -48,7 +49,7 @@ namespace photo_tos_maton.user_controls
         public void StopLiveView()
         {
             // todo: à revoir: pas faire ici + pause
-            this.LiveViewImage.Visibility = Visibility.Hidden;
+            this.LiveViewImage.Visibility = Visibility.Collapsed;
             this.cameraOffIcon.Visibility =  Visibility.Visible;
 
 

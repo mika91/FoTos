@@ -31,7 +31,7 @@ namespace photo_tos_maton.pages
         // TODO: should be done on OnLoad() ???
         public void StartLiveView()
         {
-            this.liveViewControl.StartLiveView(Camera.Device);
+            this.liveViewControl.StartLiveView(Camera.Instance.Device);
         }
 
         public void StopLiveView()

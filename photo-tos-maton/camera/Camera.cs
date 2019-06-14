@@ -4,6 +4,7 @@ using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,53 +16,71 @@ namespace photo_tos_maton
         // TODO: maybe Acquire(UserControl) pour bien gérer les changements d'etat de IHM ?
     class Camera
     {
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static CameraDeviceManager _cameraDeviceManager;
-
-        private static CameraDeviceManager Manager
+        // TODO: not singleton, use some sort DI or application context instead
+        private static Lazy<Camera> _instance = new Lazy<Camera>(() => new Camera());
+        public static Camera Instance
         {
-            get
-            {
-                if (_cameraDeviceManager == null || _cameraDeviceManager.SelectedCameraDevice == null)
-                {
-                    _cameraDeviceManager = GetCameraManager();
-                }
-                return _cameraDeviceManager;
-            }
+            get { return _instance.Value; }
         }
 
-        public static ICameraDevice Device
-        {
-            get
+        private CameraDeviceManager _mng;
+
+        // TODO: maybe remove, all logic in this class ?
+        public ICameraDevice Device { get
             {
-                return Manager?.SelectedCameraDevice;
-            }
+                if (null == _mng.SelectedCameraDevice)
+                    TryConnect();
+                return _mng.SelectedCameraDevice;
+            } }
+
+        private Camera()
+        {
+            log.Info("instantiate new camera wrapper");
+
+            //TODO: camera connect/disconnect seems buggy with Canon (see docs)
+            // maybe recreate CameraDeviceManager ?
+
+            // camera device manager
+            _mng = new CameraDeviceManager();
+            _mng.CameraConnected    += _mng_CameraConnected;
+            _mng.CameraDisconnected += _mng_CameraDisconnected;
+            _mng.CameraSelected += _mng_CameraSelected;
+
+            // connect camera
+            TryConnect();
         }
 
-        private static CameraDeviceManager GetCameraManager()
+        private void TryConnect()
         {
-            try
-            {
-                log.Info("attempt to get new camera...");
-                var cameraDeviceManager = new CameraDeviceManager();
-                cameraDeviceManager.CloseAll();
-                cameraDeviceManager.DetectWebcams = true;
-                cameraDeviceManager.ConnectToCamera();
+            log.Info("attempt to connect a camera...");
+            _mng.CloseAll();
+            _mng.DetectWebcams = true;
+            _mng.ConnectToCamera();
 
-                // TODO: choose camera, if not in properties
-                cameraDeviceManager.SelectedCameraDevice = cameraDeviceManager.ConnectedDevices.FirstOrDefault();
-                Log.Info(string.Format("selected camera = {0}", cameraDeviceManager?.SelectedCameraDevice?.DisplayName));
-                return cameraDeviceManager;
-
-            }
-            catch (Exception ex)
-            {
-                // TODO
-                MessageBox.Show(ex.Message, "Vérifier l'appareil photo");
-            }
-            return null;
+            _mng.SelectedCameraDevice = _mng.ConnectedDevices.FirstOrDefault();
+            if (_mng.SelectedCameraDevice == null)
+                log.Error("failed to find any camera");
         }
+
+        private void _mng_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
+        {
+            log.Info("camera selected = " + newcameraDevice?.DisplayName);
+        }
+
+        private void _mng_CameraDisconnected(ICameraDevice cameraDevice)
+        {
+            log.Info("camera disonnected = " + cameraDevice?.DisplayName);
+        }
+
+        private void _mng_CameraConnected(ICameraDevice cameraDevice)
+        {
+            log.Info("camera connected = " + cameraDevice?.DisplayName);
+        }
+
+        
+       
 
     }
 }

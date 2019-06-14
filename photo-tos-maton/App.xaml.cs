@@ -13,5 +13,8 @@ namespace photo_tos_maton
     /// </summary>
     public partial class App : Application
     {
+        // CameraManager logic
+
+
     }
 }
