@@ -11,6 +11,10 @@ using System.Windows;
 
 namespace photo_tos_maton
 {
+    // TODO: gérer la connexion/deconexion d'une camera (doit etre transparent pour la UI)
+    // TODO: gérer la copy des photos
+    // TODO: gérer les réglages
+
     // TODO: static vs singleton + gérer les events + gérer connexion/reconnexion...
 
         // TODO: maybe Acquire(UserControl) pour bien gérer les changements d'etat de IHM ?
