@@ -23,7 +23,7 @@ namespace photo_tos_maton.user_controls
     /// </summary>
     public partial class LiveViewControl : UserControl 
     {
-        private ICameraDevice _cameraDevice;
+        private ICameraMan _cameraRam;
         private LiveView _liveView;
 
         public LiveViewControl()
@@ -32,16 +32,16 @@ namespace photo_tos_maton.user_controls
         }
 
 
-        public void StartLiveView(ICameraDevice cameraDevice)
+        public void StartLiveView(ICameraMan cameraRam)
         {
-            _cameraDevice = cameraDevice;
+            _cameraRam = cameraRam;
 
-            // todo: à revoir
-            this.LiveViewImage.Visibility = _cameraDevice != null ? Visibility.Visible : Visibility.Collapsed;
-            this.cameraOffIcon.Visibility = _cameraDevice != null ? Visibility.Collapsed : Visibility.Visible;
+            // todo: utiliser un checl
+            this.LiveViewImage.Visibility = _cameraRam != null ? Visibility.Visible : Visibility.Collapsed;
+            this.cameraOffIcon.Visibility = _cameraRam != null ? Visibility.Collapsed : Visibility.Visible;
 
             // start liveview
-            _liveView = new LiveView(_cameraDevice, () => StopLiveView());
+            _liveView = new LiveView(_cameraRam, () => StopLiveView());
             _liveView.Start(LiveViewImage, true);
 
         }
@@ -59,24 +59,7 @@ namespace photo_tos_maton.user_controls
                 _liveView = null;
             }
 
-            //_cameraDevice.PhotoCaptured -= DeviceManager_PhotoCaptured;
-
-            //if (_timerBeforeStoppingPhoto != null)
-            //{
-            //    _timerBeforeStoppingPhoto.Dispose();
-            //    _timerBeforeStoppingPhoto = null;
-            //}
-            //if (_timerWatchDog != null)
-            //{
-            //    _timerWatchDog.Dispose();
-            //    _timerWatchDog = null;
-            //}
-
-            //GridPhoto.Dispatcher.Invoke(() => VisibilityManagement(0));
-
-            //_playMain(_error);
-            //Hide();
-        }
+                 }
 
     }
 }

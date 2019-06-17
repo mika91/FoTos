@@ -107,6 +107,8 @@
     </ApplicationDefinition>
     <Compile Include="camera\BitmapUtils.cs" />
     <Compile Include="camera\Camera.cs" />
+    <Compile Include="camera\CameraMan.cs" />
+    <Compile Include="camera\ICameraMan.cs" />
     <Compile Include="camera\LiveView.cs" />
     <Compile Include="user_controls\SlideShowControl.xaml.cs">
       <DependentUpon>SlideShowControl.xaml</DependentUpon>
