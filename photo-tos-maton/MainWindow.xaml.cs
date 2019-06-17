@@ -17,6 +17,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NHotkey.Wpf;
+using NHotkey;
 
 namespace photo_tos_maton
 {
@@ -35,12 +37,21 @@ namespace photo_tos_maton
             log.Info("MainWindow InitializeComponent");
             InitializeComponent();
 
+            // register global hotkeys
+            HotkeyManager.Current.AddOrReplace("Increment", Key.Enter, ModifierKeys.Alt, OnToggleFullScreen);
+
+
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
+
+            // init pages
             initPages();
             LoadHomePage();
         }
+
+
+        #region pages init
 
         private void initPages()
         {
@@ -70,5 +81,55 @@ namespace photo_tos_maton
 
             transitionBox.Content = _homePage;
         }
+
+
+        #endregion
+
+
+        #region toggle fullscreen
+
+        private double _winLeft;
+        private double _winTop;
+        private double _winWidth;
+        private double _winHeight;
+
+        public void OnToggleFullScreen(object sender, HotkeyEventArgs e)
+        {
+            log.Info("toggle full screen");
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.Visibility = Visibility.Collapsed;
+
+                this.WindowStyle = WindowStyle.SingleBorderWindow;
+                this.ResizeMode = ResizeMode.CanResize;
+                this.WindowState = WindowState.Normal;
+
+                // restore position
+                this.Top = _winTop;
+                this.Left = _winLeft;
+                this.Width = Math.Max(_winWidth, 640);
+                this.Height = Math.Max(_winHeight, 480);
+
+                this.Topmost = false;
+                this.Visibility = Visibility.Visible; 
+            }
+            else
+            {
+                // save position
+                _winTop = this.Top;
+                _winLeft = this.Left;
+                _winWidth = this.ActualWidth;
+                _winHeight = this.ActualHeight;
+
+                this.Visibility = Visibility.Collapsed;
+                this.WindowStyle = WindowStyle.None;
+                this.ResizeMode = ResizeMode.NoResize;
+                this.WindowState = WindowState.Maximized;
+                this.Topmost = true;
+                this.Visibility = Visibility.Visible;
+            }
+        }
+
+        #endregion
     }
 }

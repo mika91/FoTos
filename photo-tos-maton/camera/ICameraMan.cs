@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace photo_tos_maton.camera
 {
-    interface ICameraMan
+    public interface ICameraMan
     {
-        bool HasCamera { get; }
-        event Action CameraChanged;
-
 
         void StartLiveView();
         void StopLiveView();
 
-        event Action NewLiveViewImage;
+        event Action<BitmapSource> NewLiveViewImage;
 
         void TakePicture();
 
-        event Action NewPhoto;
+        event Action<String> NewPhoto;
 
     }
 }

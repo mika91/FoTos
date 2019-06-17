@@ -30,14 +30,32 @@ namespace photo_tos_maton.pages
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ICameraMan CameraMan { get; set }
+        private ICameraMan _cameraMan;
+        public ICameraMan CameraMan {
+            get { return _cameraMan; }
+            set {
+                _cameraMan = value;
+                _cameraMan.NewLiveViewImage += _cameraMan_NewLiveViewImage;
+                _cameraMan.NewPhoto += cameraMan_NewPhoto;
+            } }
+
+        private void cameraMan_NewPhoto(string filename)
+        {
+            log.Info("cameraMan_NewPhoto");
+
+        }
+
+        private void _cameraMan_NewLiveViewImage(BitmapSource image)
+        {
+            log.Info("cameraMan_NewLiveViewImage");
+            this.LiveViewImage.Dispatcher.Invoke(() => this.LiveViewImage.Source = image);
+        }
 
         public Action GotoBackPageHandler { get; set; }
 
         public PhotoPage()
         {
             log.Debug("PhotoPage::Contructor");
-            // TODO: logger
             InitializeComponent();
         }
 
@@ -45,35 +63,25 @@ namespace photo_tos_maton.pages
         public void StartLiveView()
         {
             log.Debug("PhotoPage::StartLiveView");
-            this.liveViewControl.StartLiveView(Camera.Instance.Device);
+            CameraMan?.StartLiveView();
         }
 
         public void StopLiveView()
         {
             log.Debug("PhotoPage::StopLiveView");
-            this.liveViewControl.StopLiveView();
+            CameraMan?.StopLiveView();
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
             log.Debug("PhotoPage::ButtonBack_Click");
-
             GotoBackPageHandler?.Invoke();
         }
 
         private void ButtonTakePicture_Click(object sender, RoutedEventArgs e)
         {
             log.Debug("PhotoPage::ButtonTakePicture_Click");
-            
-    
-            if (Camera.Instance.Device == null)
-            {
-                log.Warn("impossible to take picture: no camera device");
-                return;
-            }
-
-            
-
+            CameraMan?.TakePicture();
         }
 
     }

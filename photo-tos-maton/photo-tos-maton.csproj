@@ -70,6 +70,12 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NHotkey, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHotkey.1.2.1\lib\net20\NHotkey.dll</HintPath>
+    </Reference>
+    <Reference Include="NHotkey.Wpf, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHotkey.Wpf.1.2.1\lib\net35\NHotkey.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="PortableDeviceLib, Version=2.1.0.1, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\CameraControl.Devices.2.1.0-beta\lib\net46\PortableDeviceLib.dll</HintPath>
     </Reference>
@@ -106,15 +112,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="camera\BitmapUtils.cs" />
-    <Compile Include="camera\Camera.cs" />
     <Compile Include="camera\CameraMan.cs" />
+    <Compile Include="camera\CameraManPhoto.cs" />
     <Compile Include="camera\ICameraMan.cs" />
-    <Compile Include="camera\LiveView.cs" />
+    <Compile Include="camera\CameraManLiveView.cs" />
     <Compile Include="user_controls\SlideShowControl.xaml.cs">
       <DependentUpon>SlideShowControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="user_controls\LiveViewControl.xaml.cs">
-      <DependentUpon>LiveViewControl.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -137,10 +140,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="user_controls\SlideShowControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="user_controls\LiveViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
