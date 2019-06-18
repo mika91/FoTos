@@ -3,12 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:user_controls="clr-namespace:photo_tos_maton.user_controls" x:Class="photo_tos_maton.pages.PhotoPage"
+             xmlns:user_controls="clr-namespace:photo_tos_maton.user_controls"
+    xmlns:system="clr-namespace:System;assembly=mscorlib" x:Class="photo_tos_maton.pages.PhotoPage"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
             Unloaded="PhotoPage_Unloaded"
             Loaded="PhotoPage_Loaded">
+
+    <UserControl.Resources>
+        <system:Double x:Key="max_scale">1.3</system:Double>
+        <system:Double x:Key="min_scale">0.3</system:Double>
+        <Storyboard x:Key="StorayBoardCountdown">
+            <DoubleAnimation Storyboard.TargetName="MyAnimatedScaleTransform" Storyboard.TargetProperty="ScaleX"
+                                             Duration="0:0:1" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
+            <DoubleAnimation Storyboard.TargetName="MyAnimatedScaleTransform" Storyboard.TargetProperty="ScaleY"
+                                             Duration="0:0:1" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
+        </Storyboard>
+    </UserControl.Resources>
+
     <Grid>
+       
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="8*" />
@@ -19,6 +33,10 @@
             <RowDefinition Height="8*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
+
+        <Grid.Background>
+            <ImageBrush ImageSource="../resources/wallpapers/wallpaper00.jpg" Opacity="0.7" Stretch="Fill"/>
+        </Grid.Background>
 
         <!-- Live View -->
         <Grid x:Name="LiveViewGrid" Grid.Column="1" Grid.Row="1">
@@ -78,13 +96,13 @@
         <Grid x:Name="SmileGrid" Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
-                <RowDefinition Height="5*" />
                 <RowDefinition Height="3*" />
+                <RowDefinition Height="2*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
                 <Image Source="../resources/icons/picto-sourire.png" Grid.Row="1" Grid.Column="1"></Image>

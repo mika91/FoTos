@@ -18,6 +18,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
@@ -83,6 +84,10 @@ namespace photo_tos_maton.pages
         private void ButtonTakePicture_Click(object sender, RoutedEventArgs e)
         {
             log.Debug("PhotoPage::ButtonTakePicture_Click");
+
+
+
+         
             Task.Factory.StartNew(TakePictureTask);
         }
 
@@ -91,12 +96,17 @@ namespace photo_tos_maton.pages
             // display countdown
             SetVisibility(EVisibilityMode.Countdown);
 
+            // countdown
             int countdown = 3;
             for (int i=countdown; i>0; i--)
-            { 
-                WpfInvoke(() =>
+            {
+                Dispatcher.Invoke(() =>
                 {
+                    // decrement countdown
                     this.TextCountdown.Text = i.ToString();
+                    // animation
+                    var sb = this.FindResource("StorayBoardCountdown") as Storyboard;
+                    BeginStoryboard(sb);
                 });
                 Thread.Sleep(1000);
             }
@@ -111,6 +121,11 @@ namespace photo_tos_maton.pages
             _cameraMan?.TakePicture();
 
             // TODO: when phot captured (or timeout), return to LiveView 
+        }
+
+        private void StartCountdownAnimation()
+        {
+          
         }
 
 

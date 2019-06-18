@@ -4,15 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:photo_tos_maton"
-        xmlns:controls="clr-namespace:Transitionals.Controls;assembly=Transitionals"
-        xmlns:Transitions="clr-namespace:Transitionals.Transitions;assembly=Transitionals"
+        xmlns:transc="clr-namespace:Transitionals.Controls;assembly=Transitionals"
+        xmlns:transt="clr-namespace:Transitionals.Transitions;assembly=Transitionals"
+        xmlns:trans="clr-namespace:Transitionals;assembly=Transitionals"
         mc:Ignorable="d"
         Title="MainWindow">
     <Grid>
-        <controls:TransitionElement x:Name="transitionBox" Margin="0,0,0,0">
-            <controls:TransitionElement.Transition>
-                <Transitions:FadeTransition></Transitions:FadeTransition>
-            </controls:TransitionElement.Transition>
-        </controls:TransitionElement>
+        <transc:TransitionElement x:Name="transitionBox" Margin="0,0,0,0">
+            <!--<transc:TransitionElement.Transition>
+                <transt:FadeTransition/>
+            </transc:TransitionElement.Transition>-->
+            <transc:TransitionElement.TransitionSelector>
+                <trans:RandomTransitionSelector>
+                    <transt:FadeTransition/>
+                    <transt:DoorTransition/>
+                    <transt:DotsTransition/>
+                    <transt:RotateTransition Angle="45" />
+                    <transt:RollTransition/>
+                </trans:RandomTransitionSelector>
+            </transc:TransitionElement.TransitionSelector>
+        </transc:TransitionElement>
     </Grid>
 </Window>

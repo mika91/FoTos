@@ -190,10 +190,18 @@
     <Resource Include="resources\icons\picto-sourire.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="resources\wallpapers\wallpaper00.jpg" />
-    <Resource Include="resources\wallpapers\wallpaper01.jpg" />
-    <Resource Include="resources\wallpapers\wallpaper02.png" />
-    <Resource Include="resources\wallpapers\wallpaper03.jpg" />
+    <Resource Include="resources\wallpapers\wallpaper00.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="resources\wallpapers\wallpaper01.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="resources\wallpapers\wallpaper02.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="resources\wallpapers\wallpaper03.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="utils\" />
