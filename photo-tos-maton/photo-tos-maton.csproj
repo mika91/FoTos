@@ -185,6 +185,11 @@
     <Content Include="EdsImage.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="resources\icons\arrow-left-bold-circle-outline.png" />
+    <Resource Include="resources\icons\arrow-up-bold.png" />
+    <Resource Include="resources\icons\picto-sourire.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="resources\wallpapers\wallpaper00.jpg" />
     <Resource Include="resources\wallpapers\wallpaper01.jpg" />
     <Resource Include="resources\wallpapers\wallpaper02.png" />
