@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
 
         <!-- Live View -->
-        <Grid Grid.Column="1" Grid.Row="1">
+        <Grid x:Name="LiveViewGrid" Grid.Column="1" Grid.Row="1">
             <!-- camera off icon -->
             <!--<Grid x:Name="cameraOffIcon" Background="LightGray" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
@@ -48,7 +48,40 @@
                 </Image.RenderTransform>
             </Image>
         </Grid>
-        
+
+        <!-- countdown -->
+        <Grid x:Name="CountdownGrid" Grid.Column="1" Grid.Row="1">
+            <Border>
+                <Border.RenderTransformOrigin>0.5, 0.5</Border.RenderTransformOrigin>
+                <Border.RenderTransform>
+                    <ScaleTransform x:Name="MyAnimatedScaleTransform" />
+                </Border.RenderTransform>
+
+                <Viewbox>
+
+                    <TextBlock Name="TextCountdown" Text="3" FontFamily="Segoe UI" >
+                        <TextBlock.Foreground>
+                            <SolidColorBrush x:Name="myTextColor" Color="DarkOrchid" />
+                        </TextBlock.Foreground>
+                        <TextBlock.Effect>
+                            <DropShadowEffect
+                                ShadowDepth="0.2"
+                                Direction="330"
+                                Color="Black"
+                                Opacity="1"
+                                BlurRadius="0"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                </Viewbox>
+            </Border>
+        </Grid>
+
+
+        <!-- smile -->
+        <Grid x:Name="SmileGrid" Grid.Column="1" Grid.Row="1">
+
+        </Grid>
+
         <!-- Button 'Take Picture'-->
         <Button x:Name="buttonTakePicture" Grid.Column="0" Grid.Row="1" Content="Take Picture" Height="50" Click="ButtonTakePicture_Click"/>
         <!-- Button 'back' -->

@@ -106,8 +106,8 @@ namespace photo_tos_maton
                 this.WindowState = WindowState.Normal;
 
                 // restore position
-                this.Top = _winTop;
-                this.Left = _winLeft;
+                this.Top = Math.Max(_winTop, 100);
+                this.Left = Math.Max(_winLeft,100);
                 this.Width = Math.Max(_winWidth, 640);
                 this.Height = Math.Max(_winHeight, 480);
 

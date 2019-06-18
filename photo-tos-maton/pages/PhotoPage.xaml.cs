@@ -20,7 +20,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-
+using System.Windows.Threading;
 
 namespace photo_tos_maton.pages
 {
@@ -83,20 +83,92 @@ namespace photo_tos_maton.pages
         private void ButtonTakePicture_Click(object sender, RoutedEventArgs e)
         {
             log.Debug("PhotoPage::ButtonTakePicture_Click");
-            CameraMan?.TakePicture();
+            Task.Factory.StartNew(TakePictureTask);
+        }
+
+        private void TakePictureTask()
+        {
+            // display countdown
+            SetVisibility(EVisibilityMode.Countdown);
+
+            int countdown = 3;
+            for (int i=countdown; i>0; i--)
+            { 
+                WpfInvoke(() =>
+                {
+                    this.TextCountdown.Text = i.ToString();
+                });
+                Thread.Sleep(1000);
+            }
+        
+            // stop live view
+            _cameraMan?.StopLiveView();
+
+            // display smile icon
+            SetVisibility(EVisibilityMode.Smile);
+
+            // take picture
+            _cameraMan?.TakePicture();
+
+            // TODO: when phot captured (or timeout), return to LiveView 
         }
 
 
         private void PhotoPage_Loaded(object sender, RoutedEventArgs e)
         {
             log.Info("PhotoPage::Loaded");
-            _cameraMan?.StartLiveView();
+            StartLiveView();
+            SetVisibility(EVisibilityMode.LiveView);
         }
 
         private void PhotoPage_Unloaded(object sender, RoutedEventArgs e)
         {
             log.Info("PhotoPage::Unloaded");
-            _cameraMan?.StopLiveView();
+            StopLiveView();
         }
+
+        #region Visibility Management
+
+        enum EVisibilityMode { LiveView, Countdown, Smile, Photo }
+
+        private void SetVisibility(EVisibilityMode mode)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                switch (mode)
+                {
+                    case EVisibilityMode.LiveView:
+                        this.LiveViewGrid.Visibility = Visibility.Visible;
+                        this.CountdownGrid.Visibility = Visibility.Collapsed;
+                        this.SmileGrid.Visibility = Visibility.Collapsed;
+                        break;
+
+                    case EVisibilityMode.Countdown:
+                        this.LiveViewGrid.Visibility = Visibility.Visible;
+                        this.CountdownGrid.Visibility = Visibility.Visible;
+                        this.SmileGrid.Visibility = Visibility.Collapsed;
+                        break;
+
+                    case EVisibilityMode.Smile:
+                        this.LiveViewGrid.Visibility = Visibility.Collapsed;
+                        this.CountdownGrid.Visibility = Visibility.Collapsed;
+                        this.SmileGrid.Visibility = Visibility.Visible;
+                        break;
+
+                    case EVisibilityMode.Photo:
+                        this.LiveViewGrid.Visibility = Visibility.Collapsed;
+                        this.CountdownGrid.Visibility = Visibility.Collapsed;
+                        this.SmileGrid.Visibility = Visibility.Collapsed;
+                        break;
+                }
+            }, DispatcherPriority.Background);
+        }
+  
+        public void WpfInvoke(Action handler)
+        {
+            Dispatcher.Invoke(handler, DispatcherPriority.Background);
+        }
+
+        #endregion
     }
 }
