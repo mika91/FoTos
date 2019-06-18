@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:user_controls="clr-namespace:photo_tos_maton.user_controls" x:Class="photo_tos_maton.pages.PhotoPage"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+            Unloaded="PhotoPage_Unloaded"
+            Loaded="PhotoPage_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -19,9 +21,9 @@
         </Grid.RowDefinitions>
 
         <!-- Live View -->
-        <Canvas Grid.Column="1" Grid.Row="1">
+        <Grid Grid.Column="1" Grid.Row="1">
             <!-- camera off icon -->
-            <Grid x:Name="cameraOffIcon" Background="LightGray" Visibility="Collapsed">
+            <!--<Grid x:Name="cameraOffIcon" Background="LightGray" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="8*" />
@@ -38,14 +40,14 @@
                     </Canvas>
                 </Viewbox>
 
-            </Grid>
+            </Grid>-->
             <!--- live view image -->
-            <Image x:Name="LiveViewImage" RenderTransformOrigin="0.5,0.5" >
+            <Image x:Name="LiveViewImage" RenderTransformOrigin="0.5,0.5" Visibility="Visible">
                 <Image.RenderTransform>
                     <ScaleTransform ScaleX="-1"/>
                 </Image.RenderTransform>
             </Image>
-        </Canvas>
+        </Grid>
         
         <!-- Button 'Take Picture'-->
         <Button x:Name="buttonTakePicture" Grid.Column="0" Grid.Row="1" Content="Take Picture" Height="50" Click="ButtonTakePicture_Click"/>

@@ -27,6 +27,8 @@ namespace photo_tos_maton.camera
         public CameraMan()
         {
             log.Info("CameraMan::Constructor");
+
+            InitManager();
         }
 
         #region camera device manager
@@ -40,6 +42,8 @@ namespace photo_tos_maton.camera
             _mng.CameraConnected    += Manager_CameraConnected;
             _mng.CameraDisconnected += Manager_CameraDisconnected;
             _mng.CameraSelected     += Manager_CameraSelected;
+
+            CloseAllAndConnect();
         }
 
         private void CloseAllAndConnect()
@@ -69,6 +73,8 @@ namespace photo_tos_maton.camera
         private void Manager_CameraDisconnected(ICameraDevice cameraDevice)
         {
             log.Info("camera disonnected = " + cameraDevice?.DisplayName);
+
+            StopLiveView();
 
             // TODO: vérifier si le fait de déconnecter une caméra met SelectedCameraDevice à null
             // fire camera change event

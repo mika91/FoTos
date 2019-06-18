@@ -91,7 +91,7 @@ namespace photo_tos_maton.camera
                     File.Delete(tempFile);
                 } catch (Exception ex)
                 {
-                    log.Warn(string.Format("failed to remove tmeporary photo file '{0}'", tempFile));
+                    log.Warn(string.Format("failed to remove tmeporary photo file '{0}'", tempFile), ex);
                 }
                
 

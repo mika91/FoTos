@@ -19,6 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using NHotkey.Wpf;
 using NHotkey;
+using photo_tos_maton.camera;
 
 namespace photo_tos_maton
 {
@@ -29,6 +30,7 @@ namespace photo_tos_maton
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        private ICameraMan _cameraMan;
         private PhotoPage _photoPage;
         private HomePage _homePage;
 
@@ -44,6 +46,8 @@ namespace photo_tos_maton
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
+            // cameraman
+            _cameraMan = new CameraMan();
 
             // init pages
             initPages();
@@ -60,10 +64,11 @@ namespace photo_tos_maton
             // home page
             _homePage = new HomePage();
             _homePage.GotoPhotoPageHandler = LoadPhotoPage;
-
+           
             // photo page
             _photoPage = new PhotoPage();
             _photoPage.GotoBackPageHandler = LoadHomePage;
+            _photoPage.CameraMan = _cameraMan;
 
             LoadHomePage();
         }
@@ -71,14 +76,10 @@ namespace photo_tos_maton
         private void LoadPhotoPage()
         {
             transitionBox.Content = _photoPage;
-            _photoPage.StartLiveView();
         }
 
         private void LoadHomePage()
         {
-            // TODO: should be done in photopage unload 
-            _photoPage.StopLiveView();
-
             transitionBox.Content = _homePage;
         }
 

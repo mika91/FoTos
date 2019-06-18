@@ -5,7 +5,6 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 
 namespace photo_tos_maton.camera
 {
@@ -15,8 +14,7 @@ namespace photo_tos_maton.camera
         // TODO: watchdog pour éteindre le timer du liveview si jamais on a perdu la caméra ?
         // d'un autre côté, 15 appels par seconde, ça vaut peut-etre pas les coup de se faire chier et crée d'éventuels effets de bord...
 
-        public event Action<BitmapSource> NewLiveViewImage;
-
+        public event Action<Bitmap> NewLiveViewImage;
 
         private System.Timers.Timer _timerLiveView;
  
@@ -53,7 +51,7 @@ namespace photo_tos_maton.camera
             catch (Exception ex)
             {
                 Log.Debug("Error starting live view " + ex.ToString());
-                _timerLiveView.Stop();
+                _timerLiveView?.Stop();
             }
         }
 
@@ -139,7 +137,7 @@ namespace photo_tos_maton.camera
                      liveViewData.ImageDataPosition,
                      liveViewData.ImageData.Length - liveViewData.ImageDataPosition));
 
-                NewLiveViewImage.Invoke(BitmapUtils.BitmapToImageSource(bitmap));
+                NewLiveViewImage.Invoke(bitmap);
             }
           
         }

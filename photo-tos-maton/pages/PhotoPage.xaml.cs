@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -45,10 +46,11 @@ namespace photo_tos_maton.pages
 
         }
 
-        private void _cameraMan_NewLiveViewImage(BitmapSource image)
+
+        private void _cameraMan_NewLiveViewImage(Bitmap bitmap)
         {
-            log.Info("cameraMan_NewLiveViewImage");
-            this.LiveViewImage.Dispatcher.Invoke(() => this.LiveViewImage.Source = image);
+            //log.Trace("cameraMan_NewLiveViewImage");
+            this.LiveViewImage.Dispatcher.Invoke(() => this.LiveViewImage.Source = BitmapUtils.BitmapToImageSource(bitmap));
         }
 
         public Action GotoBackPageHandler { get; set; }
@@ -60,13 +62,13 @@ namespace photo_tos_maton.pages
         }
 
         // TODO: should be done on OnLoad() ???
-        public void StartLiveView()
+        private void StartLiveView()
         {
             log.Debug("PhotoPage::StartLiveView");
             CameraMan?.StartLiveView();
         }
 
-        public void StopLiveView()
+        private void StopLiveView()
         {
             log.Debug("PhotoPage::StopLiveView");
             CameraMan?.StopLiveView();
@@ -84,5 +86,17 @@ namespace photo_tos_maton.pages
             CameraMan?.TakePicture();
         }
 
+
+        private void PhotoPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            log.Info("PhotoPage::Loaded");
+            _cameraMan?.StartLiveView();
+        }
+
+        private void PhotoPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            log.Info("PhotoPage::Unloaded");
+            _cameraMan?.StopLiveView();
+        }
     }
 }
