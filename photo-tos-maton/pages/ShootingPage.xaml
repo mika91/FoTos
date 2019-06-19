@@ -1,0 +1,127 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:user_controls="clr-namespace:photo_tos_maton.user_controls"
+    xmlns:system="clr-namespace:System;assembly=mscorlib" x:Class="photo_tos_maton.pages.ShootingPage"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+            Unloaded="ShootingPage_Unloaded"
+            Loaded="ShootingPage_Loaded">
+
+    <UserControl.Resources>
+        <system:Double x:Key="max_scale">1.3</system:Double>
+        <system:Double x:Key="min_scale">0.3</system:Double>
+        <Storyboard x:Key="StorayBoardCountdown">
+            <DoubleAnimation Storyboard.TargetName="MyAnimatedScaleTransform" Storyboard.TargetProperty="ScaleX"
+                                             Duration="0:0:1" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
+            <DoubleAnimation Storyboard.TargetName="MyAnimatedScaleTransform" Storyboard.TargetProperty="ScaleY"
+                                             Duration="0:0:1" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Grid>
+       
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="8*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Grid.Background>
+            <ImageBrush ImageSource="../resources/wallpapers/wallpaper00.jpg" Opacity="0.7" Stretch="Fill"/>
+        </Grid.Background>
+
+        <!-- Live View -->
+        <Grid x:Name="LiveViewGrid" Grid.Column="1" Grid.Row="1">
+            <!-- camera off icon -->
+            <!--<Grid x:Name="cameraOffIcon" Background="LightGray" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="8*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="8*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <Viewbox Opacity="0.3" Grid.Row="1" Grid.Column="1">
+                    <Canvas Width="24" Height="24">
+                        <Path Data="M1.2,4.47L2.5,3.2L20,20.72L18.73,22L16.73,20H4A2,2 0 0,1 2,18V6C2,5.78 2.04,5.57 2.1,5.37L1.2,4.47M7,4L9,2H15L17,4H20A2,2 0 0,1 22,6V18C22,18.6 21.74,19.13 21.32,19.5L16.33,14.5C16.76,13.77 17,12.91 17,12A5,5 0 0,0 12,7C11.09,7 10.23,7.24 9.5,7.67L5.82,4H7M7,12A5,5 0 0,0 12,17C12.5,17 13.03,16.92 13.5,16.77L11.72,15C10.29,14.85 9.15,13.71 9,12.28L7.23,10.5C7.08,10.97 7,11.5 7,12M12,9A3,3 0 0,1 15,12C15,12.35 14.94,12.69 14.83,13L11,9.17C11.31,9.06 11.65,9 12,9Z" Fill="Black" />
+                    </Canvas>
+                </Viewbox>
+
+            </Grid>-->
+            <!--- live view image -->
+            <Image x:Name="LiveViewImage" RenderTransformOrigin="0.5,0.5" Visibility="Visible">
+                <Image.RenderTransform>
+                    <ScaleTransform ScaleX="-1"/>
+                </Image.RenderTransform>
+            </Image>
+        </Grid>
+
+        <!-- countdown -->
+        <Grid x:Name="CountdownGrid" Grid.Column="1" Grid.Row="1">
+            <Border>
+                <Border.RenderTransformOrigin>0.5, 0.5</Border.RenderTransformOrigin>
+                <Border.RenderTransform>
+                    <ScaleTransform x:Name="MyAnimatedScaleTransform" />
+                </Border.RenderTransform>
+                <Viewbox>
+                    <TextBlock Name="TextCountdown" Text="3" FontFamily="Segoe UI" >
+                        <TextBlock.Foreground>
+                            <SolidColorBrush x:Name="myTextColor" Color="DarkOrchid" />
+                        </TextBlock.Foreground>
+                        <TextBlock.Effect>
+                            <DropShadowEffect
+                                ShadowDepth="0.2"
+                                Direction="330"
+                                Color="Black"
+                                Opacity="1"
+                                BlurRadius="0"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                </Viewbox>
+            </Border>
+        </Grid>
+
+        <!-- smile -->
+        <Grid x:Name="SmileGrid" Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+                <Image Source="../resources/icons/picto-sourire.png" Grid.Row="1" Grid.Column="1"></Image>
+            <Viewbox  Grid.Row="2" Grid.Column="1">
+                    <TextBlock Text="Smile !" FontFamily="Segoe UI Black" />
+                </Viewbox>
+        </Grid>
+
+
+        <!-- photo result -->
+        <Grid x:Name="PhotoResultGrid" Grid.Column="1" Grid.Row="1">
+            <Image x:Name="PhotoResultImage" />
+        </Grid>
+        
+        <!-- Button 'Take Picture'-->
+        <Button x:Name="buttonTakePicture" Grid.Column="0" Grid.Row="1" Content="Take Picture" Height="50" Click="ButtonTakePicture_Click"/>
+        <!-- Button 'back' -->
+        <Button x:Name="buttonBack" Grid.Column="0" Grid.Row="2" Content="back" Click="ButtonBack_Click" />
+
+      
+    </Grid>
+</UserControl>

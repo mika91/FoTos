@@ -1,27 +1,13 @@
-﻿using CameraControl.Devices.Classes;
-using log4net;
-using photo_tos_maton.camera;
+﻿using log4net;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Threading;
+using System.Threading.Tasks;
+using System.Drawing;
+using photo_tos_maton.utils;
+using photo_tos_maton.camera;
 
 namespace photo_tos_maton.pages
 {
@@ -30,160 +16,79 @@ namespace photo_tos_maton.pages
     /// </summary>
     public partial class PhotoPage : UserControl
     {
+        // TODO: time out on inactivity
+
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        private ICameraMan _cameraMan;
-        public ICameraMan CameraMan {
-            get { return _cameraMan; }
-            set {
-                _cameraMan = value;
-                _cameraMan.NewLiveViewImage += _cameraMan_NewLiveViewImage;
-                _cameraMan.NewPhoto += cameraMan_NewPhoto;
-            } }
-
-        private void cameraMan_NewPhoto(string filename)
-        {
-            log.Info("cameraMan_NewPhoto");
-
-        }
-
-
-        private void _cameraMan_NewLiveViewImage(Bitmap bitmap)
-        {
-            //log.Trace("cameraMan_NewLiveViewImage");
-            this.LiveViewImage.Dispatcher.Invoke(() => this.LiveViewImage.Source = BitmapUtils.BitmapToImageSource(bitmap));
-        }
-
-        public Action GotoBackPageHandler { get; set; }
+        MainWindow MainWindow { get { return Dispatcher.Invoke(() => Window.GetWindow(this) as MainWindow); } }
 
         public PhotoPage()
         {
-            log.Debug("PhotoPage::Contructor");
             InitializeComponent();
         }
 
-        // TODO: should be done on OnLoad() ???
-        private void StartLiveView()
+
+        public void SetImage(String filename)
         {
-            log.Debug("PhotoPage::StartLiveView");
-            CameraMan?.StartLiveView();
-        }
-
-        private void StopLiveView()
-        {
-            log.Debug("PhotoPage::StopLiveView");
-            CameraMan?.StopLiveView();
-        }
-
-        private void ButtonBack_Click(object sender, RoutedEventArgs e)
-        {
-            log.Debug("PhotoPage::ButtonBack_Click");
-            GotoBackPageHandler?.Invoke();
-        }
-
-        private void ButtonTakePicture_Click(object sender, RoutedEventArgs e)
-        {
-            log.Debug("PhotoPage::ButtonTakePicture_Click");
+            log.Info(string.Format("set photo image = '{0}'", filename));
 
 
 
-         
-            Task.Factory.StartNew(TakePictureTask);
-        }
-
-        private void TakePictureTask()
-        {
-            // display countdown
-            SetVisibility(EVisibilityMode.Countdown);
-
-            // countdown
-            int countdown = 3;
-            for (int i=countdown; i>0; i--)
+            this.Dispatcher.Invoke(() =>
             {
-                Dispatcher.Invoke(() =>
-                {
-                    // decrement countdown
-                    this.TextCountdown.Text = i.ToString();
-                    // animation
-                    var sb = this.FindResource("StorayBoardCountdown") as Storyboard;
-                    BeginStoryboard(sb);
-                });
-                Thread.Sleep(1000);
-            }
-        
-            // stop live view
-            _cameraMan?.StopLiveView();
+                // TODO: isn't possible to get the bitmap instead of loading it from filesystem ?
+                //var originalBitmap = new BitmapImage(new Uri(filename, UriKind.Absolute));
+                var originalBitmap = new Bitmap(filename);
 
-            // display smile icon
-            SetVisibility(EVisibilityMode.Smile);
+                PhotoImage.Source = BitmapUtils.BitmapToImageSource(originalBitmap);
+                Task.Factory.StartNew(() => RefreshThumbnails(originalBitmap));
+            });
 
-            // take picture
-            _cameraMan?.TakePicture();
-
-            // TODO: when phot captured (or timeout), return to LiveView 
-        }
-
-        private void StartCountdownAnimation()
-        {
           
         }
 
 
+     
+        private void RefreshThumbnails(Bitmap original)
+        {
+
+            // TODO: resize before ?
+
+         
+
+            this.Dispatcher.Invoke(() =>
+            {
+                var grayscale = original.Grayscale();
+                var sepia = original.Sepia();
+
+                this.ThumbnailColor.Source      = BitmapUtils.BitmapToImageSource(original);
+                this.ThumbnailSepia.Source      = BitmapUtils.BitmapToImageSource(sepia);
+                this.ThumbnailGrayscale.Source  = BitmapUtils.BitmapToImageSource(grayscale);
+            });
+        }
+
         private void PhotoPage_Loaded(object sender, RoutedEventArgs e)
         {
-            log.Info("PhotoPage::Loaded");
-            StartLiveView();
-            SetVisibility(EVisibilityMode.LiveView);
+            log.Debug("PhotoPage::Loaded");
+
         }
 
         private void PhotoPage_Unloaded(object sender, RoutedEventArgs e)
         {
-            log.Info("PhotoPage::Unloaded");
-            StopLiveView();
+            log.Debug("PhotoPage::Unloaded");
         }
 
-        #region Visibility Management
-
-        enum EVisibilityMode { LiveView, Countdown, Smile, Photo }
-
-        private void SetVisibility(EVisibilityMode mode)
+        private void Thumbnail_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            if (sender is System.Windows.Controls.Image img)
             {
-                switch (mode)
-                {
-                    case EVisibilityMode.LiveView:
-                        this.LiveViewGrid.Visibility = Visibility.Visible;
-                        this.CountdownGrid.Visibility = Visibility.Collapsed;
-                        this.SmileGrid.Visibility = Visibility.Collapsed;
-                        break;
-
-                    case EVisibilityMode.Countdown:
-                        this.LiveViewGrid.Visibility = Visibility.Visible;
-                        this.CountdownGrid.Visibility = Visibility.Visible;
-                        this.SmileGrid.Visibility = Visibility.Collapsed;
-                        break;
-
-                    case EVisibilityMode.Smile:
-                        this.LiveViewGrid.Visibility = Visibility.Collapsed;
-                        this.CountdownGrid.Visibility = Visibility.Collapsed;
-                        this.SmileGrid.Visibility = Visibility.Visible;
-                        break;
-
-                    case EVisibilityMode.Photo:
-                        this.LiveViewGrid.Visibility = Visibility.Collapsed;
-                        this.CountdownGrid.Visibility = Visibility.Collapsed;
-                        this.SmileGrid.Visibility = Visibility.Collapsed;
-                        break;
-                }
-            }, DispatcherPriority.Background);
+                log.Info(string.Format("{0}: apply photo filter", img.Name));
+                this.PhotoImage.Source = img.Source;
+            }
         }
-  
-        public void WpfInvoke(Action handler)
+
+        private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.Invoke(handler, DispatcherPriority.Background);
+            MainWindow.GotoShootingPage();
         }
-
-        #endregion
     }
 }

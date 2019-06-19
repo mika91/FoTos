@@ -17,3 +17,8 @@
 - fichier conf log4net à part du app.config ? (dans le assemby.info, mettre le nome du fichier)
 - binding resource
 - margin %
+
+
+- usercontorl base calss
+https://docs.microsoft.com/en-us/dotnet/framework/wpf/controls/control-authoring-overview
+https://social.msdn.microsoft.com/Forums/vstudio/en-US/fe35716b-2f27-4c39-95a9-a431c0381d47/usercontrol-inheritance?forum=wpf

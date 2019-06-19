@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using NHotkey.Wpf;
 using NHotkey;
 using photo_tos_maton.camera;
+using System.Configuration;
 
 namespace photo_tos_maton
 {
@@ -31,8 +32,9 @@ namespace photo_tos_maton
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private ICameraMan _cameraMan;
-        private PhotoPage _photoPage;
+        private ShootingPage _shootingPage;
         private HomePage _homePage;
+        private PhotoPage _photoPage;
 
         public MainWindow()
         {
@@ -47,11 +49,20 @@ namespace photo_tos_maton
                 return;
 
             // cameraman
-            _cameraMan = new CameraMan();
+            var useCameraMock = Boolean.Parse(ConfigurationManager.AppSettings["UseCameraMock"] ?? "false");
+            if (useCameraMock)
+            {
+                log.Warn("using cameraman mock");
+                _cameraMan = new CameraManMock();
+            } else
+            {
+                _cameraMan = new CameraMan();
+            }
+        
 
             // init pages
             initPages();
-            LoadHomePage();
+            GotoHomePage();
         }
 
 
@@ -63,24 +74,48 @@ namespace photo_tos_maton
 
             // home page
             _homePage = new HomePage();
-            _homePage.GotoPhotoPageHandler = LoadPhotoPage;
            
+            // shooting page
+            _shootingPage = new ShootingPage();
+            _shootingPage.CameraMan = _cameraMan;
+
             // photo page
             _photoPage = new PhotoPage();
-            _photoPage.GotoBackPageHandler = LoadHomePage;
-            _photoPage.CameraMan = _cameraMan;
 
-            LoadHomePage();
+
+            GotoHomePage();
         }
 
-        private void LoadPhotoPage()
-        {
-            transitionBox.Content = _photoPage;
-        }
 
-        private void LoadHomePage()
+
+        public void GotoHomePage()
         {
+            this.Dispatcher.Invoke(() =>
+        {
+            log.Debug("Goto Home Page");
             transitionBox.Content = _homePage;
+        });
+         }
+
+    public void GotoShootingPage()
+        {
+        this.Dispatcher.Invoke(() =>
+        {
+            log.Debug("Goto Shooting Page");
+            transitionBox.Content = _shootingPage;
+        });
+             }
+
+
+
+    public void GotoPhotoPage(string filename)
+        {
+        this.Dispatcher.Invoke(() =>
+        {
+            log.Debug("Goto Photo Page");
+            _photoPage.SetImage(filename);
+            transitionBox.Content = _photoPage;
+        });
         }
 
 

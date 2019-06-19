@@ -111,14 +111,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="camera\BitmapUtils.cs" />
+    <Compile Include="utils\BitmapUtils.cs" />
     <Compile Include="camera\CameraMan.cs" />
+    <Compile Include="camera\CameraManMock.cs" />
     <Compile Include="camera\CameraManPhoto.cs" />
     <Compile Include="camera\ICameraMan.cs" />
     <Compile Include="camera\CameraManLiveView.cs" />
+    <Compile Include="pages\PhotoPage.xaml.cs">
+      <DependentUpon>PhotoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="user_controls\SlideShowControl.xaml.cs">
       <DependentUpon>SlideShowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="utils\BitmapExtensions.cs" />
+    <Compile Include="utils\IdleTimeDetector.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -136,6 +142,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="pages\PhotoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="pages\ShootingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -148,8 +158,8 @@
     <Compile Include="pages\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="pages\PhotoPage.xaml.cs">
-      <DependentUpon>PhotoPage.xaml</DependentUpon>
+    <Compile Include="pages\ShootingPage.xaml.cs">
+      <DependentUpon>ShootingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -203,9 +213,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Accord.3.8.2-alpha\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.2-alpha\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

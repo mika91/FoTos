@@ -5,7 +5,7 @@
              StartupUri="MainWindow.xaml">
     
     <Application.Resources>
-        
+
         <!-- icon: camera-off -->
         <Style TargetType="{x:Type ContentControl}" x:Key="camera-off">
             <Setter Property="ContentTemplate">

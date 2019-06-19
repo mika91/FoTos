@@ -1,8 +1,10 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,7 +24,8 @@ namespace photo_tos_maton.pages
     /// </summary>
     public partial class HomePage : UserControl
     {
-        public Action GotoPhotoPageHandler { get; set; }
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        MainWindow MainWindow { get { return Dispatcher.Invoke(() => Window.GetWindow(this) as MainWindow); } }
 
         public HomePage()
         {
@@ -32,13 +35,10 @@ namespace photo_tos_maton.pages
             slideShowControl.Start(ConfigurationManager.AppSettings["SlideShowDirPath"].ToString());
         }
 
-        
-
-
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            GotoPhotoPageHandler?.Invoke();
+            MainWindow.GotoShootingPage();
         }
     }
 }
