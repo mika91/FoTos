@@ -9,6 +9,7 @@ using System.Drawing;
 using photo_tos_maton.utils;
 using photo_tos_maton.camera;
 using System.Diagnostics;
+using System.Threading;
 
 namespace photo_tos_maton.pages
 {
@@ -28,26 +29,31 @@ namespace photo_tos_maton.pages
         }
 
 
-        public void SetImage(Bitmap img)
+        private Bitmap _img;
+        public Bitmap Image
         {
-
-
-            this.Dispatcher.Invoke(() =>
+            get { return _img; }
+            set
             {
-                var originalBitmap = img;
+                _img = value;
+                this.Dispatcher.Invoke(() =>
+                {
+                    var originalBitmap = _img;
 
-                PhotoImage.Source = BitmapUtils.BitmapToImageSource(originalBitmap);
-                Task.Factory.StartNew(() => RefreshThumbnails(originalBitmap));
-            });
+                    PhotoImage.Source = BitmapUtils.BitmapToImageSource(originalBitmap);
+                    RefreshThumbnails(originalBitmap);
+                });
+            }
 
           
         }
 
 
      
-        private void RefreshThumbnails(Bitmap img)
+        private async Task RefreshThumbnails(Bitmap img)
         {
             log.Debug("Refreshing filter thumbnails...");
+            //await Task.Delay(5000);
             var sw = new Stopwatch();
             sw.Start();
             // TODO: resize before ?

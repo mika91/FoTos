@@ -21,7 +21,7 @@ namespace photo_tos_maton.camera
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public bool HasCamera { get { return _mng.SelectedCameraDevice != null; } }
+        public bool HasCamera { get { return _mng.SelectedCameraDevice?.IsConnected == true; } }
         public event Action CameraChanged;
 
         public CameraMan()
@@ -37,11 +37,11 @@ namespace photo_tos_maton.camera
         {
             log.Info("init camera manager");
             _mng = new CameraDeviceManager();
-            _mng.CameraConnected    += Manager_CameraConnected;
+            _mng.CameraConnected += Manager_CameraConnected;
             _mng.CameraDisconnected += Manager_CameraDisconnected;
-            _mng.CameraSelected     += Manager_CameraSelected;
-            _mng.PhotoCaptured      += Manager_PhotoCaptured;
-            _mng.PropertyChanged    += Manager_PropertyChanged;
+            _mng.CameraSelected += Manager_CameraSelected;
+            _mng.PhotoCaptured += Manager_PhotoCaptured;
+            _mng.PropertyChanged += Manager_PropertyChanged;
 
             // For experimental Canon driver support- to use canon driver the canon sdk files should be copied in application folder
             _mng.UseExperimentalDrivers = true;
@@ -57,8 +57,11 @@ namespace photo_tos_maton.camera
                 log.Warn("camera is busy, please wait...");
                 Thread.Sleep(100);
             }
+
+            InitLiveView();
         }
 
+        private ICameraDevice Camera { get { return (_mng.SelectedCameraDevice?.IsConnected == true) ? _mng.SelectedCameraDevice : null; } }
 
         //private void CloseAllAndConnect()
         //{
@@ -110,18 +113,6 @@ namespace photo_tos_maton.camera
                 CameraChanged();
         }
 
-
-        private ICameraDevice CheckDevice()
-        {
-            // TODO: recoonect device if null ?
-            var device = _mng.SelectedCameraDevice;
-            if (device == null)
-            {
-                log.Error("no selected camera");
-            }
-
-            return device;
-        }
 
         #endregion
 

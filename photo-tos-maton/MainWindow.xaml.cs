@@ -33,9 +33,9 @@ namespace photo_tos_maton
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private ICameraMan _cameraMan;
-        private ShootingPage _shootingPage;
-        private HomePage _homePage;
-        private PhotoPage _photoPage;
+        //private ShootingPage _shootingPage;
+        //private HomePage _homePage;
+        //private PhotoPage _photoPage;
 
         public MainWindow()
         {
@@ -73,15 +73,7 @@ namespace photo_tos_maton
         {
             // TODO: ajouter un 'OnUnload' sur toutes les pages pour centraliser ici toute la gestion des etas IHM / Camera
 
-            // home page
-            _homePage = new HomePage();
-           
-            // shooting page
-            _shootingPage = new ShootingPage();
-            _shootingPage.CameraMan = _cameraMan;
-
-            // photo page
-            _photoPage = new PhotoPage();
+          
 
 
             GotoHomePage();
@@ -94,7 +86,10 @@ namespace photo_tos_maton
             this.Dispatcher.Invoke(() =>
         {
             log.Debug("Goto Home Page");
-            transitionBox.Content = _homePage;
+
+            this.GridMain.Children.Clear();
+            var homepage = new HomePage();
+            this.GridMain.Children.Add(homepage);
         });
          }
 
@@ -103,7 +98,10 @@ namespace photo_tos_maton
         this.Dispatcher.Invoke(() =>
         {
             log.Debug("Goto Shooting Page");
-            transitionBox.Content = _shootingPage;
+
+            this.GridMain.Children.Clear();
+            var shootingpage = new ShootingPage() { CameraMan = _cameraMan };
+            this.GridMain.Children.Add(shootingpage);
         });
              }
 
@@ -114,11 +112,27 @@ namespace photo_tos_maton
         this.Dispatcher.Invoke(() =>
         {
             log.Debug("Goto Photo Page");
-            _photoPage.SetImage(img);
-            transitionBox.Content = _photoPage;
+
+            this.GridMain.Children.Clear();
+            var photopage = new PhotoPage() {  Image = img };
+            this.GridMain.Children.Add(photopage);
         });
         }
 
+        //private void setPage(int page)
+        //{
+        //    this.Dispatcher.Invoke(() =>
+        //    {
+        //        _homePage.Visibility     = SetVisibility(page == 0);
+        //        _shootingPage.Visibility = SetVisibility(page == 1);
+        //        _photoPage.Visibility    = SetVisibility(page == 2);
+        //    });
+        //}
+
+        //private Visibility SetVisibility(bool v)
+        //{
+        //    return v ? Visibility.Visible : Visibility.Collapsed;
+        //}
 
         #endregion
 

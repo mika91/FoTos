@@ -15,13 +15,11 @@ namespace photo_tos_maton.camera
         public void TakePicture()
         {
             log.Info("CameraMan::TakePicture");
-
-            var device = CheckDevice();
-
+            
             try
             {
                 log.Info("call device photo capture");
-                device?.CapturePhotoNoAf();
+                Camera?.CapturePhotoNoAf();
             } catch (Exception ex)
             {
                 log.Error("An error occured whil taking picture", ex);

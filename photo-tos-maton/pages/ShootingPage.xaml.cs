@@ -19,6 +19,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
@@ -208,6 +209,8 @@ namespace photo_tos_maton.pages
                 {
                     case EVisibilityMode.LiveView:
                         this.LiveViewGrid.Visibility = Visibility.Visible;
+                        this.LiveViewImage.BitmapEffect = null;
+                        this.LiveViewGrid.Opacity = 1.0;
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
                         this.PhotoResultGrid.Visibility = Visibility.Collapsed;
@@ -215,18 +218,23 @@ namespace photo_tos_maton.pages
 
                     case EVisibilityMode.Countdown:
                         this.LiveViewGrid.Visibility = Visibility.Visible;
+                        this.LiveViewImage.BitmapEffect = null;
+                        this.LiveViewGrid.Opacity = 1.0;
                         this.CountdownGrid.Visibility = Visibility.Visible;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
                         this.PhotoResultGrid.Visibility = Visibility.Collapsed;
                         break;
 
                     case EVisibilityMode.Smile:
-                        this.LiveViewGrid.Visibility = Visibility.Collapsed;
+                        this.LiveViewImage.BitmapEffect = new BlurBitmapEffect() { Radius = 20, KernelType = KernelType.Gaussian };
+                        this.LiveViewGrid.Visibility = Visibility.Visible;
+                        this.LiveViewGrid.Opacity = 0.7;
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
                         this.SmileGrid.Visibility = Visibility.Visible;
                         this.PhotoResultGrid.Visibility = Visibility.Collapsed;
                         break;
 
+                        // TODO: not used for now
                     case EVisibilityMode.Photo:
                         this.LiveViewGrid.Visibility = Visibility.Collapsed;
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
