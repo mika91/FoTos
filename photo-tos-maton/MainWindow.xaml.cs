@@ -21,6 +21,7 @@ using NHotkey.Wpf;
 using NHotkey;
 using photo_tos_maton.camera;
 using System.Configuration;
+using System.Drawing;
 
 namespace photo_tos_maton
 {
@@ -108,12 +109,12 @@ namespace photo_tos_maton
 
 
 
-    public void GotoPhotoPage(string filename)
+    public void GotoPhotoPage(Bitmap img)
         {
         this.Dispatcher.Invoke(() =>
         {
             log.Debug("Goto Photo Page");
-            _photoPage.SetImage(filename);
+            _photoPage.SetImage(img);
             transitionBox.Content = _photoPage;
         });
         }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using photo_tos_maton.utils;
 using photo_tos_maton.camera;
+using System.Diagnostics;
 
 namespace photo_tos_maton.pages
 {
@@ -27,17 +28,13 @@ namespace photo_tos_maton.pages
         }
 
 
-        public void SetImage(String filename)
+        public void SetImage(Bitmap img)
         {
-            log.Info(string.Format("set photo image = '{0}'", filename));
-
 
 
             this.Dispatcher.Invoke(() =>
             {
-                // TODO: isn't possible to get the bitmap instead of loading it from filesystem ?
-                //var originalBitmap = new BitmapImage(new Uri(filename, UriKind.Absolute));
-                var originalBitmap = new Bitmap(filename);
+                var originalBitmap = img;
 
                 PhotoImage.Source = BitmapUtils.BitmapToImageSource(originalBitmap);
                 Task.Factory.StartNew(() => RefreshThumbnails(originalBitmap));
@@ -48,22 +45,27 @@ namespace photo_tos_maton.pages
 
 
      
-        private void RefreshThumbnails(Bitmap original)
+        private void RefreshThumbnails(Bitmap img)
         {
-
+            log.Debug("Refreshing filter thumbnails...");
+            var sw = new Stopwatch();
+            sw.Start();
             // TODO: resize before ?
-
-         
 
             this.Dispatcher.Invoke(() =>
             {
-                var grayscale = original.Grayscale();
-                var sepia = original.Sepia();
+                var original = BitmapUtils.Scale(img, 1000, 1000, true);
+
+                var grayscale   = original.Grayscale();
+                var sepia       = original.Sepia();
 
                 this.ThumbnailColor.Source      = BitmapUtils.BitmapToImageSource(original);
                 this.ThumbnailSepia.Source      = BitmapUtils.BitmapToImageSource(sepia);
                 this.ThumbnailGrayscale.Source  = BitmapUtils.BitmapToImageSource(grayscale);
             });
+
+            sw.Stop();
+            log.Debug(string.Format("thumbnails refreshed in {0}ms", sw.ElapsedMilliseconds));
         }
 
         private void PhotoPage_Loaded(object sender, RoutedEventArgs e)

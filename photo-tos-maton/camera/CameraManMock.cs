@@ -11,7 +11,7 @@ namespace photo_tos_maton.camera
     class CameraManMock : ICameraMan
     {
         public event Action<Bitmap> NewLiveViewImage;
-        public event Action<string> NewPhoto;
+        public event Action<Bitmap> NewPhoto;
 
         private CancellationTokenSource _liveViewToken;
 
@@ -28,7 +28,7 @@ namespace photo_tos_maton.camera
                     if (ct.IsCancellationRequested)
                     {
                         // another thread decided to cancel
-                        Console.WriteLine("task canceled");
+                        Console.WriteLine("mock liveview stopped");
                         break;
                     }
 
@@ -51,9 +51,7 @@ namespace photo_tos_maton.camera
             if (NewPhoto != null)
             {
                 var img = GenerateRandomBitmap();
-                var filename = @"c:\\tmp\\fake_image.png";
-                img.Save(filename);
-                NewPhoto?.Invoke(filename);
+                NewPhoto?.Invoke(img);
 
             }
            

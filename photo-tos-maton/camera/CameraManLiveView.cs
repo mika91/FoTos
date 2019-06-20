@@ -44,13 +44,13 @@ namespace photo_tos_maton.camera
                 }
                 else
                 {
-                    Log.Debug("Error starting live view " + resp);
+                    Log.Error("Error starting live view " + resp);
                     _timerLiveView.Stop();
                 }
             }
             catch (Exception ex)
             {
-                Log.Debug("Error starting live view " + ex.ToString());
+                Log.Error("Error starting live view " + ex.ToString());
                 _timerLiveView?.Stop();
             }
         }
@@ -72,7 +72,7 @@ namespace photo_tos_maton.camera
                 var device = _mng.SelectedCameraDevice;
                 if (device?.GetLiveViewImage()?.IsLiveViewRunning ?? false)
                 {
-                    log.Info("stop device liveview");
+                    log.Info("call device liveview stop");
                     device?.StopLiveView();
                 }
                
@@ -92,11 +92,11 @@ namespace photo_tos_maton.camera
             {
                 bool retry = false;
                 int retryNum = 0;
-                Log.Debug("LiveView: Liveview started");
                 do
                 {
                     try
                     {
+                        log.Info("call device liveview start");
                         _mng.SelectedCameraDevice?.StartLiveView();
                     }
                     catch (DeviceException deviceException)
@@ -114,11 +114,9 @@ namespace photo_tos_maton.camera
 
 
                 // notify new liveview image available on timer tick
-                _timerLiveView.Elapsed += (sender, eventArgs) => Task.Factory.StartNew(NotifyNewLiveViewImage) ;
+                _timerLiveView.Elapsed += (sender, eventArgs) => Task.Factory.StartNew(NotifyNewLiveViewImage);
                 _timerLiveView.Start();
 
-
-                Log.Debug("LiveView: Liveview start done");
             }
             catch (Exception exception)
             {
@@ -129,17 +127,19 @@ namespace photo_tos_maton.camera
 
         private void NotifyNewLiveViewImage()
         {
-            // notify bitmap
+            // nobody to notify
+            if (NewLiveViewImage == null)
+                return;
+
             var liveViewData = _mng.SelectedCameraDevice?.GetLiveViewImage();
-            if (liveViewData != null && liveViewData.ImageData != null && NewLiveViewImage != null)
+            if (liveViewData != null && liveViewData.ImageData != null)
             {
                 var bitmap = new Bitmap(new MemoryStream(liveViewData.ImageData,
                      liveViewData.ImageDataPosition,
                      liveViewData.ImageData.Length - liveViewData.ImageDataPosition));
 
-                NewLiveViewImage.Invoke(bitmap);
+                NewLiveViewImage?.Invoke(bitmap);
             }
-          
         }
 
   

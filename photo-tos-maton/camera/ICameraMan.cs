@@ -14,7 +14,7 @@ namespace photo_tos_maton.camera
 
         void TakePicture();
 
-        event Action<String> NewPhoto;
+        event Action<Bitmap> NewPhoto;
 
     }
 }

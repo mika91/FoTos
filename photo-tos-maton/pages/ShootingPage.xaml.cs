@@ -53,7 +53,6 @@ namespace photo_tos_maton.pages
 
         public ShootingPage()
         {
-            log.Debug("ShootingPage::Contructor");
             InitializeComponent();
         }
 
@@ -61,28 +60,26 @@ namespace photo_tos_maton.pages
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            log.Debug("ShootingPage::ButtonBack_Click");
             MainWindow.GotoHomePage();
         }
 
         private void ButtonTakePicture_Click(object sender, RoutedEventArgs e)
         {
-            log.Debug("ShootingPage::ButtonTakePicture_Click");
             if (_inProgressPhotoShoot)
             {
-                log.Warn("photo shoot is already in progess");
+                log.Warn("photo shooting is already in progess");
                 return;
             }
 
             // start new photo shoot process
-            log.Info("start photo shoot countdown");
+            log.Info("start photo shooting countdown");
             Task.Factory.StartNew(PhotoShootTask);
         }
 
         private void PhotoShootTask()
         {
             _inProgressPhotoShoot = true;
-            _photoFilename = null;
+            _lastPhoto = null;
 
             try
             {
@@ -114,7 +111,7 @@ namespace photo_tos_maton.pages
                 Thread.Sleep(1000);
 
                 // take picture
-                _photoFilename = null;
+                _lastPhoto = null;
                 _cameraMan?.TakePicture(); // TODO: appel blocant ?
 
           
@@ -125,11 +122,10 @@ namespace photo_tos_maton.pages
                 // timeout task:
                 // https://stackoverflow.com/questions/20717414/creating-tasks-with-timeouts
                 // https://devblogs.microsoft.com/pfxteam/crafting-a-task-timeoutafter-method/
-                var photoWasCaptured = SpinWait.SpinUntil(() => !String.IsNullOrEmpty(_photoFilename), TimeSpan.FromSeconds(5)); // TODO: make configurable
+                var photoWasCaptured = SpinWait.SpinUntil(() => _lastPhoto != null, TimeSpan.FromSeconds(5)); // TODO: make configurable
                 if (photoWasCaptured)
                 {
-                    log.Info(string.Format("new photo captured = '{0}'", _photoFilename));
-                    MainWindow.GotoPhotoPage(_photoFilename);
+                    MainWindow.GotoPhotoPage(_lastPhoto);
                     //this.Dispatcher.Invoke(() =>
                     //{
                     //    //// set photo source
@@ -143,39 +139,38 @@ namespace photo_tos_maton.pages
                 }
                 else
                 {
-                    log.Warn("photo capture timeout");
+                    log.Warn("photo shooting timeout");
                     SetVisibility(EVisibilityMode.LiveView);
                 }
             } catch (Exception ex)
             {
-                log.Error("error furing photo shoot session", ex);
+                log.Error("error during photo shooting session", ex);
                 SetVisibility(EVisibilityMode.LiveView);
             }
             finally
             {
                 // reset var
                 _inProgressPhotoShoot = false;
-                _photoFilename = null;
+                _lastPhoto = null;
             }
         }
 
         private bool _inProgressPhotoShoot     = false; // TODO: mutex
-        private String _photoFilename = null;
+        private Bitmap _lastPhoto = null;
 
 
-        private void cameraMan_NewPhoto(string filename)
+        private void cameraMan_NewPhoto(Bitmap img)
         {
-            log.Info("cameraMan_NewPhoto");
             if (_inProgressPhotoShoot /* && _photoFilename == null*/)
             {
-                _photoFilename = filename;
+                _lastPhoto = img;
             }
         }
 
 
         private void ShootingPage_Loaded(object sender, RoutedEventArgs e)
         {
-            log.Debug("ShootingPage::Loaded");
+            log.Debug("ShootingPage:Loaded");
             StartLiveView();
         }
 
@@ -188,9 +183,8 @@ namespace photo_tos_maton.pages
         // TODO: should be done on OnLoad() ???
         private void StartLiveView()
         {
-            log.Info("Start Camera LiveView");
             _inProgressPhotoShoot = false;
-            _photoFilename = null;
+            _lastPhoto = null;
             CameraMan?.StartLiveView();
             SetVisibility(EVisibilityMode.LiveView);
         }
@@ -199,7 +193,6 @@ namespace photo_tos_maton.pages
 
         private void StopLiveView()
         {
-            log.Info("Stop Camera LiveView");
             CameraMan?.StopLiveView();
         }
 

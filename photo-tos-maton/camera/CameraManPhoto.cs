@@ -2,6 +2,7 @@
 using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Threading;
 
@@ -9,7 +10,7 @@ namespace photo_tos_maton.camera
 {
     public partial class CameraMan
     {
-        public event Action<String> NewPhoto;
+        public event Action<Bitmap> NewPhoto;
 
         public void TakePicture()
         {
@@ -19,6 +20,7 @@ namespace photo_tos_maton.camera
 
             try
             {
+                log.Info("call device photo capture");
                 device?.CapturePhotoNoAf();
             } catch (Exception ex)
             {
@@ -27,9 +29,9 @@ namespace photo_tos_maton.camera
             
         }
 
-        private void SelectedCameraDevice_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
+        private void Manager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
         {
-            log.Info(string.Format("CameraMan::SelectedCameraDevice_PhotoCaptured: filename = {0}", eventArgs.FileName));
+            log.Info(string.Format("new photo captured: filename = {0}", eventArgs.FileName));
 
             // to prevent UI freeze start the transfer process in a new thread
             Thread thread = new Thread(OnPhotoCapturedThread);
@@ -98,7 +100,13 @@ namespace photo_tos_maton.camera
                 // notify new photo
                 if (NewPhoto != null)
                 {
-                    NewPhoto.Invoke(fileName);
+                    try{
+                        var img = new Bitmap(fileName);
+                        NewPhoto.Invoke(img);
+                    } catch(Exception ex)
+                    {
+                        log.Error(string.Format("failed to load camera roll photo: filename = '{0}'", fileName));
+                    }
                 }
 
 
