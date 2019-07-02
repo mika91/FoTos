@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Media.Imaging;
 
-namespace photo_tos_maton.camera
+namespace FoTos.Services.Camera
 {
-    public interface ICameraMan
+    public interface ICameraService
     {
 
         void StartLiveView();
@@ -15,8 +14,5 @@ namespace photo_tos_maton.camera
         void TakePicture();
 
         event Action<Bitmap> NewPhoto;
-
-        void Save(Bitmap picture);
-
     }
 }

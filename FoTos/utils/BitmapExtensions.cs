@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace photo_tos_maton.utils
+namespace FoTos.utils
 {
     public static class BitmapExtensions
     {

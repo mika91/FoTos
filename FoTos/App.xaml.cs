@@ -1,15 +1,13 @@
 ﻿using log4net;
-using photo_tos_maton.camera;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
+using FoTos.Views;
+using FoTos.Services.Camera;
+using FoTos.Services.Camera.mock;
 
-namespace photo_tos_maton
+namespace FoTos
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -25,6 +23,8 @@ namespace photo_tos_maton
             LoadSettings();
 
             // load services
+            log.Info("Load application services");
+            LoadServices();
 
             // Create main application window
             log.Info("Start MainWindow");
@@ -34,20 +34,33 @@ namespace photo_tos_maton
 
 
         #region Settings
-
-        public String SlideShowFolder { get; private set; }
-        public String CameraRollFolder { get; private set; }
-        public String FinalPhotosFolder { get; private set; }
-        public Boolean UseCameraMock { get; private set; }
+        
+        public AppSettings Settings { get; private set; }
 
 
         private void LoadSettings()
         {
-            SlideShowFolder = ConfigurationManager.AppSettings["SlideShowFolder"];
-            CameraRollFolder = ConfigurationManager.AppSettings["CameraRollFolder"];
-            FinalPhotosFolder = ConfigurationManager.AppSettings["FinalPhotosFolder"];
-            UseCameraMock = Boolean.Parse(ConfigurationManager.AppSettings["UseCameraMock"] ?? "false");
+            Settings = new AppSettings();
+           
         }
+
+
+        public class AppSettings
+        {
+            public String SlideShowFolder   { get; private set; }
+            public String CameraRollFolder  { get; private set; }
+            public String FinalPhotosFolder { get; private set; }
+            public Boolean UseCameraMock    { get; private set; }
+
+            public AppSettings()
+            {
+                SlideShowFolder     = ConfigurationManager.AppSettings["SlideShowFolder"];
+                CameraRollFolder    = ConfigurationManager.AppSettings["CameraRollFolder"];
+                FinalPhotosFolder   = ConfigurationManager.AppSettings["FinalPhotosFolder"];
+                UseCameraMock       = Boolean.Parse(ConfigurationManager.AppSettings["UseCameraMock"] ?? "false");
+            }
+        }
+
 
         #endregion
 
@@ -57,20 +70,27 @@ namespace photo_tos_maton
 
         private void LoadServices()
         {
-            Services = new AppServices(
-                new CameraMan()
-            //TODO: uploader
-            );
+            ICameraService camera;
+            if (Settings.UseCameraMock)
+            {
+                log.Warn("using cameraman mock");
+                camera = new CameraServiceMock();
+            }
+            else
+            {
+                camera = new CameraService(Settings.CameraRollFolder);
+            }
 
+            Services = new AppServices(camera);
         }
 
         public class AppServices
         {
-            public ICameraMan CameraMan { get; private set; }
+            public ICameraService CameraService { get; private set; }
 
-            public AppServices(ICameraMan cameraMan)
+            public AppServices(ICameraService cameraMan)
             {
-                this.CameraMan = cameraMan;
+                this.CameraService = cameraMan;
             }
 
         }

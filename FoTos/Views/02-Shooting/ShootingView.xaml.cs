@@ -1,27 +1,18 @@
 ﻿using log4net;
-using photo_tos_maton.camera;
+using FoTos.camera;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
+using FoTos.Services.Camera;
 
-namespace photo_tos_maton.Views._02_ShootingView
+namespace FoTos.Views
 {
     /// <summary>
     /// Interaction logic for ShootingView.xaml
@@ -31,32 +22,43 @@ namespace photo_tos_maton.Views._02_ShootingView
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         MainWindow MainWindow { get { return Dispatcher.Invoke(() => Window.GetWindow(this) as MainWindow); } }
 
-
-        private ICameraMan _cameraMan;
-        public ICameraMan CameraMan
-        {
-            get { return _cameraMan; }
-            set
-            {
-                _cameraMan = value;
-                _cameraMan.NewLiveViewImage += _cameraMan_NewLiveViewImage;
-                _cameraMan.NewPhoto += cameraMan_NewPhoto;
-            }
-        }
-
-
-        private void _cameraMan_NewLiveViewImage(Bitmap bitmap)
-        {
-            //log.Trace("cameraMan_NewLiveViewImage");
-            this.LiveViewImage.Dispatcher.Invoke(() => this.LiveViewImage.Source = BitmapUtils.BitmapToImageSource(bitmap));
-        }
-
-
         public ShootingView()
         {
             InitializeComponent();
         }
 
+        #region Dependency Injection
+
+        // dependency injection
+        private ICameraService _cameraService;
+
+        public void Init(ICameraService cameraService)
+        {
+            _cameraService = cameraService;
+            _cameraService.NewLiveViewImage += cameraService_NewLiveViewImage;
+            _cameraService.NewPhoto += cameraService_NewPhoto;
+        }
+
+        // clean dependencies (should be called form Unloaded event)
+        public void Release()
+        {
+            if (_cameraService != null)
+            {
+                _cameraService.NewLiveViewImage += cameraService_NewLiveViewImage;
+                _cameraService.NewPhoto += cameraService_NewPhoto;
+            }
+            _cameraService = null;
+        }
+
+        #endregion
+
+
+
+        private void cameraService_NewLiveViewImage(Bitmap bitmap)
+        {
+            //log.Trace("cameraService_NewLiveViewImage");
+            this.LiveViewImage.Dispatcher.Invoke(() => this.LiveViewImage.Source = BitmapUtils.BitmapToImageSource(bitmap));
+        }
 
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
@@ -108,7 +110,7 @@ namespace photo_tos_maton.Views._02_ShootingView
                 }
 
                 // stop live view
-                _cameraMan?.StopLiveView();
+                _cameraService?.StopLiveView();
 
                 // display smile icon
                 SetVisibility(EVisibilityMode.Smile);
@@ -118,7 +120,7 @@ namespace photo_tos_maton.Views._02_ShootingView
 
                 // take picture
                 _lastPhoto = null;
-                _cameraMan?.TakePicture(); // TODO: appel blocant ?
+                _cameraService?.TakePicture(); // TODO: appel blocant ?
 
 
 
@@ -166,7 +168,7 @@ namespace photo_tos_maton.Views._02_ShootingView
         private Bitmap _lastPhoto = null;
 
 
-        private void cameraMan_NewPhoto(Bitmap img)
+        private void cameraService_NewPhoto(Bitmap img)
         {
             if (_inProgressPhotoShoot /* && _photoFilename == null*/)
             {
@@ -185,6 +187,7 @@ namespace photo_tos_maton.Views._02_ShootingView
         {
             log.Debug("ShootingPage::Unloaded");
             StopLiveView();
+            Release();
         }
 
         // TODO: should be done on OnLoad() ???
@@ -192,7 +195,7 @@ namespace photo_tos_maton.Views._02_ShootingView
         {
             _inProgressPhotoShoot = false;
             _lastPhoto = null;
-            CameraMan?.StartLiveView();
+            _cameraService?.StartLiveView();
             SetVisibility(EVisibilityMode.LiveView);
         }
 
@@ -200,7 +203,7 @@ namespace photo_tos_maton.Views._02_ShootingView
 
         private void StopLiveView()
         {
-            CameraMan?.StopLiveView();
+            _cameraService?.StopLiveView();
         }
 
         #region Visibility Management

@@ -1,7 +1,7 @@
-﻿<Application x:Class="photo_tos_maton.App"
+﻿<Application x:Class="FoTos.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:photo_tos_maton"
+             xmlns:views="clr-namespace:FoTos.Views"
              Startup="App_Startup">
     
     <Application.Resources>

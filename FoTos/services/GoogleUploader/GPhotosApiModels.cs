@@ -4,7 +4,7 @@
 //using System.Text;
 //using System.Threading.Tasks;
 
-//namespace photo_tos_maton.uploader
+//namespace FoTos.uploader
 //{
 //    public class clsResponseRootObject
 //    {

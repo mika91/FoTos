@@ -1,20 +1,19 @@
-﻿using CameraControl.Devices;
+﻿
 using CameraControl.Devices.Classes;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
 
-namespace photo_tos_maton.camera
+namespace FoTos.Services.Camera
 {
     /// <summary>
     /// code based on DigiCamContol samples
     /// </summary>
-    public partial class CameraMan
+    public partial class CameraService
     {
         public event Action<Bitmap> NewLiveViewImage;
 

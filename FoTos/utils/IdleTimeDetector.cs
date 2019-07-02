@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace photo_tos_maton.utils
+namespace FoTos.utils
 {
     /// <summary>
     /// https://stackoverflow.com/questions/4963135/wpf-inactivity-and-activity

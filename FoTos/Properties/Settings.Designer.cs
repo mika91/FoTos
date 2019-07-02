@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace photo_tos_maton.Properties
+namespace FoTos.Properties
 {
 
 

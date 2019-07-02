@@ -111,34 +111,30 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="services\GoogleUploader\GPhotosApiModels.cs" />
-    <Compile Include="services\GoogleUploader\Uploader.cs" />
-    <Compile Include="services\PhotoProcessing\PhotoProcessing.cs" />
+    <Compile Include="Services\GoogleUploader\GPhotosApiModels.cs" />
+    <Compile Include="Services\GoogleUploader\Uploader.cs" />
+    <Compile Include="Services\PhotoProcessing\PhotoProcessing.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
-    <Compile Include="services\camera\CameraMan.cs" />
-    <Compile Include="services\camera\CameraManMock.cs" />
-    <Compile Include="services\camera\CameraManPhoto.cs" />
-    <Compile Include="services\camera\ICameraMan.cs" />
-    <Compile Include="services\camera\CameraManLiveView.cs" />
+    <Compile Include="Services\Camera\CameraService.cs" />
+    <Compile Include="Services\Camera\mock\CameraServiceMock.cs" />
+    <Compile Include="Services\Camera\CameraServiceShoot.cs" />
+    <Compile Include="Services\Camera\ICameraService.cs" />
+    <Compile Include="Services\Camera\CameraServiceLiveView.cs" />
     <Compile Include="Views\00-Misc\SlideShowControl.xaml.cs">
       <DependentUpon>SlideShowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\BitmapExtensions.cs" />
     <Compile Include="Utils\IdleTimeDetector.cs" />
-    <Compile Include="Views\01-HomeView\HomeView.xaml.cs">
+    <Compile Include="Views\01-Home\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\01-HomeView\HomeViewModel.cs" />
-    <Compile Include="Views\02-ShootingView\ShootingView.xaml.cs">
+    <Compile Include="Views\02-Shooting\ShootingView.xaml.cs">
       <DependentUpon>ShootingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\02-ShootingView\ShootingViewModel.cs" />
-    <Compile Include="Views\03-DevelopingView\DevelopingView.xaml.cs">
+    <Compile Include="Views\03-Developing\DevelopingView.xaml.cs">
       <DependentUpon>DevelopingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\03-DevelopingView\DevelopingViewModel.cs" />
-    <Compile Include="Views\MainWindowViewModel.cs" />
-    <Page Include="Views\01-HomeView\HomeView.xaml">
+    <Page Include="Views\01-Home\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -158,11 +154,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\02-ShootingView\ShootingView.xaml">
+    <Page Include="Views\02-Shooting\ShootingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\03-DevelopingView\DevelopingView.xaml">
+    <Page Include="Views\03-Developing\DevelopingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -221,7 +217,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="services\SlideShowProvider\" />
+    <Folder Include="Services\SlideShowProvider\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Accord.3.8.2-alpha\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.2-alpha\build\Accord.targets')" />

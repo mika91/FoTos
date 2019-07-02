@@ -1,16 +1,13 @@
-﻿using photo_tos_maton.camera;
+﻿using FoTos.camera;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using photo_tos_maton.utils;
+using FoTos.utils;
 using System.IO;
 using log4net;
 using System.Reflection;
 
-namespace photo_tos_maton.services.PhotoProcessing
+namespace FoTos.Services.PhotoProcessing
 {
     public class PhotoProcessing
     {

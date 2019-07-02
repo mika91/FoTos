@@ -1,14 +1,13 @@
 ﻿using CameraControl.Devices.Classes;
 using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading;
 
-namespace photo_tos_maton.camera
+namespace FoTos.Services.Camera
 {
-    public partial class CameraMan
+    public partial class CameraService
     {
         public event Action<Bitmap> NewPhoto;
 
@@ -46,7 +45,7 @@ namespace photo_tos_maton.camera
             {
                 eventArgs.CameraDevice.IsBusy = true;
                 var date = DateTime.Now.ToString("yyyyMMddHHmmssffff");
-                var fileName = Path.Combine(((App)System.Windows.Application.Current).CameraRollFolder, date + ".jpg");
+                var fileName = Path.Combine(CameraRollFolder, date + ".jpg");
 
                 // check the folder of filename, if not found create it
                 var dir = Path.GetDirectoryName(fileName);

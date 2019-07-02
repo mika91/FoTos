@@ -1,33 +1,24 @@
 ﻿using CameraControl.Devices;
-using CameraControl.Devices.Classes;
 using log4net;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace photo_tos_maton.camera
+namespace FoTos.Services.Camera
 {
-    public partial class CameraMan : ICameraMan
+    public partial class CameraService : ICameraService
     {
-        // TODO: avant chaque appel, si pas de camera détecté, tenter de faire un TryConnect ???
-
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public bool HasCamera { get { return _mng.SelectedCameraDevice?.IsConnected == true; } }
         public event Action CameraChanged;
 
-        public CameraMan()
+        public String CameraRollFolder { get; private set; }
+
+        public CameraService(String cameraRollFolder)
         {
+            CameraRollFolder = cameraRollFolder;
+
             InitManager();
         }
 
@@ -115,32 +106,8 @@ namespace photo_tos_maton.camera
                 CameraChanged();
         }
 
-        public void Save(Bitmap picture)
-        {
-            var dir = ((App)System.Windows.Application.Current).FinalPhotosFolder;
-
-            if (!Directory.Exists(dir))
-            {
-                log.Info("create final photos folder = " + dir);
-                Directory.CreateDirectory(dir);
-            }
-
-
-        }
-
 
         #endregion
-
-
-
-
-        public event Action CameraOn;
-        public event Action CameraOff;
-
-
-
-   
-
 
     }
 }

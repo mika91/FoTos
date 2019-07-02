@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace photo_tos_maton.camera
+namespace FoTos.Services.Camera.mock
 {
-    class CameraManMock : ICameraMan
+    class CameraServiceMock : ICameraService
     {
         public event Action<Bitmap> NewLiveViewImage;
         public event Action<Bitmap> NewPhoto;

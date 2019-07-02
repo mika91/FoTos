@@ -1,31 +1,16 @@
-﻿using CameraControl.Devices;
-using log4net;
+﻿using log4net;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using NHotkey.Wpf;
 using NHotkey;
-using photo_tos_maton.camera;
-using System.Configuration;
 using System.Drawing;
-using photo_tos_maton.Views._01_HomeView;
-using photo_tos_maton.Views._02_ShootingView;
-using photo_tos_maton.Views._03_DevelopingView;
+using FoTos.Services.Camera.mock;
+using FoTos.Services.Camera;
 
-namespace photo_tos_maton
+namespace FoTos.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -34,10 +19,7 @@ namespace photo_tos_maton
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private ICameraMan _cameraMan;
-        //private ShootingPage _shootingPage;
-        //private HomePage _homePage;
-        //private PhotoPage _photoPage;
+        public App App { get { return ((App)System.Windows.Application.Current); } }
 
         public MainWindow()
         {
@@ -51,36 +33,11 @@ namespace photo_tos_maton
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
-            // cameraman
-            var useCameraMock = ((App)Application.Current).UseCameraMock;
-            if (useCameraMock)
-            {
-                log.Warn("using cameraman mock");
-                _cameraMan = new CameraManMock();
-            } else
-            {
-                _cameraMan = new CameraMan();
-            }
-        
-
-            // init pages
-            initPages();
             GotoHomePage();
         }
 
 
         #region pages init
-
-        private void initPages()
-        {
-            // TODO: ajouter un 'OnUnload' sur toutes les pages pour centraliser ici toute la gestion des etas IHM / Camera
-
-          
-
-
-            GotoHomePage();
-        }
-
 
 
         public void GotoHomePage()
@@ -90,8 +47,9 @@ namespace photo_tos_maton
             log.Debug("Goto Home Page");
 
             this.GridMain.Children.Clear();
-            var homepage = new HomeView();
-            this.GridMain.Children.Add(homepage);
+            var homeView = new HomeView();
+            homeView.Init(App.Settings.SlideShowFolder);
+            this.GridMain.Children.Add(homeView);
         });
          }
 
@@ -102,8 +60,9 @@ namespace photo_tos_maton
             log.Debug("Goto Shooting Page");
 
             this.GridMain.Children.Clear();
-            var shootingpage = new ShootingView() { CameraMan = _cameraMan };
-            this.GridMain.Children.Add(shootingpage);
+            var shootingView = new ShootingView();
+            shootingView.Init(App.Services.CameraService);
+            this.GridMain.Children.Add(shootingView);
         });
              }
 
@@ -116,25 +75,13 @@ namespace photo_tos_maton
             log.Debug("Goto Photo Page");
 
             this.GridMain.Children.Clear();
-            var photopage = new DevelopingView() {  Image = img };
-            this.GridMain.Children.Add(photopage);
+            var photoView = new DevelopingView() {  Image = img };
+            photoView.Init();
+            this.GridMain.Children.Add(photoView);
         });
         }
 
-        //private void setPage(int page)
-        //{
-        //    this.Dispatcher.Invoke(() =>
-        //    {
-        //        _homePage.Visibility     = SetVisibility(page == 0);
-        //        _shootingPage.Visibility = SetVisibility(page == 1);
-        //        _photoPage.Visibility    = SetVisibility(page == 2);
-        //    });
-        //}
-
-        //private Visibility SetVisibility(bool v)
-        //{
-        //    return v ? Visibility.Visible : Visibility.Collapsed;
-        //}
+      
 
         #endregion
 

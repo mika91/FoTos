@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace photo_tos_maton.user_controls
+namespace FoTos.Views
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
