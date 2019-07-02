@@ -19,13 +19,101 @@
             <DoubleAnimation Storyboard.TargetName="MyAnimatedScaleTransform" Storyboard.TargetProperty="ScaleY"
                                              Duration="0:0:1" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
         </Storyboard>
+        
+            <Style TargetType="{x:Type Viewbox}" x:Key="ViewBoxButtonStyle">
+                <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform />
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <!-- Animates the button's opacity on mouse over. -->
+                    <EventTrigger RoutedEvent="Viewbox.MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+                  Storyboard.TargetProperty="(Viewbox.Opacity)"
+                  From="1.0" To="0.5" Duration="0:0:0.5" AutoReverse="True"
+                  RepeatBehavior="Forever" />
+                                    <!--<DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="0.9" Duration="0:0:.1" />
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="0.9" Duration="0:0:.1" />-->
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <!-- Returns the button's opacity to 1 when the mouse leaves. -->
+                    <EventTrigger RoutedEvent="Viewbox.MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+                  Storyboard.TargetProperty="(Viewbox.Opacity)"
+                  To="1" Duration="0:0:0.1" />
+                                    <!--<DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.0" Duration="0:0:.1" />
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.0" Duration="0:0:.1" />-->
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <!-- Animates the button's mouse down. -->
+                    <EventTrigger RoutedEvent="Viewbox.MouseDown">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="0.9" Duration="0:0:.1" />
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="0.9" Duration="0:0:.1" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <!-- Returns the button's opacity to 1 when the mouse up. -->
+                    <EventTrigger RoutedEvent="Viewbox.MouseUp">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.0" Duration="0:0:.1" />
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.0" Duration="0:0:.1" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+
+
+        <Style x:Key="BouncingUpStyle" TargetType="Viewbox">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform />
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=IsVisible}" 
+                         Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <!--<DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" To="-20" Duration="0:0:0.4" AutoReverse="True" RepeatBehavior="Forever"/>-->
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" From="15" To="0" Duration="0:0:0.4"  AutoReverse="True" RepeatBehavior="Forever"/>
+
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
     </UserControl.Resources>
 
     <Grid>
        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="8*" />
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="32*" />
+            <ColumnDefinition Width="5*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -37,9 +125,35 @@
         <Grid.Background>
             <ImageBrush ImageSource="../resources/wallpapers/wallpaper00.jpg" Opacity="0.7" Stretch="Fill"/>
         </Grid.Background>
+        
+        <!-- ArrowUp -->
+        <Grid Name="ArrowsUpGrid" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="32*" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+           
+            <Viewbox Grid.Column="0" Grid.Row="0" Style="{StaticResource BouncingUpStyle}">
+                <Canvas Width="24" Height="24">
+                    <Path Data="M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z" Fill="Black" />
+                </Canvas>
+            </Viewbox>
+            <Viewbox Grid.Column="1" Grid.Row="0" Style="{StaticResource BouncingUpStyle}">
+                <Canvas Width="24" Height="24">
+                    <Path Data="M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z" Fill="Black" />
+                </Canvas>
+            </Viewbox>
+            <Viewbox Grid.Column="2" Grid.Row="0" Style="{StaticResource BouncingUpStyle}">
+                <Canvas Width="24" Height="24">
+                    <Path Data="M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z" Fill="Black" />
+                </Canvas>
+            </Viewbox>
 
+        </Grid>
+     
         <!-- Live View -->
-        <Grid x:Name="LiveViewGrid" Grid.Column="1" Grid.Row="1">
+        <Grid x:Name="LiveViewGrid" Grid.Column="2" Grid.Row="1">
             <!-- camera off icon -->
             <!--<Grid x:Name="cameraOffIcon" Background="LightGray" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
@@ -68,7 +182,7 @@
         </Grid>
 
         <!-- countdown -->
-        <Grid x:Name="CountdownGrid" Grid.Column="1" Grid.Row="1">
+        <Grid x:Name="CountdownGrid" Grid.Column="2" Grid.Row="1">
             <Border>
                 <Border.RenderTransformOrigin>0.5, 0.5</Border.RenderTransformOrigin>
                 <Border.RenderTransform>
@@ -93,7 +207,7 @@
         </Grid>
 
         <!-- smile -->
-        <Grid x:Name="SmileGrid" Grid.Column="1" Grid.Row="1">
+        <Grid x:Name="SmileGrid" Grid.Column="2" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="4*"/>
@@ -111,14 +225,35 @@
                 </Viewbox>
         </Grid>
 
+        <StackPanel x:Name="panelTakePicture" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
+            
+            <!--<Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>-->
 
-        <!-- photo result -->
-        <Grid x:Name="PhotoResultGrid" Grid.Column="1" Grid.Row="1">
-            <Image x:Name="PhotoResultImage" />
-        </Grid>
-        
-        <!-- Button 'Take Picture'-->
-        <Button x:Name="buttonTakePicture" Grid.Column="0" Grid.Row="1" Content="Take Picture" Height="50" Click="ButtonTakePicture_Click"/>
+            <!-- Button 'Take Picture'-->
+            <Viewbox  Grid.Row="1" MouseUp="ButtonTakePicture_Click" Stretch="Fill" Style="{StaticResource ViewBoxButtonStyle}">
+                <Canvas Width="24" Height="24">
+                    <Path Data="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z" Fill="Black" />
+                </Canvas>
+            </Viewbox>
+
+            <Viewbox Grid.Row="2" VerticalAlignment="Top" Style="{StaticResource BouncingUpStyle}">
+                <Viewbox.RenderTransform>
+                    <TranslateTransform Y="-30"></TranslateTransform>
+                </Viewbox.RenderTransform>
+                <Canvas Width="24" Height="24">
+                    <Path Data="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" Fill="Black" />
+                </Canvas>
+                
+                <!--<Canvas Width="24" Height="24">
+                    <Path Data="M15,20H9V12H4.16L12,4.16L19.84,12H15V20Z" Fill="Black" />
+                </Canvas>-->
+            </Viewbox>
+        </StackPanel>
+
         <!-- Button 'back' -->
         <Button x:Name="buttonBack" Grid.Column="0" Grid.Row="2" Content="back" Click="ButtonBack_Click" />
 

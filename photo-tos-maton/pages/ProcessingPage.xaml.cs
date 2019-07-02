@@ -16,14 +16,14 @@ namespace photo_tos_maton.pages
     /// <summary>
     /// Interaction logic for PhotoPage.xaml
     /// </summary>
-    public partial class PhotoPage : UserControl
+    public partial class ProcessingPage : UserControl
     {
         // TODO: time out on inactivity
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         MainWindow MainWindow { get { return Dispatcher.Invoke(() => Window.GetWindow(this) as MainWindow); } }
 
-        public PhotoPage()
+        public ProcessingPage()
         {
             InitializeComponent();
         }

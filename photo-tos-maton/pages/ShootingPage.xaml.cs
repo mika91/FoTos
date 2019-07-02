@@ -66,6 +66,11 @@ namespace photo_tos_maton.pages
 
         private void ButtonTakePicture_Click(object sender, RoutedEventArgs e)
         {
+            TakePicture();
+        }
+
+        private void TakePicture()
+        {
             if (_inProgressPhotoShoot)
             {
                 log.Warn("photo shooting is already in progess");
@@ -213,7 +218,8 @@ namespace photo_tos_maton.pages
                         this.LiveViewGrid.Opacity = 1.0;
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
-                        this.PhotoResultGrid.Visibility = Visibility.Collapsed;
+                        this.panelTakePicture.Visibility = Visibility.Visible;
+                        this.ArrowsUpGrid.Visibility = Visibility.Collapsed;
                         break;
 
                     case EVisibilityMode.Countdown:
@@ -222,7 +228,8 @@ namespace photo_tos_maton.pages
                         this.LiveViewGrid.Opacity = 1.0;
                         this.CountdownGrid.Visibility = Visibility.Visible;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
-                        this.PhotoResultGrid.Visibility = Visibility.Collapsed;
+                        this.panelTakePicture.Visibility = Visibility.Collapsed;
+                        this.ArrowsUpGrid.Visibility = Visibility.Visible;
                         break;
 
                     case EVisibilityMode.Smile:
@@ -231,7 +238,8 @@ namespace photo_tos_maton.pages
                         this.LiveViewGrid.Opacity = 0.7;
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
                         this.SmileGrid.Visibility = Visibility.Visible;
-                        this.PhotoResultGrid.Visibility = Visibility.Collapsed;
+                        this.panelTakePicture.Visibility = Visibility.Collapsed;
+                        this.ArrowsUpGrid.Visibility = Visibility.Visible;
                         break;
 
                         // TODO: not used for now
@@ -239,7 +247,9 @@ namespace photo_tos_maton.pages
                         this.LiveViewGrid.Visibility = Visibility.Collapsed;
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
-                        this.PhotoResultGrid.Visibility = Visibility.Visible;
+
+                        this.ArrowsUpGrid.Visibility = Visibility.Collapsed;
+                        this.panelTakePicture.Visibility = Visibility.Collapsed;
                         break;
                 }
             }, DispatcherPriority.Background);
@@ -251,5 +261,7 @@ namespace photo_tos_maton.pages
         }
 
         #endregion
+
+       
     }
 }

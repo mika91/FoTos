@@ -73,5 +73,10 @@ namespace photo_tos_maton.camera
             g.Clear(color);
             return bmp;
         }
+
+        public void Save(Bitmap picture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

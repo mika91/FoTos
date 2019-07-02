@@ -114,7 +114,7 @@ namespace photo_tos_maton
             log.Debug("Goto Photo Page");
 
             this.GridMain.Children.Clear();
-            var photopage = new PhotoPage() {  Image = img };
+            var photopage = new ProcessingPage() {  Image = img };
             this.GridMain.Children.Add(photopage);
         });
         }

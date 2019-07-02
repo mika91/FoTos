@@ -44,10 +44,15 @@ namespace photo_tos_maton.camera
             return new Bitmap(img, (int)(img.Width * scale), (int)(img.Height * scale));
         }
 
-        // TODO: use better and faster algorithm
-        internal static Bitmap Scale(Bitmap img, int width, int height, bool keepAspectRatio)
+        internal static Bitmap Scale (Bitmap img, int max)
         {
-            int rWidth = width;
+            return Scale(img, max, max, true);
+        }
+
+        // TODO: use better and faster algorithm
+        internal static Bitmap Scale(Bitmap img, int width, int height, bool keepAspectRatio = true)
+        {
+            int rWidth  = width;
             int rHeight = height;
 
             if (keepAspectRatio)

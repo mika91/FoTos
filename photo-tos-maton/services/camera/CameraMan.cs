@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -113,10 +114,23 @@ namespace photo_tos_maton.camera
                 CameraChanged();
         }
 
+        public void Save(Bitmap picture)
+        {
+            var dir = ConfigurationManager.AppSettings["FinalPhotosDirPath"].ToString();
+
+            if (!Directory.Exists(dir))
+            {
+                log.Info("create final photos folder = " + dir);
+                Directory.CreateDirectory(dir);
+            }
+
+
+        }
+
 
         #endregion
 
- 
+
 
 
         public event Action CameraOn;
