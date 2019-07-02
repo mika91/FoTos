@@ -46,7 +46,7 @@ namespace photo_tos_maton.camera
             {
                 eventArgs.CameraDevice.IsBusy = true;
                 var date = DateTime.Now.ToString("yyyyMMddHHmmssffff");
-                var fileName = Path.Combine(ConfigurationManager.AppSettings["CameraRollDirPath"].ToString(), date + ".jpg");
+                var fileName = Path.Combine(((App)System.Windows.Application.Current).CameraRollFolder, date + ".jpg");
 
                 // check the folder of filename, if not found create it
                 var dir = Path.GetDirectoryName(fileName);

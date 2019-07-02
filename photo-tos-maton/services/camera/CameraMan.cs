@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace photo_tos_maton.camera
 {
@@ -116,7 +117,7 @@ namespace photo_tos_maton.camera
 
         public void Save(Bitmap picture)
         {
-            var dir = ConfigurationManager.AppSettings["FinalPhotosDirPath"].ToString();
+            var dir = ((App)System.Windows.Application.Current).FinalPhotosFolder;
 
             if (!Directory.Exists(dir))
             {
