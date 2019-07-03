@@ -20,7 +20,7 @@ namespace FoTos.Services.Camera.mock
             {
                 while (true)
                 {
-                    Thread.Sleep(66); // 15fps
+                    Thread.Sleep(2000); // 15fps
 
                     if (ct.IsCancellationRequested)
                     {

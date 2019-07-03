@@ -74,32 +74,23 @@
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="8*" />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="268" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="268" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="8*" />
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="100" />
         </Grid.RowDefinitions>
 
-        <Grid.Background>
-            <ImageBrush ImageSource="../../resources/wallpapers/wallpaper00.jpg" Opacity="0.7" Stretch="Fill"/>
-        </Grid.Background>
 
         <!-- Filter -->
-        <Grid Grid.Column="2" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="1*" />
-            </Grid.RowDefinitions>
-            <Image x:Name="ThumbnailColor"      Grid.Row="0" Margin="10,10,10,10" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
-            <Image x:Name="ThumbnailGrayscale"  Grid.Row="1" Margin="10,10,10,10" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
-            <Image x:Name="ThumbnailSepia"      Grid.Row="2" Margin="10,10,10,10" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
-        </Grid>
+        <StackPanel Grid.Column="2" Grid.Row="1"  Orientation="Vertical">
+            <Image x:Name="ThumbnailColor"       Margin="10,0,20,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
+            <Image x:Name="ThumbnailGrayscale"   Margin="10,10,20,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
+            <Image x:Name="ThumbnailSepia"       Margin="10,10,20,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
+        </StackPanel>
 
         <!-- Photo -->
         <Image x:Name="PhotoImage" Grid.Column="1" Grid.Row="1"></Image>

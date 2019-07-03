@@ -9,7 +9,10 @@
         xmlns:trans="clr-namespace:Transitionals;assembly=Transitionals"
         mc:Ignorable="d"
         Title="MainWindow">
-    <Grid x:Name="GridMain">
+    <Grid x:Name="GridMain" Margin="10,10,10,10">
+        <Grid.Background>
+            <ImageBrush ImageSource="../Resources/wallpapers/wallpaper00.jpg" Opacity="0.7" Stretch="Fill"/>
+        </Grid.Background>
         <!--<transc:TransitionElement x:Name="transitionBox" Margin="0,0,0,0">-->
             <!--<transc:TransitionElement.Transition>
                 <transt:FadeTransition/>

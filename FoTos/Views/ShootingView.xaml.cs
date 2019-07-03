@@ -66,12 +66,22 @@ namespace FoTos.Views
             MainWindow.GotoHomePage();
         }
 
-        private void ButtonTakePicture_Click(object sender, RoutedEventArgs e)
+        private bool buttonPictureIsDown = false;
+        private void ButtonTakePicture_MouseDown(object sender, RoutedEventArgs e)
         {
-            TakePicture();
+            buttonPictureIsDown = true;
         }
 
-        private void TakePicture()
+        private void ButtonTakePicture_MouseUp(object sender, RoutedEventArgs e)
+        {
+            if (buttonPictureIsDown == true)
+            {
+                TakePictureAsync();
+            }
+            buttonPictureIsDown = false;
+        }
+
+        private void TakePictureAsync()
         {
             if (_inProgressPhotoShoot)
             {
@@ -92,6 +102,19 @@ namespace FoTos.Views
             try
             {
                 // display countdown
+                SetVisibility(EVisibilityMode.CountdownPre);
+
+                // scale liveview
+                Dispatcher.Invoke(() =>
+                {
+                    var sb1 = this.FindResource("StoryBoardScaleLiveView") as Storyboard;
+                    BeginStoryboard(sb1);
+                });
+                // wait liveview to be scaled
+                Thread.Sleep(1000);
+
+
+                // display countdown
                 SetVisibility(EVisibilityMode.Countdown);
 
                 // countdown
@@ -102,9 +125,9 @@ namespace FoTos.Views
                     {
                         // decrement countdown
                         this.TextCountdown.Text = i.ToString();
-                        // animation
-                        var sb = this.FindResource("StorayBoardCountdown") as Storyboard;
-                        BeginStoryboard(sb);
+                        // animation coutndown
+                        var sb2 = this.FindResource("StorayBoardCountdown") as Storyboard;
+                        BeginStoryboard(sb2);
                     });
                     Thread.Sleep(1000);
                 }
@@ -208,7 +231,7 @@ namespace FoTos.Views
 
         #region Visibility Management
 
-        enum EVisibilityMode { LiveView, Countdown, Smile, Photo }
+        enum EVisibilityMode { LiveView, CountdownPre, Countdown, Smile, Photo }
 
         private void SetVisibility(EVisibilityMode mode)
         {
@@ -217,19 +240,29 @@ namespace FoTos.Views
                 switch (mode)
                 {
                     case EVisibilityMode.LiveView:
-                        this.LiveViewGrid.Visibility = Visibility.Visible;
+                        this.LiveViewImage.Visibility = Visibility.Visible;
                         this.LiveViewImage.BitmapEffect = null;
-                        this.LiveViewGrid.Opacity = 1.0;
+                        this.LiveViewImage.Opacity = 1.0;
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
                         this.panelTakePicture.Visibility = Visibility.Visible;
                         this.ArrowsUpGrid.Visibility = Visibility.Collapsed;
                         break;
 
-                    case EVisibilityMode.Countdown:
-                        this.LiveViewGrid.Visibility = Visibility.Visible;
+                    case EVisibilityMode.CountdownPre:
+                        this.LiveViewImage.Visibility = Visibility.Visible;
                         this.LiveViewImage.BitmapEffect = null;
-                        this.LiveViewGrid.Opacity = 1.0;
+                        this.LiveViewImage.Opacity = 1.0;
+                        this.CountdownGrid.Visibility = Visibility.Collapsed;
+                        this.SmileGrid.Visibility = Visibility.Collapsed;
+                        this.panelTakePicture.Visibility = Visibility.Collapsed;
+                        this.ArrowsUpGrid.Visibility = Visibility.Visible;
+                        break;
+
+                    case EVisibilityMode.Countdown:
+                        this.LiveViewImage.Visibility = Visibility.Visible;
+                        this.LiveViewImage.BitmapEffect = null;
+                        this.LiveViewImage.Opacity = 1.0;
                         this.CountdownGrid.Visibility = Visibility.Visible;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
                         this.panelTakePicture.Visibility = Visibility.Collapsed;
@@ -238,8 +271,8 @@ namespace FoTos.Views
 
                     case EVisibilityMode.Smile:
                         this.LiveViewImage.BitmapEffect = new BlurBitmapEffect() { Radius = 20, KernelType = KernelType.Gaussian };
-                        this.LiveViewGrid.Visibility = Visibility.Visible;
-                        this.LiveViewGrid.Opacity = 0.7;
+                        this.LiveViewImage.Visibility = Visibility.Visible;
+                        this.LiveViewImage.Opacity = 0.7;
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
                         this.SmileGrid.Visibility = Visibility.Visible;
                         this.panelTakePicture.Visibility = Visibility.Collapsed;
@@ -248,7 +281,7 @@ namespace FoTos.Views
 
                     // TODO: not used for now
                     case EVisibilityMode.Photo:
-                        this.LiveViewGrid.Visibility = Visibility.Collapsed;
+                        this.LiveViewImage.Visibility = Visibility.Collapsed;
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
 

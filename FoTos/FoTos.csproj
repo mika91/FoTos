@@ -120,21 +120,18 @@
     <Compile Include="Services\Camera\CameraServiceShoot.cs" />
     <Compile Include="Services\Camera\ICameraService.cs" />
     <Compile Include="Services\Camera\CameraServiceLiveView.cs" />
-    <Compile Include="Views\00-Misc\SlideShowControl.xaml.cs">
-      <DependentUpon>SlideShowControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utils\BitmapExtensions.cs" />
     <Compile Include="Utils\IdleTimeDetector.cs" />
-    <Compile Include="Views\01-Home\HomeView.xaml.cs">
+    <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\02-Shooting\ShootingView.xaml.cs">
+    <Compile Include="Views\ShootingView.xaml.cs">
       <DependentUpon>ShootingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\03-Developing\DevelopingView.xaml.cs">
+    <Compile Include="Views\DevelopingView.xaml.cs">
       <DependentUpon>DevelopingView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\01-Home\HomeView.xaml">
+    <Page Include="Views\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,15 +147,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\00-Misc\SlideShowControl.xaml">
+    <Page Include="Views\ShootingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\02-Shooting\ShootingView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\03-Developing\DevelopingView.xaml">
+    <Page Include="Views\DevelopingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

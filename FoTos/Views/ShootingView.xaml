@@ -12,14 +12,27 @@
     
     
     <UserControl.Resources>
-        <system:Double x:Key="max_scale">1.3</system:Double>
-        <system:Double x:Key="min_scale">0.3</system:Double>
+        <system:Double x:Key="max_scale">0</system:Double>
+        <system:Double x:Key="min_scale">1.1</system:Double>
+
+        <Storyboard x:Key="StoryBoardScaleLiveView">
+            <ThicknessAnimation Storyboard.TargetName="LiveViewImage" Storyboard.TargetProperty="Margin"
+                                 Duration="0:0:1"  To="-100,-100,-100,-100" />
+
+            <!--<ThicknessAnimationUsingKeyFrames  BeginTime="00:00:00">
+                <SplineThicknessKeyFrame KeyTime="00:00:00" Value="-100, -100, -100, -100" />
+               <SplineThicknessKeyFrame KeyTime="00:00:03" Value="50, 70,0,0" />
+            </ThicknessAnimationUsingKeyFrames>-->
+        </Storyboard>
+        
         <Storyboard x:Key="StorayBoardCountdown">
             <DoubleAnimation Storyboard.TargetName="MyAnimatedScaleTransform" Storyboard.TargetProperty="ScaleX"
                                              Duration="0:0:1" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
             <DoubleAnimation Storyboard.TargetName="MyAnimatedScaleTransform" Storyboard.TargetProperty="ScaleY"
                                              Duration="0:0:1" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
+
         </Storyboard>
+
 
         <Style TargetType="{x:Type Viewbox}" x:Key="ViewBoxButtonStyle">
             <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
@@ -97,7 +110,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <!--<DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" To="-20" Duration="0:0:0.4" AutoReverse="True" RepeatBehavior="Forever"/>-->
-                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" From="15" To="0" Duration="0:0:0.4"  AutoReverse="True" RepeatBehavior="Forever"/>
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" From="15" To="0" Duration="0:0:0.5"  AutoReverse="True" RepeatBehavior="Forever"/>
 
                             </Storyboard>
                         </BeginStoryboard>
@@ -111,24 +124,18 @@
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5*" />
-            <ColumnDefinition Width="32*" />
-            <ColumnDefinition Width="5*" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="268" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="268" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="8*" />
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="100" />
         </Grid.RowDefinitions>
 
-        <Grid.Background>
-            <ImageBrush ImageSource="../../resources/wallpapers/wallpaper00.jpg" Opacity="0.7" Stretch="Fill"/>
-        </Grid.Background>
-
         <!-- ArrowUp -->
-        <Grid Name="ArrowsUpGrid" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3">
+        <Grid Name="ArrowsUpGrid" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5*" />
                 <ColumnDefinition Width="32*" />
@@ -154,36 +161,15 @@
         </Grid>
 
         <!-- Live View -->
-        <Grid x:Name="LiveViewGrid" Grid.Column="2" Grid.Row="1">
-            <!-- camera off icon -->
-            <!--<Grid x:Name="cameraOffIcon" Background="LightGray" Visibility="Collapsed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="8*" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="8*" />
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
-                <Viewbox Opacity="0.3" Grid.Row="1" Grid.Column="1">
-                    <Canvas Width="24" Height="24">
-                        <Path Data="M1.2,4.47L2.5,3.2L20,20.72L18.73,22L16.73,20H4A2,2 0 0,1 2,18V6C2,5.78 2.04,5.57 2.1,5.37L1.2,4.47M7,4L9,2H15L17,4H20A2,2 0 0,1 22,6V18C22,18.6 21.74,19.13 21.32,19.5L16.33,14.5C16.76,13.77 17,12.91 17,12A5,5 0 0,0 12,7C11.09,7 10.23,7.24 9.5,7.67L5.82,4H7M7,12A5,5 0 0,0 12,17C12.5,17 13.03,16.92 13.5,16.77L11.72,15C10.29,14.85 9.15,13.71 9,12.28L7.23,10.5C7.08,10.97 7,11.5 7,12M12,9A3,3 0 0,1 15,12C15,12.35 14.94,12.69 14.83,13L11,9.17C11.31,9.06 11.65,9 12,9Z" Fill="Black" />
-                    </Canvas>
-                </Viewbox>
-
-            </Grid>-->
-            <!--- live view image -->
-            <Image x:Name="LiveViewImage" RenderTransformOrigin="0.5,0.5" Visibility="Visible">
-                <Image.RenderTransform>
-                    <ScaleTransform ScaleX="-1"/>
-                </Image.RenderTransform>
-            </Image>
-        </Grid>
+        <Image x:Name="LiveViewImage" RenderTransformOrigin="0.5,0.5" Visibility="Visible" Grid.Column="1" Grid.Row="1">
+            <Image.RenderTransform>
+                <ScaleTransform ScaleX="-1"/>
+            </Image.RenderTransform>
+         </Image>
+    
 
         <!-- countdown -->
-        <Grid x:Name="CountdownGrid" Grid.Column="2" Grid.Row="1">
+        <Grid x:Name="CountdownGrid" Grid.Column="1" Grid.Row="1">
             <Border>
                 <Border.RenderTransformOrigin>0.5, 0.5</Border.RenderTransformOrigin>
                 <Border.RenderTransform>
@@ -208,7 +194,7 @@
         </Grid>
 
         <!-- smile -->
-        <Grid x:Name="SmileGrid" Grid.Column="2" Grid.Row="1">
+        <Grid x:Name="SmileGrid" Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="4*"/>
@@ -220,13 +206,14 @@
                 <RowDefinition Height="2*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <Image Source="../../resources/icons/picto-sourire.png" Grid.Row="1" Grid.Column="1"></Image>
+            <Image Source="../Resources/icons/picto-sourire.png" Grid.Row="1" Grid.Column="1"></Image>
             <Viewbox  Grid.Row="2" Grid.Column="1">
                 <TextBlock Text="Smile !" FontFamily="Segoe UI Black" />
             </Viewbox>
         </Grid>
 
-        <StackPanel x:Name="panelTakePicture" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
+        <!-- shoot button -->
+        <Grid x:Name="panelTakePicture" Grid.Column="0" Grid.Row="1"  Background="Green">
 
             <!--<Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
@@ -235,16 +222,13 @@
             </Grid.RowDefinitions>-->
 
             <!-- Button 'Take Picture'-->
-            <Viewbox  Grid.Row="1" MouseUp="ButtonTakePicture_Click" Stretch="Fill" Style="{StaticResource ViewBoxButtonStyle}">
+            <Viewbox MouseDown="ButtonTakePicture_MouseDown" MouseUp="ButtonTakePicture_MouseUp" Style="{StaticResource ViewBoxButtonStyle}" Width="160" Stretch="Uniform">
                 <Canvas Width="24" Height="24">
                     <Path Data="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z" Fill="Black" />
                 </Canvas>
             </Viewbox>
 
-            <Viewbox Grid.Row="2" VerticalAlignment="Top" Style="{StaticResource BouncingUpStyle}">
-                <Viewbox.RenderTransform>
-                    <TranslateTransform Y="-30"></TranslateTransform>
-                </Viewbox.RenderTransform>
+            <Viewbox  Style="{StaticResource BouncingUpStyle}" Width="130" Margin="0,160,0,0" Stretch="Uniform">
                 <Canvas Width="24" Height="24">
                     <Path Data="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" Fill="Black" />
                 </Canvas>
@@ -253,7 +237,7 @@
                     <Path Data="M15,20H9V12H4.16L12,4.16L19.84,12H15V20Z" Fill="Black" />
                 </Canvas>-->
             </Viewbox>
-        </StackPanel>
+        </Grid>
 
         <!-- Button 'back' -->
         <Button x:Name="buttonBack" Grid.Column="0" Grid.Row="2" Content="back" Click="ButtonBack_Click" />

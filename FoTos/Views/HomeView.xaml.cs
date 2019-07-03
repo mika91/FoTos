@@ -1,56 +1,83 @@
 ﻿using log4net;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
+using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Timers;
 
 namespace FoTos.Views
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for HomeView.xaml
     /// </summary>
-    public partial class SlideShowControl : UserControl
+    public partial class HomeView : UserControl
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
+        MainWindow MainWindow { get { return Dispatcher.Invoke(() => Window.GetWindow(this) as MainWindow); } }
 
         // TODO: release time ???
         private Timer _timer = new Timer();
         private string[] _files;
 
-        public SlideShowControl()
+        public HomeView()
         {
             InitializeComponent();
 
-         
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
+
             // init timer
             _timer.Interval = 4000; // TODO
             _timer.Enabled = false;
             _timer.Elapsed += (s, e) => NextPhoto();
-
-            // start
-
-
         }
 
-        public static ILog Log => log;
 
-        public void Start(String dirPath)
+        private void HomeView_Unloaded(object sender, RoutedEventArgs e)
         {
+            log.Debug("HomeView::Unloaded");
+            // ensure slideshow is disable
+            if (_timer?.Enabled == true)
+                Stop();
+        }
+
+        private void HomeView_Loaded(object sender, RoutedEventArgs e)
+        {
+            log.Debug("HomeView::Loaded");
+        }
+
+        #region Dependency Injection
+
+        // dependency injection
+        public void Init(String slideShowFolder)
+        {
+            // run slideshow
+            Start(slideShowFolder);
+        }
+
+        // clean dependencies (should be called form Unloaded event)
+        public void Release()
+        {
+            Stop();
+        }
+
+        #endregion
+
+        private void Grid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            MainWindow.GotoShootingPage();
+        }
+
+        // TODO: move in service
+        #region Slideshow logic
+
+        private void Start(String dirPath)
+        {
+            log.Info("starting slideshow");
+
             if (!Directory.Exists(dirPath))
             {
                 log.Error(String.Format("Slideshow directory '{0}' doesn't exit: ", dirPath));
@@ -59,14 +86,16 @@ namespace FoTos.Views
 
             log.Info(String.Format("Slideshow directory = '{0}'", dirPath));
             _files = Directory.GetFiles(dirPath);
-            
+
 
             NextPhoto();
             _timer.Enabled = true;
         }
 
-        public void Stop()
+        private void Stop()
         {
+            log.Info("stopping slideshow");
+
             if (_timer != null)
             {
                 _timer.Enabled = false;
@@ -93,9 +122,14 @@ namespace FoTos.Views
 
                 // TODO: gérer erreurs
                 var img = new Image();
+                log.Info(String.Format("display new slideshow picture='{0}'", file));
                 img.Source = new BitmapImage(new Uri(file, UriKind.Absolute));
                 this.transitionBox.Content = img;
             });
         }
+
+        #endregion
+
+       
     }
 }
