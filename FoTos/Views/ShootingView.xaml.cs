@@ -65,20 +65,10 @@ namespace FoTos.Views
         {
             MainWindow.GotoHomePage();
         }
-
-        private bool buttonPictureIsDown = false;
-        private void ButtonTakePicture_MouseDown(object sender, RoutedEventArgs e)
+     
+        private void ButtonTakePicture_Click(object sender, RoutedEventArgs e)
         {
-            buttonPictureIsDown = true;
-        }
-
-        private void ButtonTakePicture_MouseUp(object sender, RoutedEventArgs e)
-        {
-            if (buttonPictureIsDown == true)
-            {
-                TakePictureAsync();
-            }
-            buttonPictureIsDown = false;
+            TakePictureAsync();
         }
 
         private void TakePictureAsync()
@@ -139,7 +129,7 @@ namespace FoTos.Views
                 SetVisibility(EVisibilityMode.Smile);
 
 
-                Thread.Sleep(1000);
+                Thread.Sleep(5000);
 
                 // take picture
                 _lastPhoto = null;
@@ -247,6 +237,7 @@ namespace FoTos.Views
                         this.SmileGrid.Visibility = Visibility.Collapsed;
                         this.panelTakePicture.Visibility = Visibility.Visible;
                         this.ArrowsUpGrid.Visibility = Visibility.Collapsed;
+                        this.Title.Visibility = Visibility.Collapsed;
                         break;
 
                     case EVisibilityMode.CountdownPre:
@@ -256,7 +247,8 @@ namespace FoTos.Views
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
                         this.panelTakePicture.Visibility = Visibility.Collapsed;
-                        this.ArrowsUpGrid.Visibility = Visibility.Visible;
+                        this.ArrowsUpGrid.Visibility = Visibility.Collapsed;
+                        this.Title.Visibility = Visibility.Collapsed;
                         break;
 
                     case EVisibilityMode.Countdown:
@@ -267,6 +259,8 @@ namespace FoTos.Views
                         this.SmileGrid.Visibility = Visibility.Collapsed;
                         this.panelTakePicture.Visibility = Visibility.Collapsed;
                         this.ArrowsUpGrid.Visibility = Visibility.Visible;
+                        this.Title.Text = "Prenez la pause...";
+                        this.Title.Visibility = Visibility.Visible;
                         break;
 
                     case EVisibilityMode.Smile:
@@ -277,6 +271,8 @@ namespace FoTos.Views
                         this.SmileGrid.Visibility = Visibility.Visible;
                         this.panelTakePicture.Visibility = Visibility.Collapsed;
                         this.ArrowsUpGrid.Visibility = Visibility.Visible;
+                        this.Title.Text = "Regardez là-haut!";
+                        this.Title.Visibility = Visibility.Visible;
                         break;
 
                     // TODO: not used for now
@@ -287,6 +283,7 @@ namespace FoTos.Views
 
                         this.ArrowsUpGrid.Visibility = Visibility.Collapsed;
                         this.panelTakePicture.Visibility = Visibility.Collapsed;
+                        this.Title.Visibility = Visibility.Collapsed;
                         break;
                 }
             }, DispatcherPriority.Background);

@@ -46,10 +46,15 @@ namespace FoTos.Views
         {
             log.Debug("Goto Home Page");
 
-            this.GridMain.Children.Clear();
+           
+            //this.GridMain.Children.Clear();
+            //var homeView = new HomeView();
+            //homeView.Init(App.Settings.SlideShowFolder);
+            //this.GridMain.Children.Add(homeView);
+
             var homeView = new HomeView();
             homeView.Init(App.Settings.SlideShowFolder);
-            this.GridMain.Children.Add(homeView);
+            this.TransitionControl.ShowPage(homeView);
         });
          }
 
@@ -59,10 +64,14 @@ namespace FoTos.Views
         {
             log.Debug("Goto Shooting Page");
 
-            this.GridMain.Children.Clear();
+            //this.GridMain.Children.Clear();
+            //var shootingView = new ShootingView();
+            //shootingView.Init(App.Services.CameraService);
+            //this.GridMain.Children.Add(shootingView);
+
             var shootingView = new ShootingView();
             shootingView.Init(App.Services.CameraService);
-            this.GridMain.Children.Add(shootingView);
+            this.TransitionControl.ShowPage(shootingView);
         });
              }
 
@@ -74,10 +83,14 @@ namespace FoTos.Views
         {
             log.Debug("Goto Photo Page");
 
-            this.GridMain.Children.Clear();
-            var photoView = new DevelopingView() {  Image = img };
+            //this.GridMain.Children.Clear();
+            //var photoView = new DevelopingView() {  Image = img };
+            //photoView.Init();
+            //this.GridMain.Children.Add(photoView);
+
+            var photoView = new DevelopingView() { Image = img };
             photoView.Init();
-            this.GridMain.Children.Add(photoView);
+            this.TransitionControl.ShowPage(photoView);
         });
         }
 

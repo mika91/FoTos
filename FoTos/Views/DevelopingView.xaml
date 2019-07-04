@@ -9,6 +9,7 @@
              Loaded="PhotoPage_Loaded">
 
     <UserControl.Resources>
+
         <Style TargetType="{x:Type Image}" x:Key="TestStyle">
             <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
             <Setter Property="RenderTransform">
@@ -70,7 +71,42 @@
                 </EventTrigger>
             </Style.Triggers>
         </Style>
-    </UserControl.Resources>
+
+        <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
+        <Style x:Key="MyButtonStyle1" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                            BorderThickness="1"
+                            Padding="4,2" 
+                            BorderBrush="DarkGray" 
+                            CornerRadius="3" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="Black" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+           
+        </Style>
+
+   
+
+       
+       
+     </UserControl.Resources>
+    
+    
+    
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -87,16 +123,59 @@
 
         <!-- Filter -->
         <StackPanel Grid.Column="2" Grid.Row="1"  Orientation="Vertical">
-            <Image x:Name="ThumbnailColor"       Margin="10,0,20,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
-            <Image x:Name="ThumbnailGrayscale"   Margin="10,10,20,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
-            <Image x:Name="ThumbnailSepia"       Margin="10,10,20,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
+            <Image x:Name="ThumbnailColor"       Margin="20,0,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
+            <Image x:Name="ThumbnailGrayscale"   Margin="20,10,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
+            <Image x:Name="ThumbnailSepia"       Margin="20,10,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
         </StackPanel>
 
         <!-- Photo -->
         <Image x:Name="PhotoImage" Grid.Column="1" Grid.Row="1"></Image>
 
         <!-- Button 'back' -->
-        <Button x:Name="buttonBack" Grid.Column="0" Grid.Row="2" Content="back" Click="ButtonBack_Click" />
+        <!--<Button x:Name="buttonBack" Grid.Column="0" Grid.Row="2" Content="back" Click="ButtonBack_Click" />-->
+
+        <!--<Canvas Grid.Column="0" Grid.Row="2" Grid.RowSpan="3">
+  
+                <Viewbox Height="60" Width="60" Canvas.Left="20" Canvas.Bottom="20">
+                    <Canvas Width="24" Height="24" Opacity="0.8">
+                        <Path Data="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M18,11H10L13.5,7.5L12.08,6.08L6.16,12L12.08,17.92L13.5,16.5L10,13H18V11Z" Fill="Black" />
+                    </Canvas>
+                </Viewbox>
+                <TextBox Text="retour" FontSize="36" FontFamily="Segoe Print" Canvas.Left="100" Canvas.Bottom="20" />
+  
+           
+        </Canvas>-->
+
+        <!-- button erase -->
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Left">
+            <Button x:Name="buttonBack" Click="ButtonBack_Click" Background="Transparent" BorderThickness="0" Style="{StaticResource MyButtonStyle}">
+                <Viewbox Width="100" Margin="20,0,20,0">
+                    <!--<Canvas Width="24" Height="24" Opacity="0.8">
+                        <Path Data="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M18,11H10L13.5,7.5L12.08,6.08L6.16,12L12.08,17.92L13.5,16.5L10,13H18V11Z" Fill="Black" />
+                    </Canvas>-->
+                    <Canvas Width="24" Height="24" Opacity="0.8">
+                        <Path Data="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M17,7H14.5L13.5,6H10.5L9.5,7H7V9H17V7M9,18H15A1,1 0 0,0 16,17V10H8V17A1,1 0 0,0 9,18Z" Fill="Black" />
+                    </Canvas>
+                </Viewbox>
+            </Button>
+            <TextBox Text="Je jette!" FontSize="36" FontFamily="Segoe Print" Margin="0,15,0,0" BorderThickness="0" IsReadOnly="True"/>
+        </StackPanel>
+       
+
+        <!-- button ok -->
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Right">
+            <TextBox Text="Je garde!" FontSize="36" FontFamily="Segoe Print" Margin="0,15,0,0" BorderThickness="0"/>
+            <Button  Background="Transparent" BorderThickness="0" Style="{StaticResource MyButtonStyle}">
+                <Viewbox Width="100" Margin="20,0,20,0">
+                    <!--<Canvas Width="24" Height="24" Opacity="0.8">
+                        <Path Data="M22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12M6,13H14L10.5,16.5L11.92,17.92L17.84,12L11.92,6.08L10.5,7.5L14,11H6V13Z" Fill="Black" />
+                    </Canvas>-->
+                    <Canvas Width="24" Height="24">
+                        <Path Data="M10,17L5,12L6.41,10.58L10,14.17L17.59,6.58L19,8M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" Fill="Black" />
+                    </Canvas>
+                </Viewbox>
+            </Button>
+        </StackPanel>
 
     </Grid>
 </UserControl>

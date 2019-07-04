@@ -6,25 +6,25 @@
              xmlns:local="clr-namespace:FoTos.Views"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
+             d:DesignHeight="1060" d:DesignWidth="1900"
              Unloaded="ShootingPage_Unloaded"
              Loaded="ShootingPage_Loaded">
-    
-    
+
+
     <UserControl.Resources>
         <system:Double x:Key="max_scale">0</system:Double>
         <system:Double x:Key="min_scale">1.1</system:Double>
 
         <Storyboard x:Key="StoryBoardScaleLiveView">
             <ThicknessAnimation Storyboard.TargetName="LiveViewImage" Storyboard.TargetProperty="Margin"
-                                 Duration="0:0:1"  To="-100,-100,-100,-100" />
+                                 Duration="0:0:1"  To="-100,-20,-100,-100" />
 
             <!--<ThicknessAnimationUsingKeyFrames  BeginTime="00:00:00">
                 <SplineThicknessKeyFrame KeyTime="00:00:00" Value="-100, -100, -100, -100" />
                <SplineThicknessKeyFrame KeyTime="00:00:03" Value="50, 70,0,0" />
             </ThicknessAnimationUsingKeyFrames>-->
         </Storyboard>
-        
+
         <Storyboard x:Key="StorayBoardCountdown">
             <DoubleAnimation Storyboard.TargetName="MyAnimatedScaleTransform" Storyboard.TargetProperty="ScaleX"
                                              Duration="0:0:1" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
@@ -110,7 +110,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <!--<DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" To="-20" Duration="0:0:0.4" AutoReverse="True" RepeatBehavior="Forever"/>-->
-                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" From="15" To="0" Duration="0:0:0.5"  AutoReverse="True" RepeatBehavior="Forever"/>
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" From="0" To="-15" Duration="0:0:0.5"  AutoReverse="True" RepeatBehavior="Forever"/>
 
                             </Storyboard>
                         </BeginStoryboard>
@@ -142,17 +142,13 @@
                 <ColumnDefinition Width="5*" />
             </Grid.ColumnDefinitions>
 
-            <Viewbox Grid.Column="0" Grid.Row="0" Style="{StaticResource BouncingUpStyle}">
+            <Viewbox Grid.Column="0" Grid.Row="0" Style="{StaticResource BouncingUpStyle}" Height="50">
                 <Canvas Width="24" Height="24">
                     <Path Data="M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z" Fill="Black" />
                 </Canvas>
             </Viewbox>
-            <Viewbox Grid.Column="1" Grid.Row="0" Style="{StaticResource BouncingUpStyle}">
-                <Canvas Width="24" Height="24">
-                    <Path Data="M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z" Fill="Black" />
-                </Canvas>
-            </Viewbox>
-            <Viewbox Grid.Column="2" Grid.Row="0" Style="{StaticResource BouncingUpStyle}">
+
+            <Viewbox Grid.Column="2" Grid.Row="0" Style="{StaticResource BouncingUpStyle}" Height="50">
                 <Canvas Width="24" Height="24">
                     <Path Data="M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z" Fill="Black" />
                 </Canvas>
@@ -161,12 +157,12 @@
         </Grid>
 
         <!-- Live View -->
-        <Image x:Name="LiveViewImage" RenderTransformOrigin="0.5,0.5" Visibility="Visible" Grid.Column="1" Grid.Row="1">
+        <Image x:Name="LiveViewImage" RenderTransformOrigin="0.5,0.5" Visibility="Visible" Grid.Column="1" Grid.Row="1" Panel.ZIndex="400">
             <Image.RenderTransform>
                 <ScaleTransform ScaleX="-1"/>
             </Image.RenderTransform>
-         </Image>
-    
+        </Image>
+
 
         <!-- countdown -->
         <Grid x:Name="CountdownGrid" Grid.Column="1" Grid.Row="1">
@@ -194,6 +190,15 @@
         </Grid>
 
         <!-- smile -->
+        <!--<StackPanel x:Name="SmileGrid" Grid.Column="1" Grid.Row="1">
+            <TextBlock Text="Regardez là-haut !" FontFamily="Segoe Print" FontSize="48" HorizontalAlignment="Center" />
+            <Image Source="../Resources/icons/picto-sourire.png" Stretch="Uniform" Height="400" VerticalAlignment="Center"/>
+            <TextBlock Text="Smile !" FontFamily="Segoe Print" FontSize="48" HorizontalAlignment="Center" />
+        </StackPanel>-->
+
+
+        <TextBlock Name="Title" Text="Regardez là-haut !" FontFamily="Segoe Print" FontSize="48" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Panel.ZIndex="1000"/>
+
         <Grid x:Name="SmileGrid" Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -208,12 +213,14 @@
             </Grid.RowDefinitions>
             <Image Source="../Resources/icons/picto-sourire.png" Grid.Row="1" Grid.Column="1"></Image>
             <Viewbox  Grid.Row="2" Grid.Column="1">
-                <TextBlock Text="Smile !" FontFamily="Segoe UI Black" />
+                <TextBlock Text="Smile !" FontFamily="Segoe Print" FontWeight="Bold" />
             </Viewbox>
         </Grid>
 
+
+
         <!-- shoot button -->
-        <Grid x:Name="panelTakePicture" Grid.Column="0" Grid.Row="1"  Background="Green">
+        <Grid x:Name="panelTakePicture" Grid.Column="0" Grid.Row="1"  >
 
             <!--<Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
@@ -222,13 +229,28 @@
             </Grid.RowDefinitions>-->
 
             <!-- Button 'Take Picture'-->
-            <Viewbox MouseDown="ButtonTakePicture_MouseDown" MouseUp="ButtonTakePicture_MouseUp" Style="{StaticResource ViewBoxButtonStyle}" Width="160" Stretch="Uniform">
-                <Canvas Width="24" Height="24">
-                    <Path Data="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z" Fill="Black" />
-                </Canvas>
-            </Viewbox>
+            <!--<Viewbox Width="200" Stretch="Uniform">
 
-            <Viewbox  Style="{StaticResource BouncingUpStyle}" Width="130" Margin="0,160,0,0" Stretch="Uniform">
+                <Canvas Width="24" Height="24" >
+                    <Path Data="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" Fill="Black" />
+                </Canvas>
+            </Viewbox>-->
+
+            <Button Width="160" Height="160" Style="{StaticResource MyButtonStyle}" Click="ButtonTakePicture_Click">
+                <Viewbox Style="{StaticResource ViewBoxButtonStyle}"  Stretch="Uniform">
+                    <Grid>
+                        <Border ClipToBounds="True" CornerRadius="200" Background="DarkViolet" Opacity="0.1" />
+                        <Canvas Width="24" Height="24" Background="Transparent" Margin="3,3,3,3" Opacity="0.8">
+                            <Path Data="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z" Fill="Black" />
+                        </Canvas>
+                    </Grid>
+                </Viewbox>
+            </Button>
+            
+            
+            
+
+            <Viewbox  Style="{StaticResource BouncingUpStyle}" Width="130" Margin="0,250,0,0" Stretch="Uniform" Opacity="0.8">
                 <Canvas Width="24" Height="24">
                     <Path Data="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" Fill="Black" />
                 </Canvas>

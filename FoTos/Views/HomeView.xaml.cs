@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Timers;
+using WpfPageTransitions;
 
 namespace FoTos.Views
 {
@@ -33,6 +34,9 @@ namespace FoTos.Views
             _timer.Interval = 4000; // TODO
             _timer.Enabled = false;
             _timer.Elapsed += (s, e) => NextPhoto();
+
+            // transition
+            this.transitionBox.TransitionType = PageTransitionType.Fade;
         }
 
 
@@ -124,7 +128,11 @@ namespace FoTos.Views
                 var img = new Image();
                 log.Info(String.Format("display new slideshow picture='{0}'", file));
                 img.Source = new BitmapImage(new Uri(file, UriKind.Absolute));
-                this.transitionBox.Content = img;
+                //this.transitionBox.Content = img;
+                var uc = new UserControl();
+                uc.Content = img;
+                this.transitionBox.ShowPage(uc);
+                //this.transitionBox.Source = new BitmapImage(new Uri(file, UriKind.Absolute));
             });
         }
 

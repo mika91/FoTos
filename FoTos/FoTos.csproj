@@ -212,6 +212,12 @@
   <ItemGroup>
     <Folder Include="Services\SlideShowProvider\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WpfPageTransitions\WpfPageTransitions.csproj">
+      <Project>{22a46d61-1d40-43a9-802c-b9d43dadd9ec}</Project>
+      <Name>WpfPageTransitions</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Accord.3.8.2-alpha\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.2-alpha\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

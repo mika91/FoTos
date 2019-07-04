@@ -24,6 +24,105 @@
         <!-- You can implement your own BooleanToVisibilityConverter but there is one already implemented. So the next line creates an instance of the BooleanToVisibilityConverter that you will be able to reference with the specified key -->
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
+        <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
+        <Style x:Key="MyButtonStyle" TargetType="Button">
+
+            <!-- remove default 'animated' mouse over effect -->
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                            BorderThickness="0" BorderBrush="DarkGray" CornerRadius="0"
+                            Padding="0" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <Border.RenderTransform>
+                                <ScaleTransform/>
+                            </Border.RenderTransform>
+                            <Border.RenderTransformOrigin>0.5,0.5</Border.RenderTransformOrigin>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <!-- <Setter TargetName="border" Property="BorderBrush" Value="Black" /> -->
+                                <!-- <Setter TargetName="border" Property="BorderThickness" Value="1" /> -->
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1.0" To="0.6" Duration="0:0:1" AutoReverse="True" RepeatBehavior="Forever" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:0.1"  />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="RenderTransform.ScaleX" To="0.9" Duration="0:0:.1" />
+                                            <DoubleAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="RenderTransform.ScaleY" To="0.9" Duration="0:0:.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="RenderTransform.ScaleX" To="1" Duration="0:0:.1" />
+                                            <DoubleAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="RenderTransform.ScaleY" To="1" Duration="0:0:.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!-- click style -->
+            <!--<Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform />
+                </Setter.Value>
+            </Setter>-->
+            <!--<Style.Triggers>
+                -->
+            <!-- Animates the button's mouse down. -->
+            <!--
+                <EventTrigger RoutedEvent="Button.Click">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="0.9" Duration="0:0:.1" />
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="0.9" Duration="0:0:.1" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                
+                <EventTrigger RoutedEvent="Button.MouseDown">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="0.9" Duration="0:0:.1" />
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="0.9" Duration="0:0:.1" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+
+            </Style.Triggers>-->
+
+        </Style>
+
+
 
     </Application.Resources>
 

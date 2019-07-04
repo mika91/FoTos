@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FoTos.Views.HomeView"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,11 +6,12 @@
                    xmlns:controls="clr-namespace:Transitionals.Controls;assembly=Transitionals"
              xmlns:Transitions="clr-namespace:Transitionals.Transitions;assembly=Transitionals"
              xmlns:local="clr-namespace:FoTos.Views"
+             xmlns:WpfPageTransitions="clr-namespace:WpfPageTransitions;assembly=WpfPageTransitions" x:Class="FoTos.Views.HomeView"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Unloaded="HomeView_Unloaded"
              Loaded="HomeView_Loaded">
-    
+
     <Grid MouseDown="Grid_MouseDown" Background="Transparent">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="268" />
@@ -24,12 +25,11 @@
 
         </Grid.RowDefinitions>
 
+        <!-- text -->
+        <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" FontSize="48" Margin="0,0,0,0" Background="Transparent" BorderThickness="0" FontFamily="Segoe Print" Text="Appuyez sur l'écran pour commencer..."/>
 
-        <controls:TransitionElement x:Name="transitionBox" Grid.Column="1" Grid.Row="1">
-            <controls:TransitionElement.Transition>
-                <Transitions:FadeTransition></Transitions:FadeTransition>
-            </controls:TransitionElement.Transition>
-        </controls:TransitionElement>
+        <!-- slideshow -->
+        <WpfPageTransitions:PageTransition  x:Name="transitionBox" Grid.Column="1" Grid.Row="1"/>
 
     </Grid>
 </UserControl>
