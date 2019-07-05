@@ -46,55 +46,37 @@ namespace FoTos.Views
         {
             log.Debug("Goto Home Page");
 
-           
-            //this.GridMain.Children.Clear();
-            //var homeView = new HomeView();
-            //homeView.Init(App.Settings.SlideShowFolder);
-            //this.GridMain.Children.Add(homeView);
 
-            var homeView = new HomeView();
-            homeView.Init(App.Settings.SlideShowFolder);
+            var homeView = new HomeView(App.Services.SlideshowService);
             this.TransitionControl.ShowPage(homeView);
-        });
-         }
-
-    public void GotoShootingPage()
-        {
-        this.Dispatcher.Invoke(() =>
-        {
-            log.Debug("Goto Shooting Page");
-
-            //this.GridMain.Children.Clear();
-            //var shootingView = new ShootingView();
-            //shootingView.Init(App.Services.CameraService);
-            //this.GridMain.Children.Add(shootingView);
-
-            var shootingView = new ShootingView();
-            shootingView.Init(App.Services.CameraService);
-            this.TransitionControl.ShowPage(shootingView);
-        });
-             }
-
-
-
-    public void GotoPhotoPage(Bitmap img)
-        {
-        this.Dispatcher.Invoke(() =>
-        {
-            log.Debug("Goto Photo Page");
-
-            //this.GridMain.Children.Clear();
-            //var photoView = new DevelopingView() {  Image = img };
-            //photoView.Init();
-            //this.GridMain.Children.Add(photoView);
-
-            var photoView = new DevelopingView() { Image = img };
-            photoView.Init();
-            this.TransitionControl.ShowPage(photoView);
         });
         }
 
-      
+        public void GotoShootingPage()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                log.Debug("Goto Shooting Page");
+
+                var shootingView = new ShootingView(App.Services.CameraService);
+                this.TransitionControl.ShowPage(shootingView);
+            });
+        }
+
+
+
+        public void GotoPhotoPage(Bitmap img)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                log.Debug("Goto Photo Page");
+
+                var photoView = new DevelopingView(img);
+                this.TransitionControl.ShowPage(photoView);
+            });
+        }
+
+
 
         #endregion
 
@@ -119,12 +101,12 @@ namespace FoTos.Views
 
                 // restore position
                 this.Top = Math.Max(_winTop, 100);
-                this.Left = Math.Max(_winLeft,100);
+                this.Left = Math.Max(_winLeft, 100);
                 this.Width = Math.Max(_winWidth, 640);
                 this.Height = Math.Max(_winHeight, 480);
 
                 this.Topmost = false;
-                this.Visibility = Visibility.Visible; 
+                this.Visibility = Visibility.Visible;
             }
             else
             {

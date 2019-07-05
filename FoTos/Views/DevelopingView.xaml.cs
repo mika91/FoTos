@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.ComponentModel;
 
 namespace FoTos.Views
 {
@@ -25,42 +26,41 @@ namespace FoTos.Views
             InitializeComponent();
         }
 
-        #region Dependency Injection
-
-        // dependency injection
-        public void Init()
+        public DevelopingView(Bitmap image) : this()
         {
+            _img = image;
         }
 
-        // clean dependencies (should be called form Unloaded event)
-        public void Release()
+        private void PhotoPage_Loaded(object sender, RoutedEventArgs e)
         {
+            log.Debug("DevelopingView::Loaded");
+
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
+
+            // set image and refresh thumbnails
+            this.Dispatcher.Invoke(() =>
+            {
+                var originalBitmap = _img;
+
+                PhotoImage.Source = BitmapUtils.BitmapToImageSource(originalBitmap);
+                RefreshThumbnails(originalBitmap);
+            });
+
+
         }
 
-        #endregion
+        private void PhotoPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            log.Debug("DevelopingView::Unloaded");
+        }
+
+
 
 
         private Bitmap _img;
-        public Bitmap Image
-        {
-            get { return _img; }
-            set
-            {
-                _img = value;
-                this.Dispatcher.Invoke(() =>
-                {
-                    var originalBitmap = _img;
-
-                    PhotoImage.Source = BitmapUtils.BitmapToImageSource(originalBitmap);
-                    RefreshThumbnails(originalBitmap);
-                });
-            }
-
-
-        }
-
-
-
+ 
+        
         private async Task RefreshThumbnails(Bitmap img)
         {
             log.Debug("Refreshing filter thumbnails...");
@@ -85,16 +85,7 @@ namespace FoTos.Views
             log.Debug(string.Format("thumbnails refreshed in {0}ms", sw.ElapsedMilliseconds));
         }
 
-        private void PhotoPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            log.Debug("PhotoPage::Loaded");
-
-        }
-
-        private void PhotoPage_Unloaded(object sender, RoutedEventArgs e)
-        {
-            log.Debug("PhotoPage::Unloaded");
-        }
+      
 
         private void Thumbnail_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {

@@ -114,6 +114,8 @@
     <Compile Include="Services\GoogleUploader\GPhotosApiModels.cs" />
     <Compile Include="Services\GoogleUploader\Uploader.cs" />
     <Compile Include="Services\PhotoProcessing\PhotoProcessing.cs" />
+    <Compile Include="Services\SlideShowService\ISlideShowService.cs" />
+    <Compile Include="Services\SlideShowService\SlideShowService.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
     <Compile Include="Services\Camera\CameraService.cs" />
     <Compile Include="Services\Camera\mock\CameraServiceMock.cs" />
@@ -209,9 +211,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\SlideShowProvider\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\WpfPageTransitions\WpfPageTransitions.csproj">
       <Project>{22a46d61-1d40-43a9-802c-b9d43dadd9ec}</Project>

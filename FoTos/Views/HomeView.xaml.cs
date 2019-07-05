@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Timers;
 using WpfPageTransitions;
+using FoTos.Services.SlideShowProvider;
+using System.Windows.Media;
 
 namespace FoTos.Views
 {
@@ -19,21 +21,23 @@ namespace FoTos.Views
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         MainWindow MainWindow { get { return Dispatcher.Invoke(() => Window.GetWindow(this) as MainWindow); } }
 
-        // TODO: release time ???
-        private Timer _timer = new Timer();
-        private string[] _files;
+        private ISlideShowService _slideShowService;
 
         public HomeView()
         {
             InitializeComponent();
+        }
+
+        public HomeView(ISlideShowService slideShowService) : this()
+        {
+
+            // register slide show
+            _slideShowService = slideShowService;
+          
+
 
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
-
-            // init timer
-            _timer.Interval = 4000; // TODO
-            _timer.Enabled = false;
-            _timer.Elapsed += (s, e) => NextPhoto();
 
             // transition
             this.transitionBox.TransitionType = PageTransitionType.Fade;
@@ -43,91 +47,40 @@ namespace FoTos.Views
         private void HomeView_Unloaded(object sender, RoutedEventArgs e)
         {
             log.Debug("HomeView::Unloaded");
-            // ensure slideshow is disable
-            if (_timer?.Enabled == true)
-                Stop();
+
+            // unregister slideshow
+            if (_slideShowService != null)
+            {
+                _slideShowService.NewPhoto -= NextPhoto;
+                _slideShowService.Stop();
+            }
         }
 
         private void HomeView_Loaded(object sender, RoutedEventArgs e)
         {
             log.Debug("HomeView::Loaded");
+
+            // register slideshow
+            if (_slideShowService != null)
+            { 
+                _slideShowService.Start(((App)Application.Current).Settings.SlideShowFolder); // TODO
+                _slideShowService.NewPhoto += NextPhoto;
+            }
         }
 
-        #region Dependency Injection
-
-        // dependency injection
-        public void Init(String slideShowFolder)
-        {
-            // run slideshow
-            Start(slideShowFolder);
-        }
-
-        // clean dependencies (should be called form Unloaded event)
-        public void Release()
-        {
-            Stop();
-        }
-
-        #endregion
 
         private void Grid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             MainWindow.GotoShootingPage();
         }
 
-        // TODO: move in service
-        #region Slideshow logic
 
-        private void Start(String dirPath)
-        {
-            log.Info("starting slideshow");
-
-            if (!Directory.Exists(dirPath))
-            {
-                log.Error(String.Format("Slideshow directory '{0}' doesn't exit: ", dirPath));
-                return;
-            }
-
-            log.Info(String.Format("Slideshow directory = '{0}'", dirPath));
-            _files = Directory.GetFiles(dirPath);
-
-
-            NextPhoto();
-            _timer.Enabled = true;
-        }
-
-        private void Stop()
-        {
-            log.Info("stopping slideshow");
-
-            if (_timer != null)
-            {
-                _timer.Enabled = false;
-                // TODO: clear slideshow image ?
-                // TODO: dispose += events
-            }
-
-            _files = null;
-        }
-
-        private void NextPhoto()
+        private void NextPhoto(ImageSource imgSource)
         {
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
-                var ind = new Random().Next() % _files.Length;
-                var file = _files[ind];
-
-                if (!File.Exists(file))
-                {
-                    // TODO: reload dir ???
-                    log.Error(string.Format("file '{0}' doesn't exist anymore", file));
-                    return;
-                }
-
-                // TODO: gérer erreurs
                 var img = new Image();
-                log.Info(String.Format("display new slideshow picture='{0}'", file));
-                img.Source = new BitmapImage(new Uri(file, UriKind.Absolute));
+                img.Source = imgSource;
                 //this.transitionBox.Content = img;
                 var uc = new UserControl();
                 uc.Content = img;
@@ -135,8 +88,6 @@ namespace FoTos.Views
                 //this.transitionBox.Source = new BitmapImage(new Uri(file, UriKind.Absolute));
             });
         }
-
-        #endregion
 
        
     }

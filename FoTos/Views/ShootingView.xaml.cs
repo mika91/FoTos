@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using FoTos.Services.Camera;
+using System.ComponentModel;
 
 namespace FoTos.Views
 {
@@ -27,31 +28,58 @@ namespace FoTos.Views
             InitializeComponent();
         }
 
-        #region Dependency Injection
-
-        // dependency injection
-        private ICameraService _cameraService;
-
-        public void Init(ICameraService cameraService)
+        public ShootingView(ICameraService cameraService) : this()
         {
             _cameraService = cameraService;
-            _cameraService.NewLiveViewImage += cameraService_NewLiveViewImage;
-            _cameraService.NewPhoto += cameraService_NewPhoto;
         }
 
-        // clean dependencies (should be called form Unloaded event)
-        public void Release()
+        private ICameraService _cameraService;
+
+
+        private void ShootingPage_Loaded(object sender, RoutedEventArgs e)
         {
+            log.Debug("ShootingPage:Loaded");
+
+            _inProgressPhotoShoot = false;
+            _lastPhoto = null;
+
             if (_cameraService != null)
             {
+                // register camera events camera
+                _cameraService.NewLiveViewImage += cameraService_NewLiveViewImage;
+                _cameraService.NewPhoto         += cameraService_NewPhoto;
+
+                // start live view
+                _cameraService.StartLiveView();
+            }
+
+
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
+
+            SetVisibility(EVisibilityMode.LiveView);
+        }
+
+        private void ShootingPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            log.Debug("ShootingPage::Unloaded");
+
+            if (_cameraService != null)
+            {
+                // stop live view
+                _cameraService?.StopLiveView();
+
+                // unregister camera events
                 _cameraService.NewLiveViewImage += cameraService_NewLiveViewImage;
                 _cameraService.NewPhoto += cameraService_NewPhoto;
             }
             _cameraService = null;
         }
 
-        #endregion
 
+
+
+    
 
 
         private void cameraService_NewLiveViewImage(Bitmap bitmap)
@@ -190,34 +218,9 @@ namespace FoTos.Views
         }
 
 
-        private void ShootingPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            log.Debug("ShootingPage:Loaded");
-            StartLiveView();
-        }
+      
 
-        private void ShootingPage_Unloaded(object sender, RoutedEventArgs e)
-        {
-            log.Debug("ShootingPage::Unloaded");
-            StopLiveView();
-            Release();
-        }
 
-        // TODO: should be done on OnLoad() ???
-        private void StartLiveView()
-        {
-            _inProgressPhotoShoot = false;
-            _lastPhoto = null;
-            _cameraService?.StartLiveView();
-            SetVisibility(EVisibilityMode.LiveView);
-        }
-
-        // TODO: should be done on OnUnloadLoad() ???
-
-        private void StopLiveView()
-        {
-            _cameraService?.StopLiveView();
-        }
 
         #region Visibility Management
 

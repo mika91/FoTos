@@ -6,6 +6,7 @@ using System.Windows;
 using FoTos.Views;
 using FoTos.Services.Camera;
 using FoTos.Services.Camera.mock;
+using FoTos.Services.SlideShowProvider;
 
 namespace FoTos
 {
@@ -79,18 +80,23 @@ namespace FoTos
             else
             {
                 camera = new CameraService(Settings.CameraRollFolder);
+
             }
 
-            Services = new AppServices(camera);
+            var slideShow = new SlideShowService();
+
+            Services = new AppServices(camera, slideShow);
         }
 
         public class AppServices
         {
             public ICameraService CameraService { get; private set; }
+            public ISlideShowService SlideshowService { get; private set; }
 
-            public AppServices(ICameraService cameraMan)
+            public AppServices(ICameraService cameraService, ISlideShowService slideshowService)
             {
-                this.CameraService = cameraMan;
+                this.CameraService      = cameraService;
+                this.SlideshowService   = slideshowService;
             }
 
         }
