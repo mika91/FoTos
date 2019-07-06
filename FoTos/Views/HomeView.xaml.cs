@@ -51,8 +51,8 @@ namespace FoTos.Views
             // unregister slideshow
             if (_slideShowService != null)
             {
-                _slideShowService.NewPhoto -= NextPhoto;
                 _slideShowService.Stop();
+                _slideShowService.NewPhoto -= NextPhoto;
             }
         }
 
@@ -62,9 +62,9 @@ namespace FoTos.Views
 
             // register slideshow
             if (_slideShowService != null)
-            { 
-                _slideShowService.Start(((App)Application.Current).Settings.SlideShowFolder); // TODO
+            {
                 _slideShowService.NewPhoto += NextPhoto;
+                _slideShowService.Start(((App)Application.Current).Settings.SlideShowFolder); // TODO
             }
         }
 

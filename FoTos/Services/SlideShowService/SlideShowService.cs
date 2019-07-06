@@ -74,6 +74,9 @@ namespace FoTos.Services.SlideShowProvider
                 var file = _files[ind];
                 var img = new BitmapImage(new Uri(file, UriKind.Absolute));
 
+                // make it cross-thread accessible
+                img.Freeze();
+
                 // fire event
                 NewPhoto(img);
             }
