@@ -280,9 +280,9 @@ namespace FoTos.Views
                         break;
 
                     case EVisibilityMode.Smile:
-                        this.LiveViewImage.BitmapEffect = new BlurBitmapEffect() { Radius = 20, KernelType = KernelType.Gaussian };
-                        this.LiveViewImage.Visibility = Visibility.Visible;
-                        this.LiveViewImage.Opacity = 0.7;
+                        //this.LiveViewImage.BitmapEffect = new BlurBitmapEffect() { Radius = 20, KernelType = KernelType.Gaussian };
+                        this.LiveViewImage.Visibility = Visibility.Collapsed;
+                        //this.LiveViewImage.Opacity = 0.7;
                         this.CountdownGrid.Visibility = Visibility.Collapsed;
                         this.SmileGrid.Visibility = Visibility.Visible;
                         this.panelTakePicture.Visibility = Visibility.Collapsed;

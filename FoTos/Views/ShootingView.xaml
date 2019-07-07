@@ -229,7 +229,7 @@
 
 
         <!-- shoot button -->
-        <Grid x:Name="panelTakePicture" Grid.Column="0" Grid.Row="1"  >
+        <Grid x:Name="panelTakePicture" Grid.Column="0" Grid.Row="1" Panel.ZIndex="1500" >
 
             <!--<Grid.RowDefinitions>
                 <RowDefinition Height="1*" />

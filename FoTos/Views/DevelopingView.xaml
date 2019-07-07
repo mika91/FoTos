@@ -14,7 +14,7 @@
             <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
             <Setter Property="RenderTransform">
                 <Setter.Value>
-                    <ScaleTransform />
+                    <ScaleTransform ScaleX="-1"/>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
@@ -52,7 +52,7 @@
                     <EventTrigger.Actions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="0.9" Duration="0:0:.1" />
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="-0.9" Duration="0:0:.1" />
                                 <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="0.9" Duration="0:0:.1" />
                             </Storyboard>
                         </BeginStoryboard>
@@ -63,7 +63,7 @@
                     <EventTrigger.Actions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.0" Duration="0:0:.1" />
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="-1.0" Duration="0:0:.1" />
                                 <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.0" Duration="0:0:.1" />
                             </Storyboard>
                         </BeginStoryboard>
@@ -123,13 +123,33 @@
 
         <!-- Filter -->
         <StackPanel Grid.Column="2" Grid.Row="1"  Orientation="Vertical">
-            <Image x:Name="ThumbnailColor"       Margin="20,0,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
-            <Image x:Name="ThumbnailGrayscale"   Margin="20,10,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
-            <Image x:Name="ThumbnailSepia"       Margin="20,10,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown"></Image>
+            <Image x:Name="ThumbnailColor"     Margin="20,0,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown">
+                <Image.RenderTransformOrigin>0.5,0.5</Image.RenderTransformOrigin>
+                <Image.RenderTransform>
+                    <ScaleTransform ScaleX="-1"/>
+                </Image.RenderTransform>
+            </Image>
+            <Image x:Name="ThumbnailGrayscale"   Margin="20,10,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown">
+                <Image.RenderTransformOrigin>0.5,0.5</Image.RenderTransformOrigin>
+                <Image.RenderTransform>
+                    <ScaleTransform ScaleX="-1"/>
+                </Image.RenderTransform>
+            </Image>
+            <Image x:Name="ThumbnailSepia"       Margin="20,10,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown">
+                <Image.RenderTransformOrigin>0.5,0.5</Image.RenderTransformOrigin>
+                <Image.RenderTransform>
+                    <ScaleTransform ScaleX="-1"/>
+                </Image.RenderTransform>
+            </Image>
         </StackPanel>
 
         <!-- Photo -->
-        <Image x:Name="PhotoImage" Grid.Column="1" Grid.Row="1"></Image>
+        <Image x:Name="PhotoImage" Grid.Column="1" Grid.Row="1">
+            <Image.RenderTransformOrigin>0.5,0.5</Image.RenderTransformOrigin>
+            <Image.RenderTransform>
+                <ScaleTransform ScaleX="-1"/>
+            </Image.RenderTransform>
+        </Image>
 
         <!-- Button 'back' -->
         <!--<Button x:Name="buttonBack" Grid.Column="0" Grid.Row="2" Content="back" Click="ButtonBack_Click" />-->
