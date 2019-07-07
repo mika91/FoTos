@@ -158,13 +158,13 @@
                     </Canvas>
                 </Viewbox>
             </Button>
-            <TextBox Text="Je jette!" FontSize="36" FontFamily="Segoe Print" Margin="0,15,0,0" BorderThickness="0" IsReadOnly="True"/>
+            <TextBox Text="Je jette!" FontSize="36" FontFamily="Segoe Print" Margin="0,15,0,0" BorderThickness="0" IsReadOnly="True" Background="Transparent"/>
         </StackPanel>
        
 
         <!-- button ok -->
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Right">
-            <TextBox Text="Je garde!" FontSize="36" FontFamily="Segoe Print" Margin="0,15,0,0" BorderThickness="0"/>
+            <TextBox Text="Je garde!" FontSize="36" FontFamily="Segoe Print" Margin="0,15,0,0" BorderThickness="0" Background="Transparent"/>
             <Button  Background="Transparent" BorderThickness="0" Style="{StaticResource MyButtonStyle}">
                 <Viewbox Width="100" Margin="20,0,20,0">
                     <!--<Canvas Width="24" Height="24" Opacity="0.8">

@@ -10,6 +10,7 @@ using System.Timers;
 using WpfPageTransitions;
 using FoTos.Services.SlideShowProvider;
 using System.Windows.Media;
+using Transitionals.Transitions;
 
 namespace FoTos.Views
 {
@@ -41,6 +42,7 @@ namespace FoTos.Views
 
             // transition
             this.transitionBox.TransitionType = PageTransitionType.Fade;
+            
         }
 
 
@@ -85,8 +87,7 @@ namespace FoTos.Views
                 var uc = new UserControl();
                 uc.Content = img;
                 this.transitionBox.ShowPage(uc);
-                //this.transitionBox.Source = new BitmapImage(new Uri(file, UriKind.Absolute));
-            });
+               });
         }
 
        

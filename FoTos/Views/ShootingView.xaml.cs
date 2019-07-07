@@ -12,6 +12,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using FoTos.Services.Camera;
 using System.ComponentModel;
+using FoTos.utils;
 
 namespace FoTos.Views
 {
@@ -34,7 +35,7 @@ namespace FoTos.Views
         }
 
         private ICameraService _cameraService;
-
+        private System.Timers.Timer _idleTimer;
 
         private void ShootingPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -57,6 +58,13 @@ namespace FoTos.Views
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
+            // idle time
+            _idleTimer = new System.Timers.Timer();
+            _idleTimer.Interval = 1000;
+            _idleTimer.Elapsed += idleTimer_Elapsed;
+            _idleTimer.Enabled = true;
+
+            // default view
             SetVisibility(EVisibilityMode.LiveView);
         }
 
@@ -64,6 +72,7 @@ namespace FoTos.Views
         {
             log.Debug("ShootingPage::Unloaded");
 
+            // camera
             if (_cameraService != null)
             {
                 // stop live view
@@ -74,12 +83,15 @@ namespace FoTos.Views
                 _cameraService.NewPhoto += cameraService_NewPhoto;
             }
             _cameraService = null;
+
+            // idle timer
+            if (_idleTimer != null)
+            {
+                _idleTimer.Stop();
+                _idleTimer.Elapsed -= idleTimer_Elapsed;
+                _idleTimer = null;
+            }
         }
-
-
-
-
-    
 
 
         private void cameraService_NewLiveViewImage(Bitmap bitmap)
@@ -88,6 +100,12 @@ namespace FoTos.Views
             this.LiveViewImage.Dispatcher.Invoke(() => this.LiveViewImage.Source = BitmapUtils.BitmapToImageSource(bitmap));
         }
 
+        private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            var idle = IdleTimeDetector.GetIdleTimeInfo();
+            if (idle.IdleTime.Seconds > 20)
+                MainWindow.GotoHomePage();
+        }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
@@ -111,7 +129,6 @@ namespace FoTos.Views
             log.Info("start photo shooting countdown");
             Task.Factory.StartNew(PhotoShootTask);
         }
-
         private void PhotoShootTask()
         {
             _inProgressPhotoShoot = true;
@@ -157,7 +174,7 @@ namespace FoTos.Views
                 SetVisibility(EVisibilityMode.Smile);
 
 
-                Thread.Sleep(5000);
+                Thread.Sleep(2000);
 
                 // take picture
                 _lastPhoto = null;
@@ -207,8 +224,6 @@ namespace FoTos.Views
 
         private bool _inProgressPhotoShoot = false; // TODO: mutex
         private Bitmap _lastPhoto = null;
-
-
         private void cameraService_NewPhoto(Bitmap img)
         {
             if (_inProgressPhotoShoot /* && _photoFilename == null*/)
@@ -216,10 +231,6 @@ namespace FoTos.Views
                 _lastPhoto = img;
             }
         }
-
-
-      
-
 
 
         #region Visibility Management
@@ -258,6 +269,8 @@ namespace FoTos.Views
                         this.LiveViewImage.Visibility = Visibility.Visible;
                         this.LiveViewImage.BitmapEffect = null;
                         this.LiveViewImage.Opacity = 1.0;
+
+                       
                         this.CountdownGrid.Visibility = Visibility.Visible;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
                         this.panelTakePicture.Visibility = Visibility.Collapsed;
@@ -298,7 +311,6 @@ namespace FoTos.Views
         }
 
         #endregion
-
 
     }
 }

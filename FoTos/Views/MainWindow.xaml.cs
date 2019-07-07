@@ -30,6 +30,7 @@ namespace FoTos.Views
             HotkeyManager.Current.AddOrReplace("Increment", Key.Enter, ModifierKeys.Alt, OnToggleFullScreen);
 
 
+        
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
@@ -49,6 +50,7 @@ namespace FoTos.Views
 
             var homeView = new HomeView(App.Services.SlideshowService);
             this.TransitionControl.ShowPage(homeView);
+            
         });
         }
 
@@ -60,6 +62,7 @@ namespace FoTos.Views
 
                 var shootingView = new ShootingView(App.Services.CameraService);
                 this.TransitionControl.ShowPage(shootingView);
+                
             });
         }
 
@@ -73,6 +76,7 @@ namespace FoTos.Views
 
                 var photoView = new DevelopingView(img);
                 this.TransitionControl.ShowPage(photoView);
+                
             });
         }
 

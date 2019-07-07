@@ -7,6 +7,8 @@
              xmlns:Transitions="clr-namespace:Transitionals.Transitions;assembly=Transitionals"
              xmlns:local="clr-namespace:FoTos.Views"
              xmlns:WpfPageTransitions="clr-namespace:WpfPageTransitions;assembly=WpfPageTransitions" x:Class="FoTos.Views.HomeView"
+
+   
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Unloaded="HomeView_Unloaded"
@@ -30,6 +32,7 @@
 
         <!-- slideshow -->
         <WpfPageTransitions:PageTransition  x:Name="transitionBox" Grid.Column="1" Grid.Row="1"/>
+
 
     </Grid>
 </UserControl>
