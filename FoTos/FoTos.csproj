@@ -116,6 +116,7 @@
     <Compile Include="Services\PhotoProcessing\PhotoProcessing.cs" />
     <Compile Include="Services\SlideShowService\ISlideShowService.cs" />
     <Compile Include="Services\SlideShowService\SlideShowService.cs" />
+    <Compile Include="Utils\BitmapImageUtils.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
     <Compile Include="Services\Camera\CameraService.cs" />
     <Compile Include="Services\Camera\mock\CameraServiceMock.cs" />
@@ -132,6 +133,9 @@
     </Compile>
     <Compile Include="Views\DevelopingView.xaml.cs">
       <DependentUpon>DevelopingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ThanksView.xaml.cs">
+      <DependentUpon>ThanksView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\HomeView.xaml">
       <SubType>Designer</SubType>
@@ -154,6 +158,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DevelopingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ThanksView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

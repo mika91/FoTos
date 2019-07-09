@@ -104,6 +104,29 @@ namespace FoTos.utils
         }
 
         #endregion
+
+
+        #region Save 
+
+        public static async Task SaveAsJpeg(this BitmapSource img, String filePath, int qualityLevel = 80)
+        {
+            if (img == null)
+                return;
+
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            encoder.QualityLevel = qualityLevel;
+            encoder.Frames.Add(BitmapFrame.Create(img));
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                encoder.Save(fileStream);
+            }
+        }
+
+       
+
+        #endregion
+
     }
 
 }

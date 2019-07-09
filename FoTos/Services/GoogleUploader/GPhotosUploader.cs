@@ -4,6 +4,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
+using FoTos.utils;
 
 namespace FoTos.Services.GoogleUploader
 {
@@ -11,35 +13,39 @@ namespace FoTos.Services.GoogleUploader
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+    
+        public String CredentialsFile { get; private set; }
+        public String TokenStoreFolder { get; private set; }
 
         public String UploadDirectory { get; private set; }
-        public String CredentialsFile { get; private set; }
-        public String TokenStoreDir { get; private set; }
 
         public String AlbumName { get; private set; }
+        public String UserName { get; private set; }
 
         public GPhotosClient Client { get; private set; }
 
-        public GPhotosUploader(String credentialsFile, String tokenStoreDir, String albumName)
+        public GPhotosUploader(String credentialsFile, String tokenStoreFolder, String albumName, string userName, String uploadDir)
         {
             CredentialsFile = credentialsFile;
-            TokenStoreDir = tokenStoreDir;
+            TokenStoreFolder = tokenStoreFolder;
+            UserName = UserName;
             AlbumName = albumName;
+            UploadDirectory = uploadDir;
 
             // init GPhotos client
             log.Info("Init GPhotos client");
-            Client = new GPhotosClient(@"c:\tmp\credentials.json", @"c:\tmp\tokenStore", "photomaton");
+            Client = new GPhotosClient(CredentialsFile, TokenStoreFolder, UserName);
 
             // check album exists
-            log.Info(String.Format("Check album '{0}' exists",  albumName));
+            log.Info(String.Format("Check album '{0}' exists",  AlbumName));
             // TODO
 
-            // create dir if not exists
-            if (!Directory.Exists(dir))
-            {
-                log.Info(string.Format("create upload directory: '{0}'", dir));
-                Directory.CreateDirectory(dir);
-            }
+            //// create dir if not exists
+            //if (!Directory.Exists(dir))
+            //{
+            //    log.Info(string.Format("create upload directory: '{0}'", dir));
+            //    Directory.CreateDirectory(dir);
+            //}
 
             //// Create a new FileSystemWatcher and set its properties.
             //using (FileSystemWatcher watcher = new FileSystemWatcher())
@@ -73,7 +79,7 @@ namespace FoTos.Services.GoogleUploader
             log.Info(String.Format("GPhotos upload: '{0}'", filename));
             try
             {
-                Client.UploadMedia(filename);
+                await Client.UploadMedia(filename);
             }
             catch(Exception ex)
             {
@@ -81,5 +87,6 @@ namespace FoTos.Services.GoogleUploader
             }
             
         }
+        
     }
 }

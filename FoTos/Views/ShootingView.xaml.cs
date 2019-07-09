@@ -191,7 +191,7 @@ namespace FoTos.Views
                 var photoWasCaptured = SpinWait.SpinUntil(() => _lastPhoto != null, TimeSpan.FromSeconds(5)); // TODO: make configurable
                 if (photoWasCaptured)
                 {
-                    MainWindow.GotoPhotoPage(_lastPhoto);
+                    MainWindow.GotoDeveloppingPage(_lastPhoto);
                     //this.Dispatcher.Invoke(() =>
                     //{
                     //    //// set photo source
@@ -223,12 +223,12 @@ namespace FoTos.Views
         }
 
         private bool _inProgressPhotoShoot = false; // TODO: mutex
-        private Bitmap _lastPhoto = null;
-        private void cameraService_NewPhoto(Bitmap img)
+        private String _lastPhoto = null;
+        private void cameraService_NewPhoto(String filename)
         {
             if (_inProgressPhotoShoot /* && _photoFilename == null*/)
             {
-                _lastPhoto = img;
+                _lastPhoto = filename;
             }
         }
 

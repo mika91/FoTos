@@ -9,7 +9,7 @@ namespace FoTos.Services.Camera
 {
     public partial class CameraService
     {
-        public event Action<Bitmap> NewPhoto;
+        public event Action<String> NewPhoto;
 
         public void TakePicture()
         {
@@ -97,9 +97,11 @@ namespace FoTos.Services.Camera
                 // notify new photo
                 if (NewPhoto != null)
                 {
-                    try{
-                        var img = new Bitmap(fileName);
-                        NewPhoto.Invoke(img);
+                    var filename = eventArgs.FileName;
+                    try
+                    {
+
+                        NewPhoto.Invoke(filename);
                     } catch(Exception ex)
                     {
                         log.Error(string.Format("failed to load camera roll photo: filename = '{0}'", fileName));

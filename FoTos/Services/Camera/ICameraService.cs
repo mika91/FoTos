@@ -13,6 +13,6 @@ namespace FoTos.Services.Camera
 
         void TakePicture();
 
-        event Action<Bitmap> NewPhoto;
+        event Action<String> NewPhoto;
     }
 }

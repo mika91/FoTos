@@ -19,6 +19,8 @@ namespace FoTos.Services.PhotoProcessing
         public Bitmap OriginalBitmap   { get; private set; }
         public String OriginalFilename { get; private set; }
 
+        public String OutputDir { get; set; } 
+
         private Bitmap _thumbnail;
         public Bitmap Thumbnail
         {
@@ -26,39 +28,81 @@ namespace FoTos.Services.PhotoProcessing
             {
                 // create thumbnail on demand
                 if (_thumbnail == null)
-                    _thumbnail = BitmapUtils.Scale(OriginalBitmap, ThumnailsSize);
+                    _thumbnail = BitmapUtils.Scale(OriginalBitmap, ThumnailsSize).Result;
                   
                 return _thumbnail;
             }
         }
 
-        public PhotoProcessing(String filename, Bitmap bitmap)
+        public PhotoProcessing(String filename, Bitmap bitmap, String outputDir)
         {
             OriginalFilename = filename;
             OriginalBitmap = bitmap;
+            OutputDir = outputDir;
+
+            // check output dir exists, if not found create it
+            var dir = Path.GetDirectoryName(outputDir);
+            if (!Directory.Exists(dir))
+            {
+                log.Info("create output dir = " + dir);
+                Directory.CreateDirectory(dir);
+            }
         }
 
         public enum Filter { None, Sepia, Greyscale }
 
         public async Task<Bitmap> GetThumbnail(Filter filter)
         {
-            return ApplyFilter(Thumbnail, filter);
+            return await ApplyFilter(Thumbnail, filter);
         }
 
-        public async Task Export(Filter filter, String outpuDir)
+
+        //private async Task SavePhoto(BitmapImage image, String filename)
+        //{
+        //    // check output dir exists, if not found create it
+        //    var dir = Path.GetDirectoryName(UploadDir);
+        //    if (!System.IO.Directory.Exists(dir))
+        //    {
+        //        log.Info("create GPhotos upload dir = " + dir);
+        //        System.IO.Directory.CreateDirectory(dir);
+        //    }
+
+        //    // save image
+        //    var outputFile = Path.Combine(dir, filename);
+        //    log.Info(String.Format("save jpeg img = '{0}'", outputFile));
+        //    await image.SaveAsJpeg(outputFile);
+
+        //}
+
+
+        public async Task Export(Filter filter)
         {
             // resize image to output resolution
-            var output = (OriginalBitmap.Width > MaxExportSize || OriginalBitmap.Height > MaxExportSize)
-                ? BitmapUtils.Scale(OriginalBitmap, MaxExportSize)
-                : OriginalBitmap;
+            var output = await Scale(OriginalBitmap); 
 
             // apply filter
-            var outputProcessed = ApplyFilter(output, filter);
+            log.Info("apply filter = " + filter);
+            var outputProcessed = await ApplyFilter(output, filter);
 
-            outputProcessed.Save(Path.Combine(outpuDir, OriginalFilename));
+            // save image
+            var outputFile = Path.Combine(OutputDir, Path.GetFileNameWithoutExtension(OriginalFilename) + ".jpg");
+            log.Info(String.Format("save jpeg img = '{0}'", outputFile));
+            var bitmapSource = BitmapUtils.BitmapToImageSource(outputProcessed);
+            await bitmapSource.SaveAsJpeg(outputFile);
         }
 
-        private Bitmap ApplyFilter(Bitmap bitmap, Filter filter)
+        private async Task<Bitmap> Scale(Bitmap img)
+        {
+            if (OriginalBitmap.Width > MaxExportSize || OriginalBitmap.Height > MaxExportSize)
+            {
+                log.Info("resize image");
+                return await BitmapUtils.Scale(OriginalBitmap, MaxExportSize);
+            };
+
+            return (Bitmap) img.Clone();
+        }
+
+        private async Task<Bitmap> ApplyFilter(Bitmap bitmap, Filter filter)
         {
             switch (filter)
             {

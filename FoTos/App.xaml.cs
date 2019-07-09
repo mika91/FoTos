@@ -49,17 +49,30 @@ namespace FoTos
 
         public class AppSettings
         {
-            public String SlideShowFolder   { get; private set; }
-            public String CameraRollFolder  { get; private set; }
-            public String FinalPhotosFolder { get; private set; }
-            public Boolean UseCameraMock    { get; private set; }
+            public String SlideShowFolder           { get; private set; }
+            public String CameraRollFolder          { get; private set; }
+            public String GoogleUploadFolder        { get; private set; }
+            public String GoogleTokenStoreFolder    { get; private set; }
+            public String GoogleCredentialsFile     { get; private set; }
+            public String GoogleUserName            { get; private set; }
+            public String GoogleAlbumName           { get; private set; }
+            public Boolean UseCameraMock            { get; private set; }
 
             public AppSettings()
             {
-                SlideShowFolder     = ConfigurationManager.AppSettings["SlideShowFolder"];
-                CameraRollFolder    = ConfigurationManager.AppSettings["CameraRollFolder"];
-                FinalPhotosFolder   = ConfigurationManager.AppSettings["FinalPhotosFolder"];
-                UseCameraMock       = Boolean.Parse(ConfigurationManager.AppSettings["UseCameraMock"] ?? "false");
+                // photomaton settings
+                SlideShowFolder         = ConfigurationManager.AppSettings["SlideShowFolder"];
+                CameraRollFolder        = ConfigurationManager.AppSettings["CameraRollFolder"];
+
+                // google services settings
+                GoogleUploadFolder      = ConfigurationManager.AppSettings["GoogleUploadFolder"];
+                GoogleTokenStoreFolder  = ConfigurationManager.AppSettings["GoogleTokenStoreFolder"];
+                GoogleCredentialsFile   = ConfigurationManager.AppSettings["GoogleCredentialsFile"];
+                GoogleUserName          = ConfigurationManager.AppSettings["GoogleUserName"];
+                GoogleAlbumName         = ConfigurationManager.AppSettings["GoogleAlbumName"];
+
+                // camera mock
+                UseCameraMock           = Boolean.Parse(ConfigurationManager.AppSettings["UseCameraMock"] ?? "false");
             }
         }
 
@@ -76,7 +89,7 @@ namespace FoTos
             if (Settings.UseCameraMock)
             {
                 log.Warn("using cameraman mock");
-                camera = new CameraServiceMock();
+                camera = new CameraServiceMock(Settings.CameraRollFolder);
             }
             else
             {
@@ -85,7 +98,8 @@ namespace FoTos
             }
 
             var slideShow = new SlideShowService();
-            var uploader = new GPhotosUploader(@"c:\tmp\credentials.json", @"c:\tmp\tokenStore", "photomaton");
+            var uploader = new GPhotosUploader(Settings.GoogleCredentialsFile, Settings.GoogleTokenStoreFolder,
+                Settings.GoogleUserName, Settings.GoogleAlbumName, Settings.GoogleUploadFolder);
 
             Services = new AppServices(camera, slideShow, uploader);
         }
@@ -100,7 +114,7 @@ namespace FoTos
             {
                 this.CameraService      = cameraService;
                 this.SlideshowService   = slideshowService;
-                this.GPhotosUploader = uploader;
+                this.GPhotosUploader    = uploader;
             }
 
         }

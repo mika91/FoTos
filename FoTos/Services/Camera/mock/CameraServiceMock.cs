@@ -1,5 +1,8 @@
-﻿using System;
+﻿using FoTos.camera;
+using FoTos.utils;
+using System;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,9 +11,15 @@ namespace FoTos.Services.Camera.mock
     class CameraServiceMock : ICameraService
     {
         public event Action<Bitmap> NewLiveViewImage;
-        public event Action<Bitmap> NewPhoto;
+        public event Action<String> NewPhoto;
 
         private CancellationTokenSource _liveViewToken;
+
+        String _folder;
+        public CameraServiceMock(String outputFolder)
+        {
+            _folder = outputFolder;
+        }
 
         public void StartLiveView()
         {
@@ -48,7 +57,12 @@ namespace FoTos.Services.Camera.mock
             if (NewPhoto != null)
             {
                 var img = GenerateRandomBitmap();
-                NewPhoto?.Invoke(img);
+
+                var imgSource = BitmapUtils.BitmapToImageSource(img);
+                var filename = Path.Combine(_folder, DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".jpg");
+                imgSource.SaveAsJpeg(filename).Wait();
+
+                NewPhoto?.Invoke(filename);
 
             }
            

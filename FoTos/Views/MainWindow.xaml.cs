@@ -68,15 +68,26 @@ namespace FoTos.Views
 
 
 
-        public void GotoPhotoPage(Bitmap img)
+        public void GotoDeveloppingPage(String filename)
         {
             this.Dispatcher.Invoke(() =>
             {
-                log.Debug("Goto Photo Page");
+                log.Debug("Goto Developing Page");
 
-                var photoView = new DevelopingView(img, App.Services.GPhotosUploader);
+                var photoView = new DevelopingView(filename, App.Services.GPhotosUploader);
                 this.TransitionControl.ShowPage(photoView);
                 
+            });
+        }
+
+        public void GotoThanksPage()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                log.Debug("Goto Thanks Page");
+
+                var thanksView = new ThanksView();
+                this.TransitionControl.ShowPage(thanksView);
             });
         }
 

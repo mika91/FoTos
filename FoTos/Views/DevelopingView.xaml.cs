@@ -9,6 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 using FoTos.Services.GoogleUploader;
+using System;
+using FoTos.Services.PhotoProcessing;
 
 namespace FoTos.Views
 {
@@ -22,15 +24,31 @@ namespace FoTos.Views
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         MainWindow MainWindow { get { return Dispatcher.Invoke(() => Window.GetWindow(this) as MainWindow); } }
 
+
+
+        private Bitmap _originalImage;
+        private IGPhotosUploader _uploader;
+        private string _outputDir;
+        private string _filename;
+
+        private PhotoProcessing _processor;
+
+
         public DevelopingView()
         {
             InitializeComponent();
         }
 
-        public DevelopingView(Bitmap image, IGPhotosUploader uploader) : this()
+        public DevelopingView(String filename, IGPhotosUploader uploader) : this()
         {
-            _img = image;
+
+           
             _uploader = uploader;
+            _filename = filename;
+
+            _originalImage = new Bitmap(filename);
+
+            _processor = new PhotoProcessing(filename, _originalImage, uploader.UploadDirectory);
         }
 
         private void PhotoPage_Loaded(object sender, RoutedEventArgs e)
@@ -43,13 +61,9 @@ namespace FoTos.Views
             // set image and refresh thumbnails
             this.Dispatcher.Invoke(() =>
             {
-                var originalBitmap = _img;
-
-                PhotoImage.Source = BitmapUtils.BitmapToImageSource(originalBitmap);
-                RefreshThumbnails(originalBitmap);
+                PhotoImage.Source = BitmapUtils.BitmapToImageSource(_originalImage);
+                RefreshThumbnails();
             });
-
-
         }
 
         private void PhotoPage_Unloaded(object sender, RoutedEventArgs e)
@@ -58,13 +72,7 @@ namespace FoTos.Views
         }
 
 
-
-
-        private Bitmap _img;
-        private IGPhotosUploader _uploader;
- 
-        
-        private async Task RefreshThumbnails(Bitmap img)
+        private async Task RefreshThumbnails()
         {
             log.Debug("Refreshing filter thumbnails...");
             //await Task.Delay(5000);
@@ -74,14 +82,14 @@ namespace FoTos.Views
 
             this.Dispatcher.Invoke(() =>
             {
-                var original = BitmapUtils.Scale(img, 1000, 1000, true);
 
-                var grayscale = original.Grayscale();
-                var sepia = original.Sepia();
+                var thumb          = _processor.GetThumbnail(PhotoProcessing.Filter.None).Result;
+                var thumbSepia     = _processor.GetThumbnail(PhotoProcessing.Filter.Sepia).Result;
+                var thumbGrayscale = _processor.GetThumbnail(PhotoProcessing.Filter.Greyscale).Result;
 
-                this.ThumbnailColor.Source = BitmapUtils.BitmapToImageSource(original);
-                this.ThumbnailSepia.Source = BitmapUtils.BitmapToImageSource(sepia);
-                this.ThumbnailGrayscale.Source = BitmapUtils.BitmapToImageSource(grayscale);
+                this.ThumbnailColor.Source = BitmapUtils.BitmapToImageSource(thumb);
+                this.ThumbnailSepia.Source = BitmapUtils.BitmapToImageSource(thumbSepia);
+                this.ThumbnailGrayscale.Source = BitmapUtils.BitmapToImageSource(thumbGrayscale);
             });
 
             sw.Stop();
@@ -103,5 +111,20 @@ namespace FoTos.Views
         {
             MainWindow.GotoShootingPage();
         }
+
+        private async void ButtonOK_Click(object sender, RoutedEventArgs e)
+        {
+            ExportAndUpload();
+
+            MainWindow.GotoThanksPage();
+        }
+
+        async Task ExportAndUpload()
+        {
+            await _processor.Export(PhotoProcessing.Filter.None); // TODO
+            await _uploader?.Upload(_filename);
+        }
+      
+
     }
 }

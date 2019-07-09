@@ -44,13 +44,13 @@ namespace FoTos.camera
             return new Bitmap(img, (int)(img.Width * scale), (int)(img.Height * scale));
         }
 
-        internal static Bitmap Scale (Bitmap img, int max)
+        internal async static Task<Bitmap> Scale (Bitmap img, int max)
         {
-            return Scale(img, max, max, true);
+            return await Scale(img, max, max, true);
         }
 
         // TODO: use better and faster algorithm
-        internal static Bitmap Scale(Bitmap img, int width, int height, bool keepAspectRatio = true)
+        internal static async Task<Bitmap> Scale(Bitmap img, int width, int height, bool keepAspectRatio = true)
         {
             int rWidth  = width;
             int rHeight = height;
