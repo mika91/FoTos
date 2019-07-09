@@ -111,8 +111,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Services\GoogleUploader\GPhotosApiModels.cs" />
-    <Compile Include="Services\GoogleUploader\Uploader.cs" />
+    <Compile Include="Services\GoogleUploader\GPhotosUploader.cs" />
+    <Compile Include="Services\GoogleUploader\IGPhotosUploader.cs" />
     <Compile Include="Services\PhotoProcessing\PhotoProcessing.cs" />
     <Compile Include="Services\SlideShowService\ISlideShowService.cs" />
     <Compile Include="Services\SlideShowService\SlideShowService.cs" />
@@ -213,6 +213,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\GPhotosClientApi\GPhotosClientApi.csproj">
+      <Project>{ce06ab51-5b73-48de-9f52-7d1f015deadb}</Project>
+      <Name>GPhotosClientApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WpfPageTransitions\WpfPageTransitions.csproj">
       <Project>{22a46d61-1d40-43a9-802c-b9d43dadd9ec}</Project>
       <Name>WpfPageTransitions</Name>

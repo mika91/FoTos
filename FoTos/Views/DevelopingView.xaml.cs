@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
+using FoTos.Services.GoogleUploader;
 
 namespace FoTos.Views
 {
@@ -26,9 +27,10 @@ namespace FoTos.Views
             InitializeComponent();
         }
 
-        public DevelopingView(Bitmap image) : this()
+        public DevelopingView(Bitmap image, IGPhotosUploader uploader) : this()
         {
             _img = image;
+            _uploader = uploader;
         }
 
         private void PhotoPage_Loaded(object sender, RoutedEventArgs e)
@@ -59,6 +61,7 @@ namespace FoTos.Views
 
 
         private Bitmap _img;
+        private IGPhotosUploader _uploader;
  
         
         private async Task RefreshThumbnails(Bitmap img)

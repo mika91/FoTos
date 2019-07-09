@@ -1,6 +1,7 @@
 ﻿using CameraControl.Devices;
 using log4net;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 
@@ -81,8 +82,21 @@ namespace FoTos.Services.Camera
             //// in case no camera selected, try to connect to the new connected one
             //if (_mng.SelectedCameraDevice == null)
             //    CloseAllAndConnect();
-            
+
+            // TODO: add in app.config default camera name to use
+            var reflexCamera = _mng.ConnectedDevices.FirstOrDefault(camera => camera.DisplayName.Contains("canon") || camera.DisplayName.Contains("nikon"));
+            if (reflexCamera != null) {
+                log.Info("change selected camera = "  + reflexCamera.DisplayName);
+                _mng.SelectedCameraDevice = reflexCamera;
+            }
+
+            // apply configuration
+            log.Info("apply camera settings");
+            _mng.SelectedCameraDevice.CaptureInSdRam = false;
+            //_mng.SelectedCameraDevice.FNumber.SetValue(8);
         }
+
+       
 
         private void Manager_CameraDisconnected(ICameraDevice cameraDevice)
         {

@@ -7,6 +7,7 @@ using FoTos.Views;
 using FoTos.Services.Camera;
 using FoTos.Services.Camera.mock;
 using FoTos.Services.SlideShowProvider;
+using FoTos.Services.GoogleUploader;
 
 namespace FoTos
 {
@@ -84,19 +85,22 @@ namespace FoTos
             }
 
             var slideShow = new SlideShowService();
+            var uploader = new GPhotosUploader(@"c:\tmp\credentials.json", @"c:\tmp\tokenStore", "photomaton");
 
-            Services = new AppServices(camera, slideShow);
+            Services = new AppServices(camera, slideShow, uploader);
         }
 
         public class AppServices
         {
             public ICameraService CameraService { get; private set; }
             public ISlideShowService SlideshowService { get; private set; }
+            public IGPhotosUploader GPhotosUploader { get; private set; }
 
-            public AppServices(ICameraService cameraService, ISlideShowService slideshowService)
+            public AppServices(ICameraService cameraService, ISlideShowService slideshowService, IGPhotosUploader uploader)
             {
                 this.CameraService      = cameraService;
                 this.SlideshowService   = slideshowService;
+                this.GPhotosUploader = uploader;
             }
 
         }

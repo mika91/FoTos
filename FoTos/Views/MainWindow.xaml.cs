@@ -74,7 +74,7 @@ namespace FoTos.Views
             {
                 log.Debug("Goto Photo Page");
 
-                var photoView = new DevelopingView(img);
+                var photoView = new DevelopingView(img, App.Services.GPhotosUploader);
                 this.TransitionControl.ShowPage(photoView);
                 
             });
