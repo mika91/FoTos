@@ -60,6 +60,16 @@ namespace FoTos.Services.Camera.mock
 
                 var imgSource = BitmapUtils.BitmapToImageSource(img);
                 var filename = Path.Combine(_folder, DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".jpg");
+
+                var dir = Path.GetDirectoryName(filename);
+                if (!Directory.Exists(dir))
+                {
+                    //log.Info("create camera roll folder = " + dir);
+                    Directory.CreateDirectory(dir);
+                }
+
+
+
                 imgSource.SaveAsJpeg(filename).Wait();
 
                 NewPhoto?.Invoke(filename);

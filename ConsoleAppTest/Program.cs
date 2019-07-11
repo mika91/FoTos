@@ -12,11 +12,12 @@ namespace ConsoleAppTest
         static void Main(string[] args)
         {
             var client = new GPhotosClient(
-                @"C:\Users\mika\Documents\PhotoBox\FoTos\output\private\credentials.json", 
-                @"C:\Users\mika\Documents\PhotoBox\FoTos\output\private\tokenStore",
+                @"C:\tmp\credentials.json", 
+                @"C:\tmp\tokenStore",
                 "photomaton");
 
             var albums = client.GetAllAlbums().Result;
+            albums.ForEach(a => Console.WriteLine(a.title));
 
             // exit code
             Console.WriteLine("press a key to exit...");

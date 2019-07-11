@@ -47,7 +47,7 @@ namespace GPhotosClientApi
         }
 
         // return upload token
-        public async Task<String> UploadMedia(String filename)
+        public async Task<String> UploadMedia(String fileFullName)
         {
             String baseUri = "https://photoslibrary.googleapis.com/v1/uploads";
 
@@ -56,9 +56,9 @@ namespace GPhotosClientApi
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(baseUri),
                 Headers = {
-                    { "X-Goog-Upload-File-Name" , filename},
+                    { "X-Goog-Upload-File-Name" , Path.GetFileName(fileFullName)},
                     { "X-Goog-Upload-Protocol"  , "raw" }},
-                Content = new ByteArrayContent(File.ReadAllBytes(filename))
+                Content = new ByteArrayContent(File.ReadAllBytes(fileFullName))
             };
 
             var response = await client.SendAsync(httpRequestMessage);

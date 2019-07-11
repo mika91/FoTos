@@ -25,14 +25,26 @@ namespace WpfApp1
         {
             InitializeComponent();
 
+           
+
+            this.Loaded += MainWindow_Loaded;
+
+
+
+        }
+
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
             var client = new GPhotosClient(
-      @"C:\Users\mika\Documents\PhotoBox\FoTos\output\private\credentials.json",
-      @"C:\Users\mika\Documents\PhotoBox\FoTos\output\private\tokenStore",
-      "photomaton");
+               @"C:\tmp\credentials.json",
+               @"C:\tmp\tokenStore",
+               "photomaton");
 
-            var albums = client.GetAlbumsPage().Result;
-            int toto = 0;
 
+            var albums = await client.GetAlbumsPage();
+            albums.albums.ForEach(a => Console.WriteLine(a.title));
+
+        
         }
     }
 }

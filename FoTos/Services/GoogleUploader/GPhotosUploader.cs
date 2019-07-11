@@ -27,19 +27,25 @@ namespace FoTos.Services.GoogleUploader
 
         public GPhotosUploader(String credentialsFile, String tokenStoreFolder, String albumName, string userName, String uploadDir)
         {
-            CredentialsFile = credentialsFile;
-            TokenStoreFolder = tokenStoreFolder;
-            UserName = UserName;
-            AlbumName = albumName;
-            UploadDirectory = uploadDir;
+            CredentialsFile     = credentialsFile;
+            TokenStoreFolder    = tokenStoreFolder;
+            UserName            = UserName;
+            AlbumName           = albumName;
+            UploadDirectory     = uploadDir;
 
             // init GPhotos client
             log.Info("Init GPhotos client");
-            Client = new GPhotosClient(CredentialsFile, TokenStoreFolder, UserName);
+            Client = new GPhotosClient(
+               @credentialsFile,
+               @tokenStoreFolder,
+               userName);
+
 
             // check album exists
             log.Info(String.Format("Check album '{0}' exists",  AlbumName));
-            // TODO
+            //var albums = Client.GetAllAlbums().Result;
+            //albums.ForEach(a => log.Debug(a.title));
+
 
             //// create dir if not exists
             //if (!Directory.Exists(dir))
@@ -90,7 +96,8 @@ namespace FoTos.Services.GoogleUploader
                 log.Info("albumId = " + albumId);
 
                 // upload photon then add to 
-                var uploadToken = await Client.UploadMedia(filename);
+                var fileFullName = Path.Combine(UploadDirectory, filename);
+                var uploadToken = await Client.UploadMedia(fileFullName);
                 log.Info("uploadToken = " + uploadToken);
                 if (!String.IsNullOrEmpty(uploadToken))
                 {

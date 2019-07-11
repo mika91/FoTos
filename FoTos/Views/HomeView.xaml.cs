@@ -1,16 +1,12 @@
 ﻿using log4net;
 using System;
 using System.ComponentModel;
-using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using System.Timers;
 using WpfPageTransitions;
 using FoTos.Services.SlideShowProvider;
 using System.Windows.Media;
-using Transitionals.Transitions;
 
 namespace FoTos.Views
 {

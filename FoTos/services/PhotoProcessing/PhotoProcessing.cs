@@ -41,11 +41,10 @@ namespace FoTos.Services.PhotoProcessing
             OutputDir = outputDir;
 
             // check output dir exists, if not found create it
-            var dir = Path.GetDirectoryName(outputDir);
-            if (!Directory.Exists(dir))
+            if (!Directory.Exists(outputDir))
             {
-                log.Info("create output dir = " + dir);
-                Directory.CreateDirectory(dir);
+                log.Info("create output dir = " + outputDir);
+                Directory.CreateDirectory(outputDir);
             }
         }
 
