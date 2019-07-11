@@ -99,7 +99,7 @@ namespace FoTos
 
             var slideShow = new SlideShowService();
             var uploader = new GPhotosUploader(Settings.GoogleCredentialsFile, Settings.GoogleTokenStoreFolder,
-                Settings.GoogleUserName, Settings.GoogleAlbumName, Settings.GoogleUploadFolder);
+                 Settings.GoogleAlbumName, Settings.GoogleUserName,Settings.GoogleUploadFolder);
 
             Services = new AppServices(camera, slideShow, uploader);
         }

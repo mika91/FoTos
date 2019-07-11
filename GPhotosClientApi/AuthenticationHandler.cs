@@ -73,17 +73,32 @@ namespace GPhotosClientApi
         /// <returns></returns>
         private async Task GetCredentials()
         {
-            using (var stream = new FileStream(_credentialsFilename, FileMode.Open, FileAccess.Read))
+            if (!File.Exists(_credentialsFilename))
+                throw new Exception(String.Format("Google credentials file = '{0}' doesn't exists", _credentialsFilename));
+
+            var json = File.ReadAllText(_credentialsFilename);
+
+            GoogleClientSecrets clientSecrets;
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
             {
-                var credentials = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
+                clientSecrets = GoogleClientSecrets.Load(stream);
+            }
+
+            var dataStore = new FileDataStore(_tokenStoreDir, true);
+
+
+            //using (var stream = new FileStream(_credentialsFilename, FileMode.Open, FileAccess.Read))
+            //{
+            var credentials = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    clientSecrets?.Secrets,
+                    //GoogleClientSecrets.Load(stream).Secrets,
                     _scopes,
                     _userName,
                     CancellationToken.None,
-                    new FileDataStore(_tokenStoreDir, true));
+                    dataStore);
 
                 _credentials = credentials;
-            }
+            //}
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace FoTos.Services.PhotoProcessing
             }
         }
 
-        public enum Filter { None, Sepia, Greyscale }
+        public enum Filter { None, Sepia, Grayscale }
 
         public async Task<Bitmap> GetThumbnail(Filter filter)
         {
@@ -75,7 +75,7 @@ namespace FoTos.Services.PhotoProcessing
         //}
 
 
-        public async Task Export(Filter filter)
+        public async Task<String> Export(Filter filter)
         {
             // resize image to output resolution
             var output = await Scale(OriginalBitmap); 
@@ -89,6 +89,8 @@ namespace FoTos.Services.PhotoProcessing
             log.Info(String.Format("save jpeg img = '{0}'", outputFile));
             var bitmapSource = BitmapUtils.BitmapToImageSource(outputProcessed);
             await bitmapSource.SaveAsJpeg(outputFile);
+
+            return outputFile;
         }
 
         private async Task<Bitmap> Scale(Bitmap img)
@@ -107,7 +109,7 @@ namespace FoTos.Services.PhotoProcessing
             switch (filter)
             {
                 case Filter.Sepia: return bitmap.Sepia();
-                case Filter.Greyscale: return bitmap.Grayscale();
+                case Filter.Grayscale: return bitmap.Grayscale();
                 default: return bitmap;
             }
         }

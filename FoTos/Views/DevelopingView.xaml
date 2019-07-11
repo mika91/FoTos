@@ -123,19 +123,19 @@
 
         <!-- Filter -->
         <StackPanel Grid.Column="2" Grid.Row="1"  Orientation="Vertical">
-            <Image x:Name="ThumbnailColor"     Margin="20,0,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown">
+            <Image x:Name="ThumbnailColor"     Margin="20,0,50,0" Style="{StaticResource TestStyle}" MouseDown="ThumbOrig_MouseDown">
                 <Image.RenderTransformOrigin>0.5,0.5</Image.RenderTransformOrigin>
                 <Image.RenderTransform>
                     <ScaleTransform ScaleX="-1"/>
                 </Image.RenderTransform>
             </Image>
-            <Image x:Name="ThumbnailGrayscale"   Margin="20,10,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown">
+            <Image x:Name="ThumbnailGrayscale"   Margin="20,10,50,0" Style="{StaticResource TestStyle}" MouseDown="ThumbGray_MouseDown">
                 <Image.RenderTransformOrigin>0.5,0.5</Image.RenderTransformOrigin>
                 <Image.RenderTransform>
                     <ScaleTransform ScaleX="-1"/>
                 </Image.RenderTransform>
             </Image>
-            <Image x:Name="ThumbnailSepia"       Margin="20,10,50,0" Style="{StaticResource TestStyle}" MouseDown="Thumbnail_MouseDown">
+            <Image x:Name="ThumbnailSepia"       Margin="20,10,50,0" Style="{StaticResource TestStyle}" MouseDown="ThumbSepia_MouseDown">
                 <Image.RenderTransformOrigin>0.5,0.5</Image.RenderTransformOrigin>
                 <Image.RenderTransform>
                     <ScaleTransform ScaleX="-1"/>

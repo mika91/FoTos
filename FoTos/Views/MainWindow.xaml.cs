@@ -68,13 +68,13 @@ namespace FoTos.Views
 
 
 
-        public void GotoDeveloppingPage(String filename)
+        public void GotoDeveloppingPage(String fileFullName)
         {
             this.Dispatcher.Invoke(() =>
             {
                 log.Debug("Goto Developing Page");
 
-                var photoView = new DevelopingView(filename, App.Services.GPhotosUploader);
+                var photoView = new DevelopingView(fileFullName, App.Services.GPhotosUploader);
                 this.TransitionControl.ShowPage(photoView);
                 
             });
@@ -135,7 +135,7 @@ namespace FoTos.Views
                 this.WindowStyle = WindowStyle.None;
                 this.ResizeMode = ResizeMode.NoResize;
                 this.WindowState = WindowState.Maximized;
-                this.Topmost = true;
+                //this.Topmost = true;
                 this.Visibility = Visibility.Visible;
             }
         }

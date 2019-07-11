@@ -45,10 +45,10 @@ namespace FoTos.Services.Camera
             {
                 eventArgs.CameraDevice.IsBusy = true;
                 var date = DateTime.Now.ToString("yyyyMMddHHmmssffff");
-                var fileName = Path.Combine(CameraRollFolder, date + ".jpg");
+                var fileFullName = Path.Combine(CameraRollFolder, date + ".jpg");
 
                 // check the folder of filename, if not found create it
-                var dir = Path.GetDirectoryName(fileName);
+                var dir = Path.GetDirectoryName(fileFullName);
                 if (!Directory.Exists(dir))
                 {
                     log.Info("create camera roll folder = " + dir);
@@ -68,7 +68,9 @@ namespace FoTos.Services.Camera
                 // in this way if the session folder is used as hot folder will prevent write errors
                 stopWatch.Start();
                 eventArgs.CameraDevice.TransferFile(eventArgs.Handle, tempFile); // TODO: gérer erreur ??
-                eventArgs.CameraDevice.ReleaseResurce(eventArgs.Handle);
+
+                //eventArgs.CameraDevice.ReleaseResurce(eventArgs.Handle);
+
                 eventArgs.CameraDevice.IsBusy = false;
                 stopWatch.Stop();
 
@@ -81,9 +83,9 @@ namespace FoTos.Services.Camera
                 }
 
                 // move photo to destination folder
-                log.Info(string.Format("move photo to '{0}", fileName));
-                File.Copy(tempFile, fileName);
-                WaitForFile(fileName);
+                log.Info(string.Format("move photo to '{0}", fileFullName));
+                File.Copy(tempFile, fileFullName);
+                WaitForFile(fileFullName);
 
                 try
                 {
@@ -97,14 +99,12 @@ namespace FoTos.Services.Camera
                 // notify new photo
                 if (NewPhoto != null)
                 {
-                    var filename = eventArgs.FileName;
                     try
                     {
-
-                        NewPhoto.Invoke(filename);
+                        NewPhoto.Invoke(fileFullName);
                     } catch(Exception ex)
                     {
-                        log.Error(string.Format("failed to load camera roll photo: filename = '{0}'", fileName));
+                        log.Error(string.Format("failed to load camera roll photo: filename = '{0}'", fileFullName), ex);
                     }
                 }
 

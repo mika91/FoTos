@@ -11,6 +11,8 @@ using System.ComponentModel;
 using FoTos.Services.GoogleUploader;
 using System;
 using FoTos.Services.PhotoProcessing;
+using Image = System.Windows.Controls.Image;
+using System.IO;
 
 namespace FoTos.Views
 {
@@ -29,7 +31,7 @@ namespace FoTos.Views
         private Bitmap _originalImage;
         private IGPhotosUploader _uploader;
         private string _outputDir;
-        private string _filename;
+        private string _fileFullName;
 
         private PhotoProcessing _processor;
 
@@ -39,16 +41,16 @@ namespace FoTos.Views
             InitializeComponent();
         }
 
-        public DevelopingView(String filename, IGPhotosUploader uploader) : this()
+        public DevelopingView(String fileFullName, IGPhotosUploader uploader) : this()
         {
 
            
             _uploader = uploader;
-            _filename = filename;
+            _fileFullName = fileFullName;
 
-            _originalImage = new Bitmap(filename);
+            _originalImage = new Bitmap(fileFullName);
 
-            _processor = new PhotoProcessing(filename, _originalImage, uploader.UploadDirectory);
+            _processor = new PhotoProcessing(fileFullName, _originalImage, uploader.UploadDirectory);
         }
 
         private void PhotoPage_Loaded(object sender, RoutedEventArgs e)
@@ -85,7 +87,7 @@ namespace FoTos.Views
 
                 var thumb          = _processor.GetThumbnail(PhotoProcessing.Filter.None).Result;
                 var thumbSepia     = _processor.GetThumbnail(PhotoProcessing.Filter.Sepia).Result;
-                var thumbGrayscale = _processor.GetThumbnail(PhotoProcessing.Filter.Greyscale).Result;
+                var thumbGrayscale = _processor.GetThumbnail(PhotoProcessing.Filter.Grayscale).Result;
 
                 this.ThumbnailColor.Source = BitmapUtils.BitmapToImageSource(thumb);
                 this.ThumbnailSepia.Source = BitmapUtils.BitmapToImageSource(thumbSepia);
@@ -96,15 +98,27 @@ namespace FoTos.Views
             log.Debug(string.Format("thumbnails refreshed in {0}ms", sw.ElapsedMilliseconds));
         }
 
-      
+        private PhotoProcessing.Filter _currentFilter = PhotoProcessing.Filter.None;
 
-        private void Thumbnail_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void ThumbOrig_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (sender is System.Windows.Controls.Image img)
-            {
-                log.Info(string.Format("{0}: apply photo filter", img.Name));
-                this.PhotoImage.Source = img.Source;
-            }
+            log.Info("no filter");
+            _currentFilter = PhotoProcessing.Filter.None;
+            this.PhotoImage.Source = (sender as Image)?.Source;
+        }
+
+        private void ThumbGray_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            log.Info("grayscale filter");
+            _currentFilter = PhotoProcessing.Filter.Grayscale;
+            this.PhotoImage.Source = (sender as Image)?.Source;
+        }
+
+        private void ThumbSepia_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            log.Info("sepia filter");
+            _currentFilter = PhotoProcessing.Filter.Sepia;
+            this.PhotoImage.Source = (sender as Image)?.Source;
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
@@ -121,8 +135,8 @@ namespace FoTos.Views
 
         async Task ExportAndUpload()
         {
-            await _processor.Export(PhotoProcessing.Filter.None); // TODO
-            await _uploader?.Upload(_filename);
+            var exportedFileFullName = await _processor.Export(_currentFilter);
+            await _uploader?.Upload(Path.GetFileName(_fileFullName));
         }
       
 

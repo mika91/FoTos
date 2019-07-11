@@ -224,11 +224,11 @@ namespace FoTos.Views
 
         private bool _inProgressPhotoShoot = false; // TODO: mutex
         private String _lastPhoto = null;
-        private void cameraService_NewPhoto(String filename)
+        private void cameraService_NewPhoto(String fileFullName)
         {
             if (_inProgressPhotoShoot /* && _photoFilename == null*/)
             {
-                _lastPhoto = filename;
+                _lastPhoto = fileFullName;
             }
         }
 

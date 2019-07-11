@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using FoTos.utils;
+using System.Linq;
 
 namespace FoTos.Services.GoogleUploader
 {
@@ -79,11 +80,27 @@ namespace FoTos.Services.GoogleUploader
             log.Info(String.Format("GPhotos upload: '{0}'", filename));
             try
             {
-                await Client.UploadMedia(filename);
+
+                // find album id
+                //var albums = await service.GetAllAlbums();
+                var albumsPage = await Client.GetAlbumsPage();
+                log.Info("albums = " + String.Join(", ", albumsPage.albums.Select(a => a.title)));
+
+                var albumId = albumsPage.albums.FirstOrDefault(a => a.title == AlbumName)?.id;
+                log.Info("albumId = " + albumId);
+
+                // upload photon then add to 
+                var uploadToken = await Client.UploadMedia(filename);
+                log.Info("uploadToken = " + uploadToken);
+                if (!String.IsNullOrEmpty(uploadToken))
+                {
+                    var result = await Client.BatchCreate(uploadToken, albumId);
+                    result.newMediaItemResults.ForEach(r => Console.WriteLine(string.Format("mediaItem='{0}' added to album='{1}'", r.mediaItem.filename, albumId)));
+                }
             }
             catch(Exception ex)
             {
-                log.Error(String.Format("failed to upload photo '{0}' to Google Photos", filename));
+                log.Error(String.Format("failed to upload photo '{0}' to Google Photos", filename), ex);
             }
             
         }

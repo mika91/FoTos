@@ -1,4 +1,9 @@
 ﻿
+- QR code
+
+- keep metadata when copy photo to upload dir
+
+
 
 - live view off après 'take picture'
 
