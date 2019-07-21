@@ -41,7 +41,7 @@ namespace FoTos.Views
         #region pages init
 
 
-        public void GotoHomePage()
+        public void GotoHomePage(WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideAndFade)
         {
             this.Dispatcher.Invoke(() =>
         {
@@ -49,45 +49,45 @@ namespace FoTos.Views
 
 
             var homeView = new HomeView(App.Services.SlideshowService);
-            this.TransitionControl.ShowPage(homeView);
+            this.TransitionControl.ShowPage(homeView, transitionType);
             
         });
         }
 
-        public void GotoShootingPage()
+        public void GotoShootingPage(WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideAndFade)
         {
             this.Dispatcher.Invoke(() =>
             {
                 log.Debug("Goto Shooting Page");
 
                 var shootingView = new ShootingView(App.Services.CameraService);
-                this.TransitionControl.ShowPage(shootingView);
+                this.TransitionControl.ShowPage(shootingView, transitionType);
                 
             });
         }
 
 
 
-        public void GotoDeveloppingPage(String fileFullName)
+        public void GotoDeveloppingPage(String fileFullName, WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideAndFade)
         {
             this.Dispatcher.Invoke(() =>
             {
                 log.Debug("Goto Developing Page");
 
                 var photoView = new DevelopingView(fileFullName, App.Services.GPhotosUploader);
-                this.TransitionControl.ShowPage(photoView);
+                this.TransitionControl.ShowPage(photoView, transitionType);
                 
             });
         }
 
-        public void GotoThanksPage()
+        public void GotoThanksPage(WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideAndFade)
         {
             this.Dispatcher.Invoke(() =>
             {
                 log.Debug("Goto Thanks Page");
 
                 var thanksView = new ThanksView();
-                this.TransitionControl.ShowPage(thanksView);
+                this.TransitionControl.ShowPage(thanksView, transitionType);
             });
         }
 

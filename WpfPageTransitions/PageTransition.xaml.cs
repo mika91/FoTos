@@ -43,6 +43,12 @@ namespace WpfPageTransitions
 			InitializeComponent();
 		}		
 		
+        public void ShowPage(UserControl newPage, PageTransitionType transitionType)
+        {
+            TransitionType = transitionType;
+            ShowPage(newPage);
+        }
+
 		public void ShowPage(UserControl newPage)
 		{			
 			pages.Push(newPage);

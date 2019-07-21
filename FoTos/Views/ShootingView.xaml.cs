@@ -104,12 +104,12 @@ namespace FoTos.Views
         {
             var idle = IdleTimeDetector.GetIdleTimeInfo();
             if (idle.IdleTime.Seconds > 20)
-                MainWindow.GotoHomePage();
+                MainWindow.GotoHomePage(WpfPageTransitions.PageTransitionType.SlideAndFadeLeftRight);
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.GotoHomePage();
+            MainWindow.GotoHomePage(WpfPageTransitions.PageTransitionType.SlideAndFadeLeftRight);
         }
      
         private void ButtonTakePicture_Click(object sender, RoutedEventArgs e)

@@ -123,7 +123,7 @@ namespace FoTos.Views
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.GotoShootingPage();
+            MainWindow.GotoShootingPage(WpfPageTransitions.PageTransitionType.SlideAndFadeLeftRight);
         }
 
         private async void ButtonOK_Click(object sender, RoutedEventArgs e)
