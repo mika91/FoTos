@@ -21,6 +21,9 @@ namespace FoTos.Services.GoogleUploader
         public String UploadDirectory { get; private set; }
 
         public String AlbumName { get; private set; }
+
+        public String AlbumId { get; private set; }
+
         public String UserName { get; private set; }
 
         public GPhotosClient Client { get; private set; }
@@ -41,10 +44,7 @@ namespace FoTos.Services.GoogleUploader
                userName);
 
 
-            // check album exists
-            log.Info(String.Format("Check album '{0}' exists",  AlbumName));
-            //var albums = Client.GetAllAlbums().Result;
-            //albums.ForEach(a => log.Debug(a.title));
+           
 
 
             //// create dir if not exists
@@ -80,20 +80,33 @@ namespace FoTos.Services.GoogleUploader
             //}
         }
 
+        public async Task CheckAlbum()
+        {
+            // check album exists
+            log.Info(String.Format("Check album '{0}' exists", AlbumName));
+
+            var albums = await Client.GetAllAlbums();
+            log.Info("albums = " + String.Join(", ", albums.Select(a => a.title)));
+
+            AlbumId = albums.FirstOrDefault(a => a.title == AlbumName)?.id;
+            if (AlbumId == null)
+            {
+                log.Info(String.Format("Create album '{0}'", AlbumName));
+                var createdAlbum = await Client?.CreateAlbum(AlbumName);
+                log.Info(String.Format("Album successfully created"));
+                AlbumId = createdAlbum.id;
+            }
+        }
+
 
         public async Task Upload(String filename)
         {
             log.Info(String.Format("GPhotos upload: '{0}'", filename));
             try
             {
-
-                // find album id
-                //var albums = await service.GetAllAlbums();
-                var albumsPage = await Client.GetAlbumsPage();
-                log.Info("albums = " + String.Join(", ", albumsPage.albums.Select(a => a.title)));
-
-                var albumId = albumsPage.albums.FirstOrDefault(a => a.title == AlbumName)?.id;
-                log.Info("albumId = " + albumId);
+                // check album
+                if (AlbumId == null)
+                    await CheckAlbum();
 
                 // upload photon then add to 
                 var fileFullName = Path.Combine(UploadDirectory, filename);
@@ -101,8 +114,8 @@ namespace FoTos.Services.GoogleUploader
                 log.Info("uploadToken = " + uploadToken);
                 if (!String.IsNullOrEmpty(uploadToken))
                 {
-                    var result = await Client.BatchCreate(uploadToken, albumId);
-                    result.newMediaItemResults.ForEach(r => Console.WriteLine(string.Format("mediaItem='{0}' added to album='{1}'", r.mediaItem.filename, albumId)));
+                    var result = await Client.BatchCreate(uploadToken, AlbumId);
+                    result.newMediaItemResults.ForEach(r => Console.WriteLine(string.Format("mediaItem='{0}' added to album='{1}'", r.mediaItem.filename, AlbumId)));
                 }
             }
             catch(Exception ex)
