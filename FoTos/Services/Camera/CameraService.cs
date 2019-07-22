@@ -15,10 +15,13 @@ namespace FoTos.Services.Camera
         public event Action CameraChanged;
 
         public String CameraRollFolder { get; private set; }
+    
+        public String PreferedCamera { get; private set; }
 
-        public CameraService(String cameraRollFolder)
+        public CameraService(String cameraRollFolder, String preferedCamera = null)
         {
             CameraRollFolder = cameraRollFolder;
+            PreferedCamera = preferedCamera;
 
             InitManager();
         }
@@ -83,13 +86,37 @@ namespace FoTos.Services.Camera
             //if (_mng.SelectedCameraDevice == null)
             //    CloseAllAndConnect();
 
-            // TODO: add in app.config default camera name to use
-            var reflexCamera = _mng.ConnectedDevices.FirstOrDefault(camera => camera.DisplayName.Contains("canon") || camera.DisplayName.Contains("nikon"));
-            if (reflexCamera != null) {
-                log.Info("change selected camera = "  + reflexCamera.DisplayName);
-                _mng.SelectedCameraDevice = reflexCamera;
+            // list camera
+            var devices = _mng.ConnectedDevices;
+            log.Info(String.Format("connected cameras: {0}", String.Join(", ", devices.Select(d => d.DisplayName))));
+
+            // prefered camera
+            if (PreferedCamera != null) {
+                var prefered = devices.FirstOrDefault(camera => camera.DisplayName.ToUpper().Contains(PreferedCamera.ToUpper()));
+                if (prefered != null)
+                {
+                    log.Info(String.Format("prefered camera '{0}' availabale: use it", prefered.DisplayName));
+                    _mng.SelectedCameraDevice = prefered;
+                }
+            }
+            else
+            {
+                log.Info("search fo a reflex camera");
+                var reflexCamera = devices.FirstOrDefault(camera => camera.DisplayName.ToUpper().Contains("CANON") || camera.DisplayName.Contains("NIKON"));
+                if (reflexCamera != null)
+                {
+                    log.Info("user reflex camera = " + reflexCamera.DisplayName);
+                    _mng.SelectedCameraDevice = reflexCamera;
+                }
+                else
+                {
+                    log.Info("no reflex camera found");
+                }
             }
 
+            log.Debug("camera selected = " + _mng?.SelectedCameraDevice?.DisplayName);
+            
+                
             // apply configuration
             log.Info("apply camera settings");
             _mng.SelectedCameraDevice.CaptureInSdRam = false;

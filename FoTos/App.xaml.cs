@@ -51,6 +51,7 @@ namespace FoTos
         {
             public String SlideShowFolder           { get; private set; }
             public String CameraRollFolder          { get; private set; }
+            public String PreferedCamera            { get; private set; }
             public String GoogleUploadFolder        { get; private set; }
             public String GoogleTokenStoreFolder    { get; private set; }
             public String GoogleCredentialsFile     { get; private set; }
@@ -58,11 +59,14 @@ namespace FoTos
             public String GoogleAlbumName           { get; private set; }
             public Boolean UseCameraMock            { get; private set; }
 
+
+
             public AppSettings()
             {
                 // photomaton settings
                 SlideShowFolder         = ConfigurationManager.AppSettings["SlideShowFolder"];
                 CameraRollFolder        = ConfigurationManager.AppSettings["CameraRollFolder"];
+                PreferedCamera          = ConfigurationManager.AppSettings["PreferedCamera"];
 
                 // google services settings
                 GoogleUploadFolder      = ConfigurationManager.AppSettings["GoogleUploadFolder"];
@@ -93,14 +97,12 @@ namespace FoTos
             }
             else
             {
-                camera = new CameraService(Settings.CameraRollFolder);
-
+                camera = new CameraService(Settings.CameraRollFolder, Settings.PreferedCamera);
             }
 
             var slideShow = new SlideShowService();
             var uploader = new GPhotosUploader(Settings.GoogleCredentialsFile, Settings.GoogleTokenStoreFolder,
                  Settings.GoogleAlbumName, Settings.GoogleUserName,Settings.GoogleUploadFolder);
-
             Services = new AppServices(camera, slideShow, uploader);
         }
 
