@@ -1,9 +1,15 @@
 ﻿
 - QR code
 
+- gphoto periodic sync task
+
 - keep metadata when copy photo to upload dir
 
+- animations vs 07 juillet
 
+- bitmap vs image (winform vs wpf)
+
+- perf ?
 
 - live view off après 'take picture'
 
