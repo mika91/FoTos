@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5BDFD618-422F-46E5-8139-7BD9AA211EB1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>FoTos</RootNamespace>
-    <AssemblyName>FoTos</AssemblyName>
+    <RootNamespace>FoTos2</RootNamespace>
+    <AssemblyName>FoTos2</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -37,11 +37,47 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accord, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.3.8.2-alpha\lib\net46\Accord.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Video, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Video.3.8.2-alpha\lib\net46\Accord.Video.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Video.DirectShow, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Video.DirectShow.3.8.2-alpha\lib\net46\Accord.Video.DirectShow.dll</HintPath>
+    </Reference>
+    <Reference Include="CameraControl.Devices, Version=2.1.0.1, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\CameraControl.Devices.2.1.0-beta\lib\net46\CameraControl.Devices.dll</HintPath>
+    </Reference>
+    <Reference Include="Canon.Eos.Framework, Version=2.1.0.1, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\CameraControl.Devices.2.1.0-beta\lib\net46\Canon.Eos.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.PortableDeviceApiLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CameraControl.Devices.2.1.0-beta\lib\net46\Interop.PortableDeviceApiLib.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.PortableDeviceTypesLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CameraControl.Devices.2.1.0-beta\lib\net46\Interop.PortableDeviceTypesLib.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.WIA, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\CameraControl.Devices.2.1.0-beta\lib\net46\Interop.WIA.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NHotkey, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NHotkey.1.2.1\lib\net20\NHotkey.dll</HintPath>
     </Reference>
     <Reference Include="NHotkey.Wpf, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NHotkey.Wpf.1.2.1\lib\net35\NHotkey.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="PortableDeviceLib, Version=2.1.0.1, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\CameraControl.Devices.2.1.0-beta\lib\net46\PortableDeviceLib.dll</HintPath>
     </Reference>
     <Reference Include="Rssdp.Native, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Rssdp.2.0.9\lib\net45\Rssdp.Native.dll</HintPath>
@@ -50,8 +86,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -73,60 +107,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\Camera\CameraService.cs" />
+    <Compile Include="Services\Camera\CameraServiceLiveView.cs" />
+    <Compile Include="Services\Camera\CameraServiceShoot.cs" />
+    <Compile Include="Services\Camera\ICameraService.cs" />
+    <Compile Include="Services\Camera\mock\CameraServiceMock.cs" />
     <Compile Include="Services\GoogleUploader\GPhotosUploader.cs" />
     <Compile Include="Services\GoogleUploader\IGPhotosUploader.cs" />
     <Compile Include="Services\PhotoProcessing\PhotoProcessing.cs" />
     <Compile Include="Services\SlideShowService\ISlideShowService.cs" />
     <Compile Include="Services\SlideShowService\SlideShowService.cs" />
+    <Compile Include="Utils\BitmapExtensions.cs" />
     <Compile Include="Utils\BitmapImageUtils.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
-    <Compile Include="Services\Camera\CameraService.cs" />
-    <Compile Include="Services\Camera\mock\CameraServiceMock.cs" />
-    <Compile Include="Services\Camera\CameraServiceShoot.cs" />
-    <Compile Include="Services\Camera\ICameraService.cs" />
-    <Compile Include="Services\Camera\CameraServiceLiveView.cs" />
-    <Compile Include="Utils\BitmapExtensions.cs" />
     <Compile Include="Utils\IdleTimeDetector.cs" />
+    <Compile Include="Views\DevelopingView.xaml.cs">
+      <DependentUpon>DevelopingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShootingView.xaml.cs">
       <DependentUpon>ShootingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DevelopingView.xaml.cs">
-      <DependentUpon>DevelopingView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ThanksView.xaml.cs">
       <DependentUpon>ThanksView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\HomeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Views\ShootingView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DevelopingView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ThanksView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -146,33 +159,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="TODO.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\icons\arrow-left-bold-circle-outline.png" />
-    <Resource Include="Resources\icons\arrow-up-bold.png" />
-    <Resource Include="Resources\icons\picto-sourire.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\wallpapers\wallpaper00.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\wallpapers\wallpaper01.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\wallpapers\wallpaper02.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\wallpapers\wallpaper03.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GPhotosClientApi\GPhotosClientApi.csproj">
@@ -184,13 +178,50 @@
       <Name>WpfPageTransitions</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <PackageReference Include="CameraControl.Devices">
-      <Version>2.1.0-beta</Version>
-    </PackageReference>
-    <PackageReference Include="log4net">
-      <Version>2.0.8</Version>
-    </PackageReference>
+    <Content Include="EDSDK.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EdsImage.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\icons\arrow-left-bold-circle-outline.png" />
+    <Resource Include="Resources\icons\arrow-up-bold.png" />
+    <Resource Include="Resources\icons\picto-sourire.png" />
+    <Resource Include="Resources\wallpapers\wallpaper00.jpg" />
+    <Resource Include="Resources\wallpapers\wallpaper01.jpg" />
+    <Resource Include="Resources\wallpapers\wallpaper02.png" />
+    <Resource Include="Resources\wallpapers\wallpaper03.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\DevelopingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\HomeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ShootingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ThanksView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Accord.3.8.2-alpha\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.2-alpha\build\Accord.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Accord.3.8.2-alpha\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.2-alpha\build\Accord.targets'))" />
+  </Target>
 </Project>

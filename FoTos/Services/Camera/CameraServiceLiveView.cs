@@ -5,7 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Timers;
-using System.Windows.Forms;
+using System.Windows;
 using Timer = System.Timers.Timer;
 
 namespace FoTos.Services.Camera
