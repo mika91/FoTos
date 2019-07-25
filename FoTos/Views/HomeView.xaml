@@ -30,7 +30,10 @@
 
         <!-- slideshow -->
         <WpfPageTransitions:PageTransition  x:Name="transitionBox" Grid.Column="1" Grid.Row="1"/>
-
+        
+        <!-- QR codes -->
+        <Image x:Name="imageLeftQR"   Grid.Row="2" Grid.Column="0"/>
+        <Image x:Name="imageRightQR"  Grid.Row="2" Grid.Column="2"/>
 
     </Grid>
 </UserControl>

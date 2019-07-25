@@ -1,8 +1,10 @@
-﻿using FoTos.utils;
+﻿
+using FoTos.utils;
 using log4net;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -55,6 +57,7 @@ namespace FoTos.Views
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
+            
             // idle time
             _idleTimer = new System.Timers.Timer();
             _idleTimer.Interval = 1000;
@@ -65,7 +68,7 @@ namespace FoTos.Views
         private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             var idle = IdleTimeDetector.GetIdleTimeInfo();
-            if (idle.IdleTime.Seconds > 2) // TODO
+            if (idle.IdleTime.Seconds > MainWindow.App.Settings.ThanksViewIdleTimeSeconds) // TODO
                 MainWindow.GotoHomePage();
         }
 

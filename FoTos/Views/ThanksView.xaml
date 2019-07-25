@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
 
         <Viewbox Grid.Column="1" Grid.Row="1">
-            <TextBlock FontFamily="Segoe Print" FontSize="72">Merci et à bientôt</TextBlock>
+            <TextBlock FontFamily="Segoe Print" FontSize="72">Merci et à bientôt...</TextBlock>
         </Viewbox>
 
     </Grid>

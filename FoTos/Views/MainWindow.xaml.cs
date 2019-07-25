@@ -30,11 +30,24 @@ namespace FoTos.Views
             HotkeyManager.Current.AddOrReplace("Increment", Key.Enter, ModifierKeys.Alt, OnToggleFullScreen);
 
 
-        
+
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
+            generateQRCode();
+
             GotoHomePage();
+        }
+
+        public Bitmap QRCode { get; private set; }
+
+        private void generateQRCode()
+        {
+            // bar code
+            log.Info("genrate album QR code");
+            Zen.Barcode.CodeQrBarcodeDraw qrcode = Zen.Barcode.BarcodeDrawFactory.CodeQr;
+            var img = qrcode.Draw(App.Settings.GoogleAlbumShareUrl, 500);
+            QRCode = new Bitmap(img);
         }
 
 

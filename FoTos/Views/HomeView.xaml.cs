@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using WpfPageTransitions;
 using FoTos.Services.SlideShowProvider;
 using System.Windows.Media;
+using FoTos.camera;
 
 namespace FoTos.Views
 {
@@ -30,11 +31,11 @@ namespace FoTos.Views
 
             // register slide show
             _slideShowService = slideShowService;
-          
 
 
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
+
 
             // transition
             this.transitionBox.TransitionType = PageTransitionType.Fade;
@@ -63,6 +64,13 @@ namespace FoTos.Views
             {
                 _slideShowService.NewPhoto += NextPhoto;
                 _slideShowService.Start(((App)Application.Current).Settings.SlideShowFolder); // TODO
+            }
+
+            // QR code
+            if (MainWindow?.QRCode != null)
+            {
+                this.imageLeftQR.Source = BitmapUtils.BitmapToImageSource(MainWindow.QRCode);
+                this.imageRightQR.Source = BitmapUtils.BitmapToImageSource(MainWindow.QRCode);
             }
         }
 

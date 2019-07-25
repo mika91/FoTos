@@ -103,7 +103,7 @@ namespace FoTos.Views
         private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             var idle = IdleTimeDetector.GetIdleTimeInfo();
-            if (idle.IdleTime.Seconds > 20)
+            if (idle.IdleTime.Seconds > MainWindow.App.Settings.ShootingViewIdleTimeSeconds)
                 MainWindow.GotoHomePage(WpfPageTransitions.PageTransitionType.SlideAndFadeLeftRight);
         }
 
@@ -274,7 +274,7 @@ namespace FoTos.Views
                         this.CountdownGrid.Visibility = Visibility.Visible;
                         this.SmileGrid.Visibility = Visibility.Collapsed;
                         this.panelTakePicture.Visibility = Visibility.Collapsed;
-                        this.ArrowsUpGrid.Visibility = Visibility.Visible;
+                        this.ArrowsUpGrid.Visibility = Visibility.Collapsed;
                         this.Title.Text = "Prenez la pause...";
                         this.Title.Visibility = Visibility.Visible;
                         break;

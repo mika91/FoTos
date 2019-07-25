@@ -57,8 +57,10 @@ namespace FoTos
             public String GoogleCredentialsFile     { get; private set; }
             public String GoogleUserName            { get; private set; }
             public String GoogleAlbumName           { get; private set; }
+            public String GoogleAlbumShareUrl       { get; private set; }
             public Boolean UseCameraMock            { get; private set; }
-
+            public int ShootingViewIdleTimeSeconds { get; private set; }
+            public int ThanksViewIdleTimeSeconds { get; private set; }
 
 
             public AppSettings()
@@ -74,6 +76,12 @@ namespace FoTos
                 GoogleCredentialsFile   = ConfigurationManager.AppSettings["GoogleCredentialsFile"];
                 GoogleUserName          = ConfigurationManager.AppSettings["GoogleUserName"];
                 GoogleAlbumName         = ConfigurationManager.AppSettings["GoogleAlbumName"];
+                GoogleAlbumShareUrl     = ConfigurationManager.AppSettings["GoogleAlbumShareUrl"];
+
+                // UI related stuffs
+                ShootingViewIdleTimeSeconds = int.Parse(ConfigurationManager.AppSettings["ShootingViewIdleTimeSeconds"] ?? "20");
+                ThanksViewIdleTimeSeconds   = int.Parse(ConfigurationManager.AppSettings["ThanksViewIdleTimeSeconds"] ?? "3");
+
 
                 // camera mock
                 UseCameraMock           = Boolean.Parse(ConfigurationManager.AppSettings["UseCameraMock"] ?? "false");

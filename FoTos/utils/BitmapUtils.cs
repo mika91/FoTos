@@ -21,6 +21,9 @@ namespace FoTos.camera
 
         internal static BitmapSource BitmapToImageSource(Bitmap bitmap)
         {
+            if (bitmap == null)
+                return null;
+
             IntPtr hBitmap = bitmap.GetHbitmap();
             BitmapSource retval;
             try
