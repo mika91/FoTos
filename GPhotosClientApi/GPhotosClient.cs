@@ -46,6 +46,45 @@ namespace GPhotosClientApi
             throw ToException(response);
         }
 
+        public async Task<MediaItemsResponseBody> GetAlbumMediaItems(String albumId, int pageSize = 100, String pageToken = null)
+        {
+            String baseUri = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
+            baseUri += "?albumId=" + albumId;
+            baseUri += @"&pageSize=" + pageSize;
+            if (!string.IsNullOrEmpty(pageToken))
+                baseUri += @"&pageToken=" + pageToken;
+
+            var httpRequestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(baseUri),
+                Headers = { }
+            };
+
+            var response = await client.SendAsync(httpRequestMessage);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsAsync<MediaItemsResponseBody>();
+            }
+
+            throw ToException(response);
+        }
+
+        public async Task<List<MediaItem>> GetAllAlbumMediaItems(String albumId)
+        {
+            var result = new List<MediaItem>();
+
+            var mediaItemsResponse = await GetAlbumMediaItems(albumId, 100);
+            result.AddRange(mediaItemsResponse.mediaItems);
+            while (mediaItemsResponse.nextPageToken != null)
+            {
+                mediaItemsResponse = await GetAlbumMediaItems(mediaItemsResponse.nextPageToken);
+                result.AddRange(mediaItemsResponse.mediaItems);
+            }
+            return result;
+        }
+
+
         // return upload token
         public async Task<String> UploadMedia(String fileFullName)
         {

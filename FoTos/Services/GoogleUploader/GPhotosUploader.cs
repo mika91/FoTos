@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using FoTos.utils;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace FoTos.Services.GoogleUploader
 {
     class GPhotosUploader : IGPhotosUploader
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
     
         public String CredentialsFile { get; private set; }
         public String TokenStoreFolder { get; private set; }
@@ -28,7 +28,9 @@ namespace FoTos.Services.GoogleUploader
 
         public GPhotosClient Client { get; private set; }
 
-        public GPhotosUploader(String credentialsFile, String tokenStoreFolder, String albumName, string userName, String uploadDir)
+        private System.Timers.Timer _syncTimer;
+
+        public GPhotosUploader(String credentialsFile, String tokenStoreFolder, String albumName, string userName, String uploadDir, int syncIntervalSeconds = 900)
         {
             CredentialsFile     = credentialsFile;
             TokenStoreFolder    = tokenStoreFolder;
@@ -43,8 +45,13 @@ namespace FoTos.Services.GoogleUploader
                @tokenStoreFolder,
                userName);
 
+            // mirroring sync
+            // idle time
+            _syncTimer = new System.Timers.Timer();
+            _syncTimer.Interval = syncIntervalSeconds * 1000;
+            _syncTimer.Elapsed += Sync;
+            _syncTimer.Enabled = true;
 
-           
 
 
             //// create dir if not exists
@@ -79,6 +86,83 @@ namespace FoTos.Services.GoogleUploader
             //    watcher.EnableRaisingEvents = true;
             //}
         }
+
+        #region sync
+
+        private bool _syncLock = false;
+
+        private async void Sync(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (_syncLock)
+            {
+                log.Warn("sync process is locked: skip it");
+                return;
+            }
+
+            try
+            {
+                _syncLock = true;
+
+                // list local files
+                var localFiles = ListLocalPhotos();
+                log.Info(String.Format("found {0} local files", localFiles.Count));
+
+                // list google files
+                var remoteFiles = await ListRemotePhotos();
+                log.Info(String.Format("found {0} remote files", remoteFiles.Count));
+
+                // find local files that need to be uploaded
+                var remoteFilesHash = new HashSet<String>(remoteFiles);
+                var candidates = localFiles.Where(x => !remoteFiles.Contains(x)).ToList();
+                log.Info(String.Format("find {0} candidates to sync upload:\n{1}", candidates.Count, String.Join("\n\t-", candidates.ToArray())));
+
+                if (candidates.Count > 0)
+                {
+                    // upload 
+                    candidates.ForEach(c => Upload(c).Wait());
+
+                    log.Info("sync succeeded");
+                } else
+                {
+                    log.Info("nothing to sync");
+                }
+            } catch (Exception ex)
+            {
+                log.Error("failed to sync google photos", ex);
+            } finally
+            {
+                _syncLock = false;
+            }
+
+        }
+
+
+
+        private List<string> ListLocalPhotos()
+        {
+            var allowedExtensions = new[] { ".jpg", ".jpeg" };
+            var files = Directory
+                 .GetFiles(UploadDirectory)
+                 .Select(file => Path.GetFileName(file).ToLower())
+                 .Where(file => allowedExtensions.Any(file.EndsWith))
+                 .ToList();
+            return files;
+        }
+
+        private async Task<List<String>> ListRemotePhotos()
+        {
+            // check album
+            if (AlbumId == null)
+                await CheckAlbum();
+
+            var items = await Client.GetAllAlbumMediaItems(AlbumId);
+            return items.Select(x => x.filename.ToLower()).ToList();
+        }
+
+        #endregion
+
+
+
 
         public async Task CheckAlbum()
         {

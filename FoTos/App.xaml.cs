@@ -58,6 +58,7 @@ namespace FoTos
             public String GoogleUserName            { get; private set; }
             public String GoogleAlbumName           { get; private set; }
             public String GoogleAlbumShareUrl       { get; private set; }
+            public int GoogleSyncSeconds { get; private set; }
             public Boolean UseCameraMock            { get; private set; }
             public int ShootingViewIdleTimeSeconds { get; private set; }
             public int ThanksViewIdleTimeSeconds { get; private set; }
@@ -77,6 +78,7 @@ namespace FoTos
                 GoogleUserName          = ConfigurationManager.AppSettings["GoogleUserName"];
                 GoogleAlbumName         = ConfigurationManager.AppSettings["GoogleAlbumName"];
                 GoogleAlbumShareUrl     = ConfigurationManager.AppSettings["GoogleAlbumShareUrl"];
+                GoogleSyncSeconds       = int.Parse(ConfigurationManager.AppSettings["GoogleSyncSeconds"] ?? "900");
 
                 // UI related stuffs
                 ShootingViewIdleTimeSeconds = int.Parse(ConfigurationManager.AppSettings["ShootingViewIdleTimeSeconds"] ?? "20");
@@ -110,7 +112,7 @@ namespace FoTos
 
             var slideShow = new SlideShowService();
             var uploader = new GPhotosUploader(Settings.GoogleCredentialsFile, Settings.GoogleTokenStoreFolder,
-                 Settings.GoogleAlbumName, Settings.GoogleUserName,Settings.GoogleUploadFolder);
+                 Settings.GoogleAlbumName, Settings.GoogleUserName,Settings.GoogleUploadFolder, Settings.GoogleSyncSeconds);
             Services = new AppServices(camera, slideShow, uploader);
         }
 

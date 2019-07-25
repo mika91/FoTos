@@ -68,7 +68,7 @@ namespace FoTos.Views
         private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             var idle = IdleTimeDetector.GetIdleTimeInfo();
-            if (idle.IdleTime.Seconds > MainWindow.App.Settings.ThanksViewIdleTimeSeconds) // TODO
+            if (idle.IdleTime.Seconds >  MainWindow.App.Settings.ThanksViewIdleTimeSeconds) // TODO
                 MainWindow.GotoHomePage();
         }
 
