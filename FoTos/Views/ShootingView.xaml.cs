@@ -164,7 +164,7 @@ namespace FoTos.Views
                         var sb2 = this.FindResource("StorayBoardCountdown") as Storyboard;
                         BeginStoryboard(sb2);
                     });
-                    Thread.Sleep(1500);
+                    Thread.Sleep(1000);
                 }
 
                 // stop live view

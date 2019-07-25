@@ -33,9 +33,9 @@
 
         <Storyboard x:Key="StorayBoardCountdown">
             <DoubleAnimation Storyboard.TargetName="MyAnimatedScaleTransform" Storyboard.TargetProperty="ScaleX"
-                                             Duration="0:0:0.7" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
+                                             Duration="0:0:1" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
             <DoubleAnimation Storyboard.TargetName="MyAnimatedScaleTransform" Storyboard.TargetProperty="ScaleY"
-                                             Duration="0:0:0.7" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
+                                             Duration="0:0:1" From="{StaticResource max_scale}" To="{StaticResource min_scale}"/>
 
         </Storyboard>
 
