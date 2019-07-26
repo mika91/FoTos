@@ -36,6 +36,7 @@ namespace FoTos.Views
 
         private ICameraService _cameraService;
         private System.Timers.Timer _idleTimer;
+        private DateTime _loadedDate;
 
         private void ShootingPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -59,6 +60,7 @@ namespace FoTos.Views
                 return;
 
             // idle time
+            _loadedDate = DateTime.Now;
             _idleTimer = new System.Timers.Timer();
             _idleTimer.Interval = 1000;
             _idleTimer.Elapsed += idleTimer_Elapsed;
@@ -102,8 +104,13 @@ namespace FoTos.Views
 
         private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            var idle = IdleTimeDetector.GetIdleTimeInfo();
-            if (idle.IdleTime.Seconds > MainWindow.App.Settings.ShootingViewIdleTimeSeconds)
+            //var idle = IdleTimeDetector.GetIdleTimeInfo();
+            //if (idle.IdleTime.Seconds > MainWindow.App.Settings.ShootingViewIdleTimeSeconds)
+            //    MainWindow.GotoHomePage(WpfPageTransitions.PageTransitionType.SlideAndFadeLeftRight);
+
+            var now = DateTime.Now;
+            var ellapsed = now - _loadedDate;
+            if (ellapsed.Seconds > MainWindow.App.Settings.ShootingViewIdleTimeSeconds)
                 MainWindow.GotoHomePage(WpfPageTransitions.PageTransitionType.SlideAndFadeLeftRight);
         }
 
