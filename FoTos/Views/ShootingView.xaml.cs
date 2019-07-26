@@ -173,15 +173,14 @@ namespace FoTos.Views
                     });
                     Thread.Sleep(1000);
                 }
+                
+                // display smile icon
+                SetVisibility(EVisibilityMode.Smile);
+                Thread.Sleep(1000);
 
                 // stop live view
                 _cameraService?.StopLiveView();
-
-                // display smile icon
-                SetVisibility(EVisibilityMode.Smile);
-
-
-                Thread.Sleep(2000);
+                Thread.Sleep(500); 
 
                 // take picture
                 _lastPhoto = null;
@@ -223,6 +222,12 @@ namespace FoTos.Views
             }
             finally
             {
+                if (_lastPhoto == null)
+                {
+                    //restart liveview
+                    _cameraService.StartLiveView();
+                }
+
                 // reset var
                 _inProgressPhotoShoot = false;
                 _lastPhoto = null;
