@@ -48,10 +48,7 @@ namespace FoTos.Views
             _uploader = uploader;
             _fileFullName = fileFullName;
 
-            _originalImage = new Bitmap(fileFullName);
-
-            _processor = new PhotoProcessing(fileFullName, _originalImage, uploader.UploadDirectory);
-        }
+                  }
 
         private void PhotoPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -63,6 +60,16 @@ namespace FoTos.Views
             // set image and refresh thumbnails
             this.Dispatcher.Invoke(() =>
             {
+                var cropFactor = MainWindow.App.Settings.CameraCropFactor;
+
+
+                _originalImage = new Bitmap(_fileFullName);
+                if (cropFactor > 0 && cropFactor < 100)
+                    _originalImage = _originalImage.crop(cropFactor);
+
+                _processor = new PhotoProcessing(_fileFullName, _originalImage, _uploader.UploadDirectory);
+
+     
                 PhotoImage.Source = BitmapUtils.BitmapToImageSource(_originalImage);
                 RefreshThumbnails();
             });

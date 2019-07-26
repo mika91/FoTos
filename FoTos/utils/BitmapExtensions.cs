@@ -71,6 +71,24 @@ namespace FoTos.utils
 
 
 
+        public static Bitmap crop(this Bitmap b, int factor)
+        {
+            var cropRect = new Rectangle(
+                (int)(b.Width * ((100-factor) / 200.0)), (int)(b.Height * ((100-factor) / 200.0)),
+                (int)(b.Width * (factor / 100.0)), (int) (b.Height * (factor / 100.0)));
+
+            return crop(b, cropRect);
+        }
+
+        public static Bitmap crop(this Bitmap b, Rectangle r)
+        {
+            Bitmap nb = new Bitmap(r.Width, r.Height);
+            Graphics g = Graphics.FromImage(nb);
+            g.DrawImage(b, -r.X, -r.Y);
+            return nb;
+        }
+
+
         #region bitmap <-> bitmapsource
 
         // -------------------------------------------------------------------------------------------------------

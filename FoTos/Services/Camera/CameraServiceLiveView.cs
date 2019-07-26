@@ -1,11 +1,13 @@
 ﻿
 using CameraControl.Devices.Classes;
+using FoTos.utils;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Timers;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using Timer = System.Timers.Timer;
 
 namespace FoTos.Services.Camera
@@ -29,36 +31,57 @@ namespace FoTos.Services.Camera
             _liveViewTimer.Elapsed += _liveViewTimer_Tick;
         }
 
-        // TODO: log errors
+        private bool _lockLiveview = false;
+
         void _liveViewTimer_Tick(object sender, ElapsedEventArgs e)
         {
+            if (_lockLiveview)
+            {
+                log.Warn("liveview locked: skip image acquisition");
+                return;
+            }
+
+            _lockLiveview = true;
             LiveViewData liveViewData = null;
             try
             {
                 liveViewData = Camera?.GetLiveViewImage();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                log.Error("an exception occured while getting liveview image", ex);
                 return;
+            }
+            finally
+            {
+                _lockLiveview = false;
             }
 
             if (liveViewData == null || liveViewData.ImageData == null)
             {
+                log.Error("no live view image");
+                _lockLiveview = false;
                 return;
             }
             try
             {
                 NotifyNewLiveViewImage(liveViewData);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                log.Error("an exception occured while notifying liveview image", ex);
+            }
+            finally
+            {
+                _lockLiveview = false;
             }
         }
 
         private void StartLiveViewThread()
         {
             bool retry;
+            int retryNum = 0;
+            int retryMax = 10;
             do
             {
                 retry = false;
@@ -71,22 +94,26 @@ namespace FoTos.Services.Camera
                 {
                     if (exception.ErrorCode == ErrorCodes.MTP_Device_Busy || exception.ErrorCode == ErrorCodes.ERROR_BUSY)
                     {
-                        // this may cause infinite loop
                         Thread.Sleep(100);
+                        retryNum++;
                         retry = true;
                     }
                     else
                     {
-                        log.Error("Error occurred during live view starting: " + exception.Message);
+                        log.Error("unexpected error while starting liveview", exception);
                     }
                 }
                 catch (Exception exception)
                 {
-
-                    log.Error("Error occurred during live view starting: " + exception.Message);
+                    log.Error("unexpected error while starting liveview", exception);
                 }
 
-            } while (retry);
+            } while (retry && retryNum < retryMax) ;
+
+            if (retryNum >= retryMax)
+            {
+                log.Warn("failed to stop liveview before max retry count");
+            }
 
             // start liveview timer
             log.Debug("start live view timer");
@@ -163,13 +190,15 @@ namespace FoTos.Services.Camera
         private void StopLiveViewThread()
         {
             bool retry;
+            int retryNum = 0;
+            int retryMax = 10;
             do
             {
                 retry = false;
                 try
                 {
                     log.Debug("stop live view timer");
-                    _liveViewTimer.Stop();
+                    _liveViewTimer?.Stop();
                     // wait for last get live view image
                     Thread.Sleep(500);
                     log.Info("call device liveview stop");
@@ -179,17 +208,26 @@ namespace FoTos.Services.Camera
                 {
                     if (exception.ErrorCode == ErrorCodes.MTP_Device_Busy || exception.ErrorCode == ErrorCodes.ERROR_BUSY)
                     {
-                        // this may cause infinite loop
                         Thread.Sleep(100);
+                        retryNum++;
                         retry = true;
                     }
                     else
                     {
-                        MessageBox.Show("Error occurred :" + exception.Message);
+                        log.Error("unexpected error while stopping liveview", exception);
                     }
                 }
+                catch (Exception exception)
+                {
+                    log.Error("unexpected error while stopping liveview", exception);
+                }
 
-            } while (retry);
+            } while (retry && retryNum < retryMax);
+
+            if (retryNum >= retryMax)
+            {
+                log.Warn("failed to stop liveview before max retry count");
+            }
         }
 
 
@@ -244,10 +282,18 @@ namespace FoTos.Services.Camera
                      liveViewData.ImageDataPosition,
                      liveViewData.ImageData.Length - liveViewData.ImageDataPosition));
 
+
+                if ( CameraCropFactor > 0 && CameraCropFactor < 100)
+            {
+                bitmap = bitmap.crop(CameraCropFactor);
+            }
+
                 NewLiveViewImage?.Invoke(bitmap);
            
         }
 
-  
+       
+
+
     }
 }

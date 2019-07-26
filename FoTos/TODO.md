@@ -1,4 +1,12 @@
 ﻿
+- fix freezes 
+-restart button
+- animation time shoot
+- crop
+- replace idle code (no deps)
+ 
+
+
 - QR code
 
 - gphoto periodic sync task

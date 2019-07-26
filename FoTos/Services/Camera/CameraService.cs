@@ -18,10 +18,13 @@ namespace FoTos.Services.Camera
     
         public String PreferedCamera { get; private set; }
 
-        public CameraService(String cameraRollFolder, String preferedCamera = null)
+        public int CameraCropFactor { get; private set; }
+
+        public CameraService(String cameraRollFolder, String preferedCamera = null, int cameraCropFactor = 100)
         {
             CameraRollFolder = cameraRollFolder;
             PreferedCamera = preferedCamera;
+            CameraCropFactor = cameraCropFactor;
 
             InitManager();
         }
@@ -119,7 +122,7 @@ namespace FoTos.Services.Camera
                 
             // apply configuration
             log.Info("apply camera settings");
-            _mng.SelectedCameraDevice.CaptureInSdRam = false;
+            _mng.SelectedCameraDevice.CaptureInSdRam = true;
             //_mng.SelectedCameraDevice.FNumber.SetValue(8);
         }
 
@@ -129,6 +132,7 @@ namespace FoTos.Services.Camera
         {
             log.Info("camera disonnected = " + cameraDevice?.DisplayName);
 
+            // force live view stop
             StopLiveView();
 
             // TODO: vérifier si le fait de déconnecter une caméra met SelectedCameraDevice à null

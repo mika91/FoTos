@@ -51,6 +51,7 @@ namespace FoTos
         {
             public String SlideShowFolder           { get; private set; }
             public String CameraRollFolder          { get; private set; }
+            public int CameraCropFactor             { get; private set; }
             public String PreferedCamera            { get; private set; }
             public String GoogleUploadFolder        { get; private set; }
             public String GoogleTokenStoreFolder    { get; private set; }
@@ -70,6 +71,7 @@ namespace FoTos
                 SlideShowFolder         = ConfigurationManager.AppSettings["SlideShowFolder"];
                 CameraRollFolder        = ConfigurationManager.AppSettings["CameraRollFolder"];
                 PreferedCamera          = ConfigurationManager.AppSettings["PreferedCamera"];
+                CameraCropFactor        = int.Parse(ConfigurationManager.AppSettings["CameraCropFactor"] ?? "100");
 
                 // google services settings
                 GoogleUploadFolder      = ConfigurationManager.AppSettings["GoogleUploadFolder"];
@@ -107,7 +109,7 @@ namespace FoTos
             }
             else
             {
-                camera = new CameraService(Settings.CameraRollFolder, Settings.PreferedCamera);
+                camera = new CameraService(Settings.CameraRollFolder, Settings.PreferedCamera, Settings.CameraCropFactor);
             }
 
             var slideShow = new SlideShowService();

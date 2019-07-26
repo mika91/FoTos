@@ -20,6 +20,7 @@ namespace FoTos.Services.PhotoProcessing
         public String OriginalFilename { get; private set; }
 
         public String OutputDir { get; set; } 
+        public int CropFactor { get; set; }
 
         private Bitmap _thumbnail;
         public Bitmap Thumbnail
@@ -29,7 +30,7 @@ namespace FoTos.Services.PhotoProcessing
                 // create thumbnail on demand
                 if (_thumbnail == null)
                     _thumbnail = BitmapUtils.Scale(OriginalBitmap, ThumnailsSize).Result;
-                  
+                    
                 return _thumbnail;
             }
         }
@@ -37,8 +38,9 @@ namespace FoTos.Services.PhotoProcessing
         public PhotoProcessing(String filename, Bitmap bitmap, String outputDir)
         {
             OriginalFilename = filename;
-            OriginalBitmap = bitmap;
             OutputDir = outputDir;
+
+            OriginalBitmap = bitmap;
 
             // check output dir exists, if not found create it
             if (!Directory.Exists(outputDir))

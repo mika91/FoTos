@@ -69,7 +69,8 @@ namespace FoTos.Services.Camera
                 stopWatch.Start();
                 eventArgs.CameraDevice.TransferFile(eventArgs.Handle, tempFile); // TODO: gérer erreur ??
 
-                //eventArgs.CameraDevice.ReleaseResurce(eventArgs.Handle);
+                // release resource
+                eventArgs.CameraDevice.ReleaseResurce(eventArgs.Handle);
 
                 eventArgs.CameraDevice.IsBusy = false;
                 stopWatch.Stop();
