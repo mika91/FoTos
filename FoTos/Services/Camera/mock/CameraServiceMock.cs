@@ -52,29 +52,32 @@ namespace FoTos.Services.Camera.mock
             _liveViewToken?.Cancel();
         }
 
-        public void TakePicture()
+        public void TakePictureAsync()
         {
-            if (NewPhoto != null)
+            Task.Factory.StartNew(() =>
             {
-                var img = GenerateRandomBitmap();
-
-                var imgSource = BitmapUtils.BitmapToImageSource(img);
-                var filename = Path.Combine(_folder, DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".jpg");
-
-                var dir = Path.GetDirectoryName(filename);
-                if (!Directory.Exists(dir))
+                if (NewPhoto != null)
                 {
-                    //log.Info("create camera roll folder = " + dir);
-                    Directory.CreateDirectory(dir);
+                    var img = GenerateRandomBitmap();
+
+                    var imgSource = BitmapUtils.BitmapToImageSource(img);
+                    var filename = Path.Combine(_folder, DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".jpg");
+
+                    var dir = Path.GetDirectoryName(filename);
+                    if (!Directory.Exists(dir))
+                    {
+                        //log.Info("create camera roll folder = " + dir);
+                        Directory.CreateDirectory(dir);
+                    }
+
+
+
+                    imgSource.SaveAsJpeg(filename).Wait();
+
+                    NewPhoto?.Invoke(filename);
+
                 }
-
-
-
-                imgSource.SaveAsJpeg(filename).Wait();
-
-                NewPhoto?.Invoke(filename);
-
-            }
+            });
            
         }
 

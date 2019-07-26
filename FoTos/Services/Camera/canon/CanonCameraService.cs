@@ -191,7 +191,7 @@ namespace FoTos.Services.Camera
 
         public event Action<string> NewPhoto;
 
-        public void TakePicture()
+        public void TakePictureAsync()
         {
             try
             {

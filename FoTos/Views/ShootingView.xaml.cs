@@ -184,7 +184,7 @@ namespace FoTos.Views
 
                 // take picture
                 _lastPhoto = null;
-                _cameraService?.TakePicture(); // TODO: appel blocant ?
+                _cameraService?.TakePictureAsync(); // TODO: appel blocant ?
 
 
 

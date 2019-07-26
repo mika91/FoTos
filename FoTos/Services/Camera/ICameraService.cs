@@ -11,7 +11,7 @@ namespace FoTos.Services.Camera
 
         event Action<Bitmap> NewLiveViewImage;
 
-        void TakePicture();
+        void TakePictureAsync();
 
         event Action<String> NewPhoto;
     }

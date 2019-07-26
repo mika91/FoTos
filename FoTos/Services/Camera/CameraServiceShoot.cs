@@ -11,7 +11,7 @@ namespace FoTos.Services.Camera
     {
         public event Action<String> NewPhoto;
 
-        public void TakePicture()
+        public void TakePictureAsync()
         {
             log.Info("CameraMan::TakePicture");
             
