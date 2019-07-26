@@ -63,7 +63,7 @@ namespace FoTos.Views
             // idle time
             _loadedDate = DateTime.Now;
             _idleTimer = new System.Timers.Timer();
-            _idleTimer.Interval = 1000;
+            _idleTimer.Interval = 1000 * MainWindow.App.Settings.ShootingViewIdleTimeSeconds;
             _idleTimer.Elapsed += idleTimer_Elapsed;
             _idleTimer.Enabled = true;
 
@@ -106,14 +106,7 @@ namespace FoTos.Views
 
         private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            //var idle = IdleTimeDetector.GetIdleTimeInfo();
-            //if (idle.IdleTime.Seconds > MainWindow.App.Settings.ShootingViewIdleTimeSeconds)
-            //    MainWindow.GotoHomePage(WpfPageTransitions.PageTransitionType.SlideAndFadeLeftRight);
-
-            var now = DateTime.Now;
-            var ellapsed = now - _loadedDate;
-            if (ellapsed.Seconds > MainWindow.App.Settings.ShootingViewIdleTimeSeconds)
-                MainWindow.GotoHomePage(WpfPageTransitions.PageTransitionType.SlideAndFadeLeftRight);
+            MainWindow.GotoHomePage(WpfPageTransitions.PageTransitionType.SlideAndFadeLeftRight);
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
@@ -227,7 +220,7 @@ namespace FoTos.Views
                 if (_lastPhoto == null)
                 {
                     //restart liveview
-                    _cameraService.StartLiveView();
+                    _cameraService?.StartLiveView();
                 }
 
                 // reset var

@@ -53,12 +53,13 @@ namespace FoTos.Services.Camera
             try
             {
                 log.Info("init canon camera service");
-                var APIHandler = new CanonAPI();
+                APIHandler = new CanonAPI();
                 APIHandler.CameraAdded += APIHandler_CameraAdded;
                 ErrorHandler.SevereErrorHappened += ErrorHandler_SevereErrorHappened;
                 ErrorHandler.NonSevereErrorHappened += ErrorHandler_NonSevereErrorHappened;
                 RefreshCamera();
                 IsInit = true;
+                
             }
                 catch (DllNotFoundException) { ReportError("Canon DLLs not found!", true);
             }       
@@ -89,7 +90,9 @@ namespace FoTos.Services.Camera
             //catch (Exception ex) { ReportError(ex.Message, false); }
 
             log.Info("camera added");
-            try {  RefreshCamera(); }
+            try {
+                RefreshCamera();
+            }
             catch (Exception ex) { ReportError(ex.Message, false); }
         }
 
@@ -114,7 +117,7 @@ namespace FoTos.Services.Camera
 
         private async void MainCamera_LiveViewUpdated(CanonCamera sender, Stream img)
         {
-            log.Info("live view updated");
+            //log.Debug("live view updated");
             await NotifyNewLiveViewImage(img);
         }
 
@@ -232,13 +235,14 @@ namespace FoTos.Services.Camera
 
 
                 // naming
-                var date = DateTime.Now.ToString("yyyyMMddHHmmssffff");
-                Info.FileName = date + ".jpg";
+                //var date = DateTime.Now.ToString("yyyyMMddHHmmssffff");
+                //Info.FileName = date + ".jpg";
+                //var fileFullName = Path.Combine(CameraRollFolder, Info.FileName);
                 var fileFullName = Path.Combine(CameraRollFolder, Info.FileName);
 
-                log.InfoFormat("saving picture = {0}", fileFullName);
-                sender.DownloadFile(Info);
-
+                log.InfoFormat("saving picture = {0}", Info.FileName);
+                sender.DownloadFile(Info, CameraRollFolder);
+                log.InfoFormat("done");
 
                 //string tempFile = Path.GetTempFileName();
 
@@ -332,7 +336,7 @@ namespace FoTos.Services.Camera
 
             if (CamList.Count > 0)
             {
-                OpenSession(CamList[0]);
+                OpenSession(CamList[0]); // TODO
 
                 // save to host
                 MainCamera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Host);
@@ -351,8 +355,13 @@ namespace FoTos.Services.Camera
             //else if (CamList.Count > 0) CameraListBox.SelectedIndex = 0;
 
             try {
+                // list camera
                 CamList = APIHandler.GetCameraList();
                 log.InfoFormat("available cameras: ", String.Join("\n\t- ", CamList.Select(c => c.DeviceName)));
+                
+                // select default camera
+                SelectCamera();
+
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 

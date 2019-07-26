@@ -57,6 +57,12 @@ namespace FoTos.Views
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
+            if (!File.Exists(_fileFullName))
+            {
+                log.WarnFormat("file not exists = {0}", _fileFullName);
+                return;
+            }
+
             // set image and refresh thumbnails
             this.Dispatcher.Invoke(() =>
             {

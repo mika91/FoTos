@@ -62,21 +62,14 @@ namespace FoTos.Views
             // idle time
             _loadedDate = DateTime.Now;
             _idleTimer = new System.Timers.Timer();
-            _idleTimer.Interval = 1000;
+            _idleTimer.Interval = 1000 * MainWindow.App.Settings.ThanksViewIdleTimeSeconds;
             _idleTimer.Elapsed += idleTimer_Elapsed;
             _idleTimer.Enabled = true;
         }
 
         private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            //var idle = IdleTimeDetector.GetIdleTimeInfo();
-            //if (idle.IdleTime.Seconds >  MainWindow.App.Settings.ThanksViewIdleTimeSeconds) // TODO
-            //    MainWindow.GotoHomePage();
-
-            var now = DateTime.Now;
-            var ellapsed = now - _loadedDate;
-            if (ellapsed.Seconds > MainWindow.App.Settings.ThanksViewIdleTimeSeconds) // TODO
-                MainWindow.GotoHomePage();
+            MainWindow.GotoHomePage();
         }
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
