@@ -74,9 +74,15 @@ namespace FoTos.Views
             }
         }
 
+        // prevent doucle-click => start/stop/start liveview bug
+        // cracra, à revoir
+        private bool exiting = false;
 
         private void Grid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            if (exiting) return;
+
+            exiting = true;
             MainWindow.GotoShootingPage();
         }
 
