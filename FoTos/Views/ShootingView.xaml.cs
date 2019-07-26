@@ -13,6 +13,7 @@ using System.Windows.Threading;
 using FoTos.Services.Camera;
 using System.ComponentModel;
 using FoTos.utils;
+using System.Windows.Media.Imaging;
 
 namespace FoTos.Views
 {
@@ -96,10 +97,11 @@ namespace FoTos.Views
         }
 
 
-        private void cameraService_NewLiveViewImage(Bitmap bitmap)
+        private void cameraService_NewLiveViewImage(BitmapSource bitmap)
         {
             //log.Trace("cameraService_NewLiveViewImage");
-            this.LiveViewImage.Dispatcher.Invoke(() => this.LiveViewImage.Source = BitmapUtils.BitmapToImageSource(bitmap));
+            //this.LiveViewImage.Dispatcher.Invoke(() => this.LiveViewImage.Source = BitmapUtils.BitmapToImageSource(bitmap));
+            this.LiveViewImage.Dispatcher.Invoke(() => this.LiveViewImage.Source = bitmap);
         }
 
         private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)

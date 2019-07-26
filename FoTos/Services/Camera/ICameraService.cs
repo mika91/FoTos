@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace FoTos.Services.Camera
 {
@@ -9,7 +10,7 @@ namespace FoTos.Services.Camera
         void StartLiveView();
         void StopLiveView();
 
-        event Action<Bitmap> NewLiveViewImage;
+        event Action<BitmapSource> NewLiveViewImage;
 
         void TakePictureAsync();
 

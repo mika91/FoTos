@@ -17,7 +17,7 @@ namespace FoTos.Services.Camera
     /// </summary>
     public partial class CameraService
     {
-        public event Action<Bitmap> NewLiveViewImage;
+        public event Action<BitmapSource> NewLiveViewImage;
 
 
         private System.Timers.Timer _liveViewTimer = new Timer();
@@ -278,17 +278,17 @@ namespace FoTos.Services.Camera
                 return;
 
 
-                var bitmap = new Bitmap(new MemoryStream(liveViewData.ImageData,
-                     liveViewData.ImageDataPosition,
-                     liveViewData.ImageData.Length - liveViewData.ImageDataPosition));
+            //    var bitmap = new Bitmap(new MemoryStream(liveViewData.ImageData,
+            //         liveViewData.ImageDataPosition,
+            //         liveViewData.ImageData.Length - liveViewData.ImageDataPosition));
 
 
-                if ( CameraCropFactor > 0 && CameraCropFactor < 100)
-            {
-                bitmap = bitmap.crop(CameraCropFactor);
-            }
+            //    if ( CameraCropFactor > 0 && CameraCropFactor < 100)
+            //{
+            //    bitmap = bitmap.crop(CameraCropFactor);
+            //}
 
-                NewLiveViewImage?.Invoke(bitmap);
+            //    NewLiveViewImage?.Invoke(bitmap);
            
         }
 

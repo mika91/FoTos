@@ -10,6 +10,7 @@ using System.IO;
 using CanonCamera = EOSDigital.API.Camera;
 using System.Threading.Tasks;
 using FoTos.utils;
+using System.Windows.Media.Imaging;
 
 namespace FoTos.Services.Camera
 {
@@ -140,7 +141,7 @@ namespace FoTos.Services.Camera
 
         #region LiveView
 
-        public event Action<Bitmap> NewLiveViewImage;
+        public event Action<BitmapSource> NewLiveViewImage;
 
         public void StartLiveView()
         {
@@ -170,15 +171,30 @@ namespace FoTos.Services.Camera
                 if (NewLiveViewImage == null || img == null )
                     return;
 
-                var bitmap = new Bitmap(img);
+                //var bitmap = new Bitmap(img);
 
-                // crop
-                if (CameraCropFactor > 0 && CameraCropFactor < 100)
-                {
-                    bitmap = bitmap.crop(CameraCropFactor);
-                }
+                BitmapImage EvfImage = null;
 
-                NewLiveViewImage?.Invoke(bitmap);
+                using (WrapStream s = new WrapStream(img))
+                    {
+                        img.Position = 0;
+                        EvfImage = new BitmapImage();
+                        EvfImage.BeginInit();
+                        EvfImage.StreamSource = s;
+                        EvfImage.CacheOption = BitmapCacheOption.OnLoad;
+                        EvfImage.EndInit();
+                        EvfImage.Freeze();
+                       
+                    }
+               
+
+                //// crop
+                //if (CameraCropFactor > 0 && CameraCropFactor < 100)
+                //{
+                //    bitmap = bitmap.crop(CameraCropFactor);
+                //}
+
+                NewLiveViewImage?.Invoke(EvfImage);
 
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
