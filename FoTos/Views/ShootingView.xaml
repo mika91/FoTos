@@ -49,7 +49,7 @@
             </Setter>
             <Style.Triggers>
                 <!-- Animates the button's opacity on mouse over. -->
-                <EventTrigger RoutedEvent="Viewbox.MouseEnter">
+                <!--<EventTrigger RoutedEvent="Viewbox.MouseEnter">
                     <EventTrigger.Actions>
                         <BeginStoryboard>
                             <Storyboard>
@@ -57,26 +57,26 @@
                   Storyboard.TargetProperty="(Viewbox.Opacity)"
                   From="1.0" To="0.5" Duration="0:0:0.5" AutoReverse="True"
                   RepeatBehavior="Forever" />
-                                <!--<DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="0.9" Duration="0:0:.1" />
-                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="0.9" Duration="0:0:.1" />-->
+                                --><!--<DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="0.9" Duration="0:0:.1" />
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="0.9" Duration="0:0:.1" />--><!--
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger.Actions>
-                </EventTrigger>
+                </EventTrigger>-->
                 <!-- Returns the button's opacity to 1 when the mouse leaves. -->
-                <EventTrigger RoutedEvent="Viewbox.MouseLeave">
+                <!--<EventTrigger RoutedEvent="Viewbox.MouseLeave">
                     <EventTrigger.Actions>
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation
                   Storyboard.TargetProperty="(Viewbox.Opacity)"
                   To="1" Duration="0:0:0.1" />
-                                <!--<DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.0" Duration="0:0:.1" />
-                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.0" Duration="0:0:.1" />-->
+                                --><!--<DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.0" Duration="0:0:.1" />
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.0" Duration="0:0:.1" />--><!--
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger.Actions>
-                </EventTrigger>
+                </EventTrigger>-->
                 <!-- Animates the button's mouse down. -->
                 <EventTrigger RoutedEvent="Viewbox.MouseDown">
                     <EventTrigger.Actions>

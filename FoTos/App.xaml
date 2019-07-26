@@ -42,9 +42,7 @@
                             <Border.RenderTransformOrigin>0.5,0.5</Border.RenderTransformOrigin>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <!-- <Setter TargetName="border" Property="BorderBrush" Value="Black" /> -->
-                                <!-- <Setter TargetName="border" Property="BorderThickness" Value="1" /> -->
+                            <!--<Trigger Property="IsMouseOver" Value="True">
                                 <Trigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
@@ -59,7 +57,7 @@
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.ExitActions>
-                            </Trigger>
+                            </Trigger>-->
 
                             <Trigger Property="IsPressed" Value="True">
                                 <Trigger.EnterActions>
