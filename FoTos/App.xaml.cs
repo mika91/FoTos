@@ -109,7 +109,8 @@ namespace FoTos
             }
             else
             {
-                camera = new CameraService(Settings.CameraRollFolder, Settings.PreferedCamera, Settings.CameraCropFactor);
+                //camera = new CameraService(Settings.CameraRollFolder, Settings.PreferedCamera, Settings.CameraCropFactor);
+                camera = new CanonCameraService(Settings.CameraRollFolder, Settings.PreferedCamera, Settings.CameraCropFactor);
             }
 
             var slideShow = new SlideShowService();

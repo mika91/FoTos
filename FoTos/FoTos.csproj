@@ -52,6 +52,9 @@
     <Reference Include="Canon.Eos.Framework, Version=2.0.73.5, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\CameraControl.Devices.2.0.73-beta\lib\net46\Canon.Eos.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="EDSDKLib">
+      <HintPath>.\EDSDKLib.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.PortableDeviceApiLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CameraControl.Devices.2.0.73-beta\lib\net46\Interop.PortableDeviceApiLib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -117,6 +120,7 @@
     <Compile Include="Services\Camera\CameraService.cs" />
     <Compile Include="Services\Camera\CameraServiceLiveView.cs" />
     <Compile Include="Services\Camera\CameraServiceShoot.cs" />
+    <Compile Include="Services\Camera\canon\CanonCameraService.cs" />
     <Compile Include="Services\Camera\ICameraService.cs" />
     <Compile Include="Services\Camera\mock\CameraServiceMock.cs" />
     <Compile Include="Services\GoogleUploader\GPhotosUploader.cs" />
