@@ -81,10 +81,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\Camera\CameraService.cs" />
-    <Compile Include="Services\Camera\CameraServiceLiveView.cs" />
-    <Compile Include="Services\Camera\CameraServiceShoot.cs" />
-    <Compile Include="Services\Camera\canon\CanonCameraService.cs" />
+    <Compile Include="Services\Camera\CanonCameraService.cs" />
     <Compile Include="Services\Camera\ICameraService.cs" />
     <Compile Include="Services\Camera\mock\CameraServiceMock.cs" />
     <Compile Include="Services\GoogleUploader\GPhotosUploader.cs" />
@@ -93,7 +90,7 @@
     <Compile Include="Services\SlideShowService\ISlideShowService.cs" />
     <Compile Include="Services\SlideShowService\SlideShowService.cs" />
     <Compile Include="Utils\BitmapExtensions.cs" />
-    <Compile Include="Utils\BitmapImageUtils.cs" />
+    <Compile Include="Utils\BitmapSourceExtensions.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
     <Compile Include="Utils\IdleTimeDetector.cs" />
     <Compile Include="Views\DevelopingView.xaml.cs">
@@ -185,9 +182,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="EDSDKLib.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EDSDKLib.pdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="EdsImage.dll">

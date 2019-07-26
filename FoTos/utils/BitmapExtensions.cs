@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
 
 namespace FoTos.utils
 {
@@ -42,7 +33,6 @@ namespace FoTos.utils
             //get a graphics object from the new image
             Graphics g = Graphics.FromImage(newBitmap);
 
-
             //create some image attributes
             ImageAttributes attributes = new ImageAttributes();
 
@@ -68,82 +58,6 @@ namespace FoTos.utils
         {
             return original?.Clone(SepiaColorMatrix);
         }
-
-
-
-        public static Bitmap crop(this Bitmap b, int factor)
-        {
-            var cropRect = new Rectangle(
-                (int)(b.Width * ((100-factor) / 200.0)), (int)(b.Height * ((100-factor) / 200.0)),
-                (int)(b.Width * (factor / 100.0)), (int) (b.Height * (factor / 100.0)));
-
-            return crop(b, cropRect);
-        }
-
-        public static Bitmap crop(this Bitmap b, Rectangle r)
-        {
-            Bitmap nb = new Bitmap(r.Width, r.Height);
-            Graphics g = Graphics.FromImage(nb);
-            g.DrawImage(b, -r.X, -r.Y);
-            return nb;
-        }
-
-
-        #region bitmap <-> bitmapsource
-
-        // -------------------------------------------------------------------------------------------------------
-        // https://stackoverflow.com/questions/6484357/converting-bitmapimage-to-bitmap-and-vice-versa
-        // -------------------------------------------------------------------------------------------------------
-
-        public static BitmapImage ToBitmapImage(this Bitmap bitmap)
-        {
-            BitmapSource i = Imaging.CreateBitmapSourceFromHBitmap(
-                           bitmap.GetHbitmap(),
-                           IntPtr.Zero,
-                           Int32Rect.Empty,
-                           BitmapSizeOptions.FromEmptyOptions());
-            return (BitmapImage)i;
-        }
-
-        public static Bitmap ToBitmap(this BitmapImage bitmapImage)
-        {
-            // TODO: benchmark to find faster version
-            //return new BitmapImage(bitmapImage.StreamSource));
-
-            using (MemoryStream outStream = new MemoryStream())
-            {
-                BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(bitmapImage));
-                enc.Save(outStream);
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(outStream);
-
-                return new Bitmap(bitmap);
-            }
-        }
-
-        #endregion
-
-
-        #region Save 
-
-        public static async Task SaveAsJpeg(this BitmapSource img, String filePath, int qualityLevel = 80)
-        {
-            if (img == null)
-                return;
-
-            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-            encoder.QualityLevel = qualityLevel;
-            encoder.Frames.Add(BitmapFrame.Create(img));
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                encoder.Save(fileStream);
-            }
-        }
-
-       
-
-        #endregion
 
     }
 

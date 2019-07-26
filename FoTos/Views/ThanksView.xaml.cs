@@ -74,6 +74,7 @@ namespace FoTos.Views
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            _idleTimer.Stop();
             MainWindow.GotoHomePage();
         }
     }

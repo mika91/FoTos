@@ -11,6 +11,7 @@ using CanonCamera = EOSDigital.API.Camera;
 using System.Threading.Tasks;
 using FoTos.utils;
 using System.Windows.Media.Imaging;
+using FoTos.Utils;
 
 namespace FoTos.Services.Camera
 {
@@ -111,7 +112,9 @@ namespace FoTos.Services.Camera
             //try { MainProgressBar.Dispatcher.Invoke((Action)delegate { MainProgressBar.Value = progress; }); }
             //catch (Exception ex) { ReportError(ex.Message, false); }
 
-            try { log.DebugFormat("progress = {0}", progress); }
+            try {
+                //log.DebugFormat("progress = {0}", progress);
+            }
             catch (Exception ex) { ReportError(ex.Message, false); }
         }
 
@@ -177,7 +180,6 @@ namespace FoTos.Services.Camera
                 //var bitmap = new Bitmap(img);
 
                 BitmapImage EvfImage = null;
-
                 using (WrapStream s = new WrapStream(img))
                     {
                         img.Position = 0;
@@ -187,17 +189,14 @@ namespace FoTos.Services.Camera
                         EvfImage.CacheOption = BitmapCacheOption.OnLoad;
                         EvfImage.EndInit();
                         EvfImage.Freeze();
-                       
                     }
-               
 
-                //// crop
-                //if (CameraCropFactor > 0 && CameraCropFactor < 100)
-                //{
-                //    bitmap = bitmap.crop(CameraCropFactor);
-                //}
 
-                NewLiveViewImage?.Invoke(EvfImage);
+                // crop
+                BitmapSource bm = EvfImage.Crop(CameraCropFactor);
+                bm.Freeze();
+
+                NewLiveViewImage?.Invoke(bm);
 
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
@@ -235,10 +234,10 @@ namespace FoTos.Services.Camera
 
 
                 // naming
-                //var date = DateTime.Now.ToString("yyyyMMddHHmmssffff");
-                //Info.FileName = date + ".jpg";
-                //var fileFullName = Path.Combine(CameraRollFolder, Info.FileName);
+                var date = DateTime.Now.ToString("yyyyMMddHHmmssffff");
+                Info.FileName = date + ".jpg";
                 var fileFullName = Path.Combine(CameraRollFolder, Info.FileName);
+                //var fileFullName = Path.Combine(CameraRollFolder, Info.FileName);
 
                 log.InfoFormat("saving picture = {0}", Info.FileName);
                 sender.DownloadFile(Info, CameraRollFolder);

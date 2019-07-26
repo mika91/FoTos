@@ -1,5 +1,6 @@
 ﻿using FoTos.camera;
 using FoTos.utils;
+using FoTos.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -61,23 +62,19 @@ namespace FoTos.Services.Camera.mock
             {
                 if (NewPhoto != null)
                 {
-                    //var img = GenerateRandomBitmap();
+                    var img = GenerateRandomBitmap();
+                    var filename = Path.Combine(_folder, DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".jpg");
 
-                    //var imgSource = BitmapUtils.BitmapToImageSource(img);
-                    //var filename = Path.Combine(_folder, DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".jpg");
+                    var dir = Path.GetDirectoryName(filename);
+                    if (!Directory.Exists(dir))
+                    {
+                        //log.Info("create camera roll folder = " + dir);
+                        Directory.CreateDirectory(dir);
+                    }
 
-                    //var dir = Path.GetDirectoryName(filename);
-                    //if (!Directory.Exists(dir))
-                    //{
-                    //    //log.Info("create camera roll folder = " + dir);
-                    //    Directory.CreateDirectory(dir);
-                    //}
+                    img.SaveAsJpeg(filename).Wait();
 
-
-
-                    //imgSource.SaveAsJpeg(filename).Wait();
-
-                    //NewPhoto?.Invoke(filename);
+                    NewPhoto?.Invoke(filename);
 
                 }
             });

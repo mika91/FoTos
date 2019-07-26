@@ -9,6 +9,10 @@ using NHotkey;
 using System.Drawing;
 using FoTos.Services.Camera.mock;
 using FoTos.Services.Camera;
+using FoTos.Services.PhotoProcessing;
+using System.Windows.Media.Imaging;
+using FoTos.Utils;
+using System.IO;
 
 namespace FoTos.Views
 {
@@ -83,14 +87,28 @@ namespace FoTos.Views
 
         public void GotoDeveloppingPage(String fileFullName, WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideAndFade)
         {
-            this.Dispatcher.Invoke(() =>
+            if (!File.Exists(fileFullName))
             {
-                log.Debug("Goto Developing Page");
+                log.WarnFormat("file not exists = {0}", fileFullName);
+                GotoHomePage(WpfPageTransitions.PageTransitionType.SlideAndFadeLeftRight);
+            }
+            else
+            {
+                // instanciate image processor
+                var img = new BitmapImage(new Uri(fileFullName, UriKind.Absolute));
+                var cropped = img.Crop(App.Settings.CameraCropFactor);
+                var imgProcessor = new PhotoProcessing(fileFullName, cropped, App.Services.GPhotosUploader.UploadDirectory);
 
-                var photoView = new DevelopingView(fileFullName, App.Services.GPhotosUploader);
-                this.TransitionControl.ShowPage(photoView, transitionType);
-                
-            });
+                // goto developing page
+                this.Dispatcher.Invoke(() =>
+                {
+                    log.Debug("Goto Developing Page");
+
+                    var photoView = new DevelopingView(imgProcessor, App.Services.GPhotosUploader);
+                    this.TransitionControl.ShowPage(photoView, transitionType);
+
+                });
+            }
         }
 
         public void GotoThanksPage(WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideAndFade)

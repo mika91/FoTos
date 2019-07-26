@@ -42,37 +42,39 @@ namespace FoTos.camera
             return retval;
         }
 
-        internal static Bitmap Scale(Bitmap img, float scale)
-        {
-            return new Bitmap(img, (int)(img.Width * scale), (int)(img.Height * scale));
-        }
 
-        internal async static Task<Bitmap> Scale (Bitmap img, int max)
-        {
-            return await Scale(img, max, max, true);
-        }
 
-        // TODO: use better and faster algorithm
-        internal static async Task<Bitmap> Scale(Bitmap img, int width, int height, bool keepAspectRatio = true)
-        {
-            int rWidth  = width;
-            int rHeight = height;
+        //internal static Bitmap Scale(Bitmap img, float scale)
+        //{
+        //    return new Bitmap(img, (int)(img.Width * scale), (int)(img.Height * scale));
+        //}
 
-            if (keepAspectRatio)
-            {
-                float ratio = img.Width / (float)img.Height;
-                rWidth = (int)(height * (float)ratio);
-                if (rWidth > width)
-                {
-                    rWidth = width;
-                    rHeight = (int)(width / (float)ratio);
-                }
+        //internal async static Task<Bitmap> Scale (Bitmap img, int max)
+        //{
+        //    return await Scale(img, max, max, true);
+        //}
+
+        //// TODO: use better and faster algorithm
+        //internal static async Task<Bitmap> Scale(Bitmap img, int width, int height, bool keepAspectRatio = true)
+        //{
+        //    int rWidth  = width;
+        //    int rHeight = height;
+
+        //    if (keepAspectRatio)
+        //    {
+        //        float ratio = img.Width / (float)img.Height;
+        //        rWidth = (int)(height * (float)ratio);
+        //        if (rWidth > width)
+        //        {
+        //            rWidth = width;
+        //            rHeight = (int)(width / (float)ratio);
+        //        }
                 
-            }
+        //    }
 
-            log.Debug(string.Format("resized bitmap: width = {0}px, height = {1}px", rWidth, rHeight));
-            return new Bitmap(img, rWidth, rHeight);
-        }
+        //    log.Debug(string.Format("resized bitmap: width = {0}px, height = {1}px", rWidth, rHeight));
+        //    return new Bitmap(img, rWidth, rHeight);
+        //}
 
 
     }

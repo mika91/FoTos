@@ -6,9 +6,15 @@ using FoTos.utils;
 using System.IO;
 using log4net;
 using System.Reflection;
+using FoTos.Utils;
+using System.Windows.Media.Imaging;
 
 namespace FoTos.Services.PhotoProcessing
 {
+    // TODO: find fast algorithms to BItmapSource (not bitmap)
+
+    // WriteableBitmapEx is not quite fast on 'ForEach' method    https://archive.codeplex.com/?p=writeablebitmapex
+    //
     public class PhotoProcessing
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -16,31 +22,29 @@ namespace FoTos.Services.PhotoProcessing
         private static readonly int ThumnailsSize = 1000;   // TODO
         private static readonly int MaxExportSize = 4000;   // TODO -> google as a limit to 16Mpixels for free storage
 
-        public Bitmap OriginalBitmap   { get; private set; }
+        public BitmapSource OriginalBitmap { get; private set; }
         public String OriginalFilename { get; private set; }
 
         public String OutputDir { get; set; } 
         public int CropFactor { get; set; }
 
-        private Bitmap _thumbnail;
-        public Bitmap Thumbnail
-        {
-            get
-            {
-                // create thumbnail on demand
-                if (_thumbnail == null)
-                    _thumbnail = BitmapUtils.Scale(OriginalBitmap, ThumnailsSize).Result;
-                    
-                return _thumbnail;
-            }
-        }
+        public BitmapSource ThumbnailColor      { get; private set; }
+        public BitmapSource ThumbnailSepia { get; private set; }
+        public BitmapSource ThumbnailGray  { get; private set; }
 
-        public PhotoProcessing(String filename, Bitmap bitmap, String outputDir)
+        public PhotoProcessing(String filename, BitmapSource bitmap, String outputDir)
         {
             OriginalFilename = filename;
             OutputDir = outputDir;
 
             OriginalBitmap = bitmap;
+
+            // create thumbs
+            ThumbnailColor = bitmap.Scale(ThumnailsSize).AndFreeze();
+            var thumb = ThumbnailColor.ToBitmap();
+            ThumbnailGray = ApplyFilter(thumb, Filter.Grayscale).AndFreeze();
+            ThumbnailSepia = ApplyFilter(thumb, Filter.Sepia).AndFreeze();
+
 
             // check output dir exists, if not found create it
             if (!Directory.Exists(outputDir))
@@ -52,66 +56,42 @@ namespace FoTos.Services.PhotoProcessing
 
         public enum Filter { None, Sepia, Grayscale }
 
-        public async Task<Bitmap> GetThumbnail(Filter filter)
-        {
-            return await ApplyFilter(Thumbnail, filter);
-        }
-
-
-        //private async Task SavePhoto(BitmapImage image, String filename)
-        //{
-        //    // check output dir exists, if not found create it
-        //    var dir = Path.GetDirectoryName(UploadDir);
-        //    if (!System.IO.Directory.Exists(dir))
-        //    {
-        //        log.Info("create GPhotos upload dir = " + dir);
-        //        System.IO.Directory.CreateDirectory(dir);
-        //    }
-
-        //    // save image
-        //    var outputFile = Path.Combine(dir, filename);
-        //    log.Info(String.Format("save jpeg img = '{0}'", outputFile));
-        //    await image.SaveAsJpeg(outputFile);
-
-        //}
-
-
+       
         public async Task<String> Export(Filter filter)
         {
             // resize image to output resolution
-            var output = await Scale(OriginalBitmap); 
+            var output = ScaleToExportSizeAsync(OriginalBitmap); 
 
             // apply filter
             log.Info("apply filter = " + filter);
-            var outputProcessed = await ApplyFilter(output, filter);
+            var outputProcessed = ApplyFilter(output, filter);
 
             // save image
             var outputFile = Path.Combine(OutputDir, Path.GetFileNameWithoutExtension(OriginalFilename) + ".jpg");
             log.Info(String.Format("save jpeg img = '{0}'", outputFile));
-            var bitmapSource = BitmapUtils.BitmapToImageSource(outputProcessed);
-            await bitmapSource.SaveAsJpeg(outputFile);
+            await outputProcessed.SaveAsJpeg(outputFile);
 
             return outputFile;
         }
 
-        private async Task<Bitmap> Scale(Bitmap img)
+        private Bitmap ScaleToExportSizeAsync(BitmapSource img)
         {
             if (OriginalBitmap.Width > MaxExportSize || OriginalBitmap.Height > MaxExportSize)
             {
                 log.Info("resize image");
-                return await BitmapUtils.Scale(OriginalBitmap, MaxExportSize);
+                return OriginalBitmap.Scale(MaxExportSize).ToBitmap();
             };
 
-            return (Bitmap) img.Clone();
+            return img.ToBitmap();
         }
 
-        private async Task<Bitmap> ApplyFilter(Bitmap bitmap, Filter filter)
+        private BitmapSource ApplyFilter(Bitmap bitmap, Filter filter)
         {
             switch (filter)
             {
-                case Filter.Sepia: return bitmap.Sepia();
-                case Filter.Grayscale: return bitmap.Grayscale();
-                default: return bitmap;
+                case Filter.Sepia: return BitmapUtils.BitmapToImageSource(bitmap.Sepia());
+                case Filter.Grayscale: return BitmapUtils.BitmapToImageSource(bitmap.Grayscale());
+                default: return BitmapUtils.BitmapToImageSource(bitmap);
             }
         }
     }

@@ -14,6 +14,7 @@ using FoTos.Services.Camera;
 using System.ComponentModel;
 using FoTos.utils;
 using System.Windows.Media.Imaging;
+using FoTos.Services.PhotoProcessing;
 
 namespace FoTos.Views
 {
@@ -116,6 +117,7 @@ namespace FoTos.Views
      
         private void ButtonTakePicture_Click(object sender, RoutedEventArgs e)
         {
+            _idleTimer.Stop();
             TakePictureAsync();
         }
 
@@ -168,10 +170,11 @@ namespace FoTos.Views
                     });
                     Thread.Sleep(1000);
                 }
+                Thread.Sleep(300);
                 
                 // display smile icon
                 SetVisibility(EVisibilityMode.Smile);
-                Thread.Sleep(1000);
+                Thread.Sleep(1500);
 
                 // stop live view
                 _cameraService?.StopLiveView();
@@ -221,6 +224,8 @@ namespace FoTos.Views
                 {
                     //restart liveview
                     _cameraService?.StartLiveView();
+                    _idleTimer?.Stop();
+                    _idleTimer?.Start();
                 }
 
                 // reset var
