@@ -103,7 +103,7 @@ namespace FoTos.Utils
 
             #region Save 
 
-            public static async Task SaveAsJpeg(this BitmapSource img, String filePath, int qualityLevel = 80)
+            public static async Task SaveAsJpeg(this BitmapSource img, String filePath, int qualityLevel = 90)
         {
             if (img == null)
                 return;

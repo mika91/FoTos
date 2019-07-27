@@ -52,6 +52,7 @@ namespace FoTos
             public String SlideShowFolder           { get; private set; }
             public String CameraRollFolder          { get; private set; }
             public int CameraCropFactor             { get; private set; }
+            public int ExportJpegQualityLevel       { get; private set; }
             public String PreferedCamera            { get; private set; }
             public String GoogleUploadFolder        { get; private set; }
             public String GoogleTokenStoreFolder    { get; private set; }
@@ -72,6 +73,7 @@ namespace FoTos
                 CameraRollFolder        = ConfigurationManager.AppSettings["CameraRollFolder"];
                 PreferedCamera          = ConfigurationManager.AppSettings["PreferedCamera"];
                 CameraCropFactor        = int.Parse(ConfigurationManager.AppSettings["CameraCropFactor"] ?? "100");
+                ExportJpegQualityLevel  = int.Parse(ConfigurationManager.AppSettings["ExportJpegQualityLevel"] ?? "90");
 
                 // google services settings
                 GoogleUploadFolder      = ConfigurationManager.AppSettings["GoogleUploadFolder"];

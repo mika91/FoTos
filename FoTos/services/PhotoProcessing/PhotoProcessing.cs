@@ -22,6 +22,8 @@ namespace FoTos.Services.PhotoProcessing
         private static readonly int ThumnailsSize = 1000;   // TODO
         private static readonly int MaxExportSize = 4000;   // TODO -> google as a limit to 16Mpixels for free storage
 
+        public int JpegQualityLevel { get; set; }
+
         public BitmapSource OriginalBitmap { get; private set; }
         public String OriginalFilename { get; private set; }
 
@@ -32,8 +34,9 @@ namespace FoTos.Services.PhotoProcessing
         public BitmapSource ThumbnailSepia { get; private set; }
         public BitmapSource ThumbnailGray  { get; private set; }
 
-        public PhotoProcessing(String filename, BitmapSource bitmap, String outputDir)
+        public PhotoProcessing(String filename, BitmapSource bitmap, String outputDir, int jpegQualityLevel = 90)
         {
+            JpegQualityLevel = jpegQualityLevel;
             OriginalFilename = filename;
             OutputDir = outputDir;
 
@@ -69,7 +72,7 @@ namespace FoTos.Services.PhotoProcessing
             // save image
             var outputFile = Path.Combine(OutputDir, Path.GetFileNameWithoutExtension(OriginalFilename) + ".jpg");
             log.Info(String.Format("save jpeg img = '{0}'", outputFile));
-            await outputProcessed.SaveAsJpeg(outputFile);
+            await outputProcessed.SaveAsJpeg(outputFile, JpegQualityLevel);
 
             return outputFile;
         }

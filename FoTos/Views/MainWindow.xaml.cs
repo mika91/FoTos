@@ -97,7 +97,8 @@ namespace FoTos.Views
                 // instanciate image processor
                 var img = new BitmapImage(new Uri(fileFullName, UriKind.Absolute));
                 var cropped = img.Crop(App.Settings.CameraCropFactor);
-                var imgProcessor = new PhotoProcessing(fileFullName, cropped, App.Services.GPhotosUploader.UploadDirectory);
+                var imgProcessor = new PhotoProcessing(fileFullName, cropped, App.Services.GPhotosUploader.UploadDirectory,
+                    App.Settings.ExportJpegQualityLevel);
 
                 // goto developing page
                 this.Dispatcher.Invoke(() =>
