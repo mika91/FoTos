@@ -9,11 +9,12 @@ namespace GPhotosClientApi
 {
     public class GPhotosClient : IDisposable
     {
+
         private HttpClient client;
-        public GPhotosClient(String credentialsFile, String tokenStoreDir, String userName)
+        public GPhotosClient(String credentialsFile, String tokenStoreDir, String userName, String[] scopes = null)
         {
             // init HttpClient, with oauth2 handler
-            var authHandler = new AuthenticationHandler(credentialsFile, tokenStoreDir, userName);
+            var authHandler = new AuthenticationHandler(credentialsFile, tokenStoreDir, userName, scopes);
             client = new HttpClient(authHandler);
 
         }

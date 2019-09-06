@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfPageTransitions", "WpfPa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPhotosClientApi", "GPhotosClientApi\GPhotosClientApi.csproj", "{CE06AB51-5B73-48DE-9F52-7D1F015DEADB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPhotosClientApi.Test", "GPhotosClientApi.Test\GPhotosClientApi.Test.csproj", "{B06B3B7D-A958-4D49-B45F-DE94FA2F518C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{CE06AB51-5B73-48DE-9F52-7D1F015DEADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE06AB51-5B73-48DE-9F52-7D1F015DEADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE06AB51-5B73-48DE-9F52-7D1F015DEADB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B06B3B7D-A958-4D49-B45F-DE94FA2F518C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B06B3B7D-A958-4D49-B45F-DE94FA2F518C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B06B3B7D-A958-4D49-B45F-DE94FA2F518C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B06B3B7D-A958-4D49-B45F-DE94FA2F518C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

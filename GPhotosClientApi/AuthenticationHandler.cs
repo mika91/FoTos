@@ -15,10 +15,13 @@ namespace GPhotosClientApi
 {
     class AuthenticationHandler : DelegatingHandler
     {
-        private readonly String _credentialsFilename;
-        private readonly String _tokenStoreDir;
-        private readonly String _userName;
-        private readonly string[] _scopes = {
+        private readonly String  _credentialsFilename;
+        private readonly String  _tokenStoreDir;
+        private readonly String  _userName;
+        private readonly String[] _scopes;
+
+
+        private static readonly string[] DEFAULT_SCOPES = {
             "https://www.googleapis.com/auth/photoslibrary",
             //"https://www.googleapis.com/auth/photoslibrary.sharing",
             //"https://www.googleapis.com/auth/photoslibrary.readonly",
@@ -26,13 +29,15 @@ namespace GPhotosClientApi
             //"https://www.googleapis.com/auth/photoslibrary.appendonly"
          };
 
+
         private UserCredential _credentials;
 
-        public AuthenticationHandler(String credentialsFilename, String tokenStoreDir, String userName)
+        public AuthenticationHandler(String credentialsFilename, String tokenStoreDir, String userName, String[] scopes)
         {
             _credentialsFilename = credentialsFilename;
             _tokenStoreDir = tokenStoreDir;
             _userName = userName;
+            _scopes = scopes ?? DEFAULT_SCOPES;
 
             InnerHandler = new HttpClientHandler();
 
