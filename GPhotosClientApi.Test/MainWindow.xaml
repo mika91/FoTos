@@ -9,7 +9,9 @@
         Unloaded="MainWindow_Unloaded"
         Loaded="MainWindow_Loaded">
     <Grid>
-        <Button Content="List albums" HorizontalAlignment="Left" Margin="334,171,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Content="upload photos" Margin="10,28,643.6,0" Click="ButtonUpload_Click" RenderTransformOrigin="0.53,0.595" Height="33" VerticalAlignment="Top"/>
+        <Image x:Name="ImageViewer"  Margin="155,10,9.6,10"/>
+        <Button Content="display next photo" Margin="10,80,643.6,0" Click="ButtonNext_Click" RenderTransformOrigin="0.53,0.595" Height="37" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
