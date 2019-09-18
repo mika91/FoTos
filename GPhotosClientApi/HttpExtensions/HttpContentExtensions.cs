@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace GPhotosClientApi
 {
-    public static class HttpExtensions
+    public static class HttpContentExtensions
     {
         public static async Task<T> ReadAsAsync<T>(this HttpContent content)
         {

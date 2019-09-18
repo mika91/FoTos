@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GPhotosClientApi
@@ -13,10 +14,17 @@ namespace GPhotosClientApi
         private HttpClient client;
         public GPhotosClient(String credentialsFile, String tokenStoreDir, String userName, String[] scopes = null)
         {
-            // init HttpClient, with oauth2 handler
-            var authHandler = new AuthenticationHandler(credentialsFile, tokenStoreDir, userName, scopes);
-            client = new HttpClient(authHandler);
+            // init HttpClientHandler pipeline: timeout + oauth2
+            var handlerPipeline = new TimeoutHandler()
+            {
+                InnerHandler = new AuthenticationHandler(credentialsFile, tokenStoreDir, userName, scopes)
+                {
+                    InnerHandler = new HttpClientHandler()
+                }
+            };
 
+            client = new HttpClient(handlerPipeline);
+            client.Timeout = Timeout.InfiniteTimeSpan;  // disable HttpClient timeout to use handler one instead
         }
         public void Dispose()
         {

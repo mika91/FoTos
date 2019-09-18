@@ -39,8 +39,6 @@ namespace GPhotosClientApi
             _userName = userName;
             _scopes = scopes ?? DEFAULT_SCOPES;
 
-            InnerHandler = new HttpClientHandler();
-
         }
 
         private int _maxRefreshAttempts = 3;
