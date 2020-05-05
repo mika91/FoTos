@@ -56,6 +56,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -87,6 +88,8 @@
     <Compile Include="Services\GoogleUploader\GPhotosUploader.cs" />
     <Compile Include="Services\GoogleUploader\IGPhotosUploader.cs" />
     <Compile Include="Services\PhotoProcessing\PhotoProcessing.cs" />
+    <Compile Include="Services\Printer\IPrinterService.cs" />
+    <Compile Include="Services\Printer\PrinterService.cs" />
     <Compile Include="Services\SlideShowService\ISlideShowService.cs" />
     <Compile Include="Services\SlideShowService\SlideShowService.cs" />
     <Compile Include="Utils\BitmapExtensions.cs" />

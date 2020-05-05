@@ -8,6 +8,7 @@ using FoTos.Services.PhotoProcessing;
 using Image = System.Windows.Controls.Image;
 using System.IO;
 using System.Threading.Tasks;
+using FoTos.Services.Printer;
 
 namespace FoTos.Views
 {
@@ -24,6 +25,7 @@ namespace FoTos.Views
  
         private IGPhotosUploader _uploader;
         private PhotoProcessing _processor;
+        private IPrinterService _printerService;
 
 
         public DevelopingView()
@@ -31,10 +33,11 @@ namespace FoTos.Views
             InitializeComponent();
         }
 
-        public DevelopingView(PhotoProcessing processor, IGPhotosUploader uploader) : this()
+        public DevelopingView(PhotoProcessing processor, IGPhotosUploader uploader, IPrinterService printerService) : this()
         {
             _processor = processor;
             _uploader = uploader;
+            _printerService = printerService;
         }
 
         private void PhotoPage_Loaded(object sender, RoutedEventArgs e)
@@ -98,10 +101,20 @@ namespace FoTos.Views
             MainWindow.GotoThanksPage();
         }
 
-        private void ExportAndUpload()
+        private async void ExportAndUpload()
         {
-            var exportedFileFullName = _processor.Export(_currentFilter);
+
+            // TODO: rework !!!
+
+
+            // upload to Gphotos
+            // TODO: why filter is not applied ???
             _uploader?.Upload(Path.GetFileName(_processor.OriginalFilename));
+
+            // export to disk
+            var exportedFileFullName = await _processor.Export(_currentFilter);
+            // print
+            _printerService.Print(exportedFileFullName);
         }
       
 

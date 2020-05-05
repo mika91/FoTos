@@ -105,7 +105,7 @@ namespace FoTos.Views
                 {
                     log.Debug("Goto Developing Page");
 
-                    var photoView = new DevelopingView(imgProcessor, App.Services.GPhotosUploader);
+                    var photoView = new DevelopingView(imgProcessor, App.Services.GPhotosUploader, App.Services.PrinterService);
                     this.TransitionControl.ShowPage(photoView, transitionType);
 
                 });

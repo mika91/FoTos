@@ -8,6 +8,7 @@ using FoTos.Services.Camera;
 using FoTos.Services.Camera.mock;
 using FoTos.Services.SlideShowProvider;
 using FoTos.Services.GoogleUploader;
+using FoTos.Services.Printer;
 
 namespace FoTos
 {
@@ -54,6 +55,7 @@ namespace FoTos
             public int CameraCropFactor             { get; private set; }
             public int ExportJpegQualityLevel       { get; private set; }
             public String PreferedCamera            { get; private set; }
+            public String PrinterName               { get; private set; }
             public String GoogleUploadFolder        { get; private set; }
             public String GoogleTokenStoreFolder    { get; private set; }
             public String GoogleCredentialsFile     { get; private set; }
@@ -72,6 +74,7 @@ namespace FoTos
                 SlideShowFolder         = ConfigurationManager.AppSettings["SlideShowFolder"];
                 CameraRollFolder        = ConfigurationManager.AppSettings["CameraRollFolder"];
                 PreferedCamera          = ConfigurationManager.AppSettings["PreferedCamera"];
+                PrinterName             = ConfigurationManager.AppSettings["PrinterName"];
                 CameraCropFactor        = int.Parse(ConfigurationManager.AppSettings["CameraCropFactor"] ?? "100");
                 ExportJpegQualityLevel  = int.Parse(ConfigurationManager.AppSettings["ExportJpegQualityLevel"] ?? "90");
 
@@ -87,7 +90,6 @@ namespace FoTos
                 // UI related stuffs
                 ShootingViewIdleTimeSeconds = int.Parse(ConfigurationManager.AppSettings["ShootingViewIdleTimeSeconds"] ?? "20");
                 ThanksViewIdleTimeSeconds   = int.Parse(ConfigurationManager.AppSettings["ThanksViewIdleTimeSeconds"] ?? "3");
-
 
                 // camera mock
                 UseCameraMock           = Boolean.Parse(ConfigurationManager.AppSettings["UseCameraMock"] ?? "false");
@@ -115,23 +117,27 @@ namespace FoTos
                 camera = new CanonCameraService(Settings.CameraRollFolder, Settings.PreferedCamera, Settings.CameraCropFactor);
             }
 
+            var printerService = new PrinterService(Settings.PrinterName);
+
             var slideShow = new SlideShowService();
             var uploader = new GPhotosUploader(Settings.GoogleCredentialsFile, Settings.GoogleTokenStoreFolder,
                  Settings.GoogleAlbumName, Settings.GoogleUserName,Settings.GoogleUploadFolder, Settings.GoogleSyncSeconds);
-            Services = new AppServices(camera, slideShow, uploader);
+            Services = new AppServices(camera, printerService, slideShow, uploader);
         }
 
         public class AppServices
         {
             public ICameraService CameraService { get; private set; }
+            public IPrinterService PrinterService { get; private set; }
             public ISlideShowService SlideshowService { get; private set; }
             public IGPhotosUploader GPhotosUploader { get; private set; }
 
-            public AppServices(ICameraService cameraService, ISlideShowService slideshowService, IGPhotosUploader uploader)
+            public AppServices(ICameraService cameraService, IPrinterService printerService, ISlideShowService slideshowService, IGPhotosUploader uploaderService)
             {
                 this.CameraService      = cameraService;
                 this.SlideshowService   = slideshowService;
-                this.GPhotosUploader    = uploader;
+                this.GPhotosUploader    = uploaderService;
+                this.PrinterService     = printerService;
             }
 
         }
